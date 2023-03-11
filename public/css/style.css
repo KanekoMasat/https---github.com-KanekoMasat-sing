@@ -1,0 +1,76 @@
+/* .category-title {
+    font-family: sans-serif;
+} */
+
+.category-container {
+    padding-bottom: 20px;
+}
+
+p {
+    font-family: serif;
+}
+
+li {
+    padding-right: 10px;
+    user-select: none;
+}
+
+.sampleMenu {
+    display: none;
+    pointer-events: none;
+}
+
+.sampleMenuList {
+    display: inline-flex;
+    align-items: stretch;
+    overflow: hidden;
+    pointer-events: auto;
+}
+
+.menuBar {
+    display: flex;
+    list-style: none;
+}
+
+.mixedNuts {
+    display: flex;
+    user-select: none;
+    cursor: pointer;
+    align-items: center;
+    white-space: nowrap;
+}
+
+/* ツールバー */
+.tool-bar {
+    position: absolute;
+    display: none;
+    z-index: 30px;
+}
+
+.tool-bar-menu {
+    display: inline-flex;
+}
+
+.menu-list {
+    display: flex;
+    list-style: none;
+}
+
+.menu-btn {
+    text-align: center;
+    user-select: none;
+}
+
+.secret {
+    user-select: none;
+    pointer-events: none;
+}
+
+.test-textarea {
+    background-image: url(../storage/b067.gif);
+}
+
+.main-container {
+    position: relative;
+    z-index: 0px;
+}
