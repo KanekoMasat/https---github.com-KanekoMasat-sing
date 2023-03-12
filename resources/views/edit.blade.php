@@ -31,7 +31,7 @@
             </div>
         </div>
         <form action="">
-            <textarea class="test-textarea" name="" id="test-textarea" cols="30" rows="10">{{ $singingSheets[0]->lyrics }}</textarea>
+            <textarea class="test-textarea" name="" id="test-textarea" cols="30" rows="10">{{ old('lyrics', $form->lyrics) }}</textarea>
             <button class="secret" type="submit">保存</button>
         </form>
     </div>
