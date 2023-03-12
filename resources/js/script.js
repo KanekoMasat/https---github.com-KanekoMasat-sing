@@ -1,0 +1,44 @@
+const foucasTarget = document.getElementById('test-textarea');
+const formSampleTarget = document.getElementById('form-sample');
+let changeTarget = document.getElementById('tool-bar');
+const headerArea = document.getElementById('header-container');
+
+
+// foucasTarget.onselect = (event) => {
+//     let x = event.pageX;
+//     let y = event.pageY;
+//     changeTarget.style.display = "block";
+//     changeTarget.style.top = y;
+//     changeTarget.style.left = x;
+//     console.log("x座標: "+x);
+//     console.log("y座標: "+y);
+// }
+
+foucasTarget.addEventListener('mouseup', function (event) {
+    // 選択されたテキストの長さが0より大きい場合、ボタンを表示する
+    if (foucasTarget.selectionStart !== foucasTarget.selectionEnd) {
+        changeTarget.style.display = "block";
+        const textareaRect = foucasTarget.getBoundingClientRect();
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft; // x軸のスクロール量を取得
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop; // y軸のスクロール量を取得
+        const headerTop = headerArea.offsetTop;     //ヘッダーのy軸ピクセルを取得
+        const x = event.pageX - scrollLeft;
+        const y = event.pageY - scrollTop - headerTop;
+        changeTarget.style.left = x + 'px';
+        changeTarget.style.top = y + 'px';
+        console.log(headerTop);
+        console.log(scrollTop);
+        console.log(scrollLeft);
+        console.log(event.pageY);
+        console.log(event.pageX);
+        console.log(window.getSelection().toString());  //選択した文字を取得して出力
+        console.log('----------------------');
+
+    } else {
+        changeTarget.style.display = "none";
+    }
+});
+
+        // foucasTarget.onblur = () => {
+        //     changeTarget.style.display = "none";
+        // }
