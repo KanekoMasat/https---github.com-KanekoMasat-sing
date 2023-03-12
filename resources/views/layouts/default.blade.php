@@ -4,11 +4,11 @@
 <head>
     <title>@yield('title', '歌い方')</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/@yield('styleSheet', 'styles.css')">
+    <link rel="stylesheet" href="css/@yield('styleSheet', 'style.css')">
     @yield('head')
 </head>
 
-<body onContextmenu="return false;">
+<body>
     <header class="header-container" id="header-container">
         <h1>テキスト</h1>
         <a href="{{ route('index') }}">トップページへ</a>

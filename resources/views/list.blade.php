@@ -1,7 +1,9 @@
 @extends('layouts.default')
+
 @section('title', 'サンプル')
 @section('styleSheet', 'style.css')
 @section('head')
+
 @endsection
 
 

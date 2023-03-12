@@ -1,10 +1,13 @@
 @extends('layouts.default')
 
 @section('title', 'サンプル')
+@section('styleSheet', 'style.css')
 
 @section('head')
-<script src="{{asset('js/script.js')}}"></script>
+<script src="{{ asset('js/script.js') }}"></script>
+<link rel="stylesheet" href="{{asset('css/style.css')}}">
 @endsection
+
 
 @section('main')
     <form action="{{ route('form.update', ['form' => $form->id]) }}" method="POST" enctype="multipart/form-data">
