@@ -53,4 +53,11 @@
         <p>息継ぎをするタイミング。(v)で表される。息継ぎ(ブレス)も場合によっては表現になる。胸式呼吸、腹式呼吸で音が変わる。</p>
     </div>
 
+    <div class="category-container">
+        <div class="category-title">
+            <h2>エッジボイス</h2>
+        </div>
+        <p>ボーカルフライトも言われるテクニック</p>
+    </div>
+
 @endsection
