@@ -4,8 +4,7 @@
 @section('styleSheet', 'style.css')
 
 @section('head')
-<script src="{{ asset('js/script.js') }}"></script>
-<link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
 @endsection
 
 
@@ -26,7 +25,7 @@
         <div class="tool-bar" id="tool-bar">
             <div class="tool-bar-menu">
                 <ul class="menu-list">
-                    <button type="button" class="menu-btn">ビブラート</button>
+                    <button type="button" class="menu-btn" onclick="alert('ビブラートボタンが押されました')">ビブラート</button>
                     <button type="button" class="menu-btn">こぶし</button>
                     <button type="button" class="menu-btn">しゃくり</button>
                     <button type="button" class="menu-btn">フォール</button>
@@ -38,4 +37,5 @@
             <button class="secret" type="submit">保存</button>
         </form>
     </div>
+    <script src="{{ asset('js/script.js') }}"></script>
 @endsection

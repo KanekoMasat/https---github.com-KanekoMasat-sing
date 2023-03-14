@@ -4,7 +4,6 @@
 <head>
     <title>@yield('title', '歌い方')</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/@yield('styleSheet', 'style.css')">
     @yield('head')
 </head>
 
