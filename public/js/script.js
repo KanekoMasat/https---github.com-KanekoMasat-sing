@@ -40,8 +40,6 @@ foucasTarget.addEventListener('mouseup', function (event) {
         textPosition = createArray(start, end);
         console.log(textPosition);
 
-    } else {
-        changeTarget.style.display = "none";
     }
 
     //setSelection(3, 5)....3から5文字目を選択
@@ -92,9 +90,13 @@ bodyArea.addEventListener('mousedown', function (event) {
     });
 });
 
-foucasTarget.onblur = () => {
-    changeTarget.style.display = "none";
-}
+buttonArea.addEventListener('click', () => {
+    console.log(window.getSelection().toString());
+});
+
+// foucasTarget.onblur = () => {
+//     changeTarget.style.display = "none";
+// }
 
 foucasTarget.addEventListener("selectionchange", function () {
     var start = foucasTarget.selectionStart; // テキストの選択範囲の最初の文字の位置
