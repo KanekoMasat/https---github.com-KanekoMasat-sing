@@ -44,21 +44,25 @@ li {
 .tool-bar {
     position: absolute;
     display: none;
+    pointer-events: none;
     z-index: 30px;
 }
 
 .tool-bar-menu {
     display: inline-flex;
+    pointer-events: none;
 }
 
 .menu-list {
     display: flex;
     list-style: none;
+    pointer-events: none;
 }
 
 .menu-btn {
     text-align: center;
     user-select: none;
+    pointer-events: auto;
 }
 
 .secret {
@@ -70,7 +74,12 @@ li {
     background-image: url(../storage/b067.gif);
 }
 
-.main-container {
+/* .main-container {
+    position: relative;
+    z-index: 0px;
+} */
+
+.body-container {
     position: relative;
     z-index: 0px;
 }

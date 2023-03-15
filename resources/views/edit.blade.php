@@ -24,11 +24,11 @@
         {{-- ツールバー --}}
         <div class="tool-bar" id="tool-bar">
             <div class="tool-bar-menu">
-                <ul class="menu-list">
-                    <button type="button" class="menu-btn" onclick="alert('ビブラートボタンが押されました')">ビブラート</button>
-                    <button type="button" class="menu-btn">こぶし</button>
-                    <button type="button" class="menu-btn">しゃくり</button>
-                    <button type="button" class="menu-btn">フォール</button>
+                <ul class="menu-list" id="menu-list">
+                    <button type="button" class="menu-btn" id="menu-btn" onclick="alert('ビブラートボタンが押されました')">ビブラート</button>
+                    <button type="button" class="menu-btn" onclick="alert('こぶしボタンが押されました')">こぶし</button>
+                    <button type="button" class="menu-btn" onclick="alert('しゃくりボタンが押されました')">しゃくり</button>
+                    <button type="button" class="menu-btn" onclick="alert('フォールボタンが押されました')">フォール</button>
                 </ul>
             </div>
         </div>

@@ -3,6 +3,8 @@ const formSampleTarget = document.getElementById('form-sample');
 let changeTarget = document.getElementById('tool-bar');
 const headerArea = document.getElementById('header-container');
 let textPosition = null;
+const buttonArea = document.getElementById('menu-btn');
+const bodyArea = document.getElementById('body-container');
 
 // foucasTarget.onselect = (event) => {
 //     let x = event.pageX;
@@ -24,14 +26,16 @@ foucasTarget.addEventListener('mouseup', function (event) {
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft; // x軸のスクロール量を取得
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop; // y軸のスクロール量を取得
         const headerTop = headerArea.offsetTop;     //ヘッダーのy軸ピクセルを取得
-        const x = event.pageX - scrollLeft;
-        const y = event.pageY - scrollTop - headerTop;
+        const x = event.pageX - scrollLeft - 60;
+        const y = event.pageY - scrollTop - 80;
         changeTarget.style.left = x + 'px';
         changeTarget.style.top = y + 'px';
         console.log(window.getSelection().toString());  //選択した文字を取得して出力
 
+        console.log(buttonArea.tagName);
         console.log(start);
         console.log(end);
+        console.log(headerTop);
         console.log('----------------------');
         textPosition = createArray(start, end);
         console.log(textPosition);
@@ -39,6 +43,10 @@ foucasTarget.addEventListener('mouseup', function (event) {
     } else {
         changeTarget.style.display = "none";
     }
+
+    //setSelection(3, 5)....3から5文字目を選択
+
+
 
     // textPosition.forEach(element => {
     //     if (element === foucasTarget.selectionStart) {
@@ -68,14 +76,19 @@ foucasTarget.addEventListener('mouseup', function (event) {
 //     }, 500)
 // });
 
-foucasTarget.addEventListener('mousedown', function () {
+//このイベントの問題点: 選択するのが400mSec以内に終わった場合消える→これは妥協か？
+bodyArea.addEventListener('mousedown', function (event) {
+    console.log(event.target.tagName);
     textPosition.forEach(element => {
-        if (element === foucasTarget.selectionStart) {
-            setTimeout(function () {
-                changeTarget.style.display = "none";
-                console.log("changeTargetのstyleをnoneにしました");
-            }, 100);
+        if (event.target.tagName !== 'BUTTON') {
+            if (element === foucasTarget.selectionStart) {
+                setTimeout(function () {
+                    changeTarget.style.display = "none";
+                    console.log("changeTargetのstyleをnoneにしました");
+                }, 400);
+            }
         }
+
     });
 });
 
