@@ -40,9 +40,12 @@
     </div>
 
     <button id="boldButton2">太字</button>
+    <button id="boldButton3">太字(mytextarea)</button>
     <p id="myText">これはサンプルテキストです。</p>
     <textarea name="" id="testTextarea" cols="30" rows="10"></textarea>
 
+    <textarea name="" id="testTextarea2" cols="30" rows="10">mytextarea2</textarea>
 
+    <div contenteditable>contenteditable要素</div>
     <script src="{{ asset('js/script.js') }}"></script>
 @endsection

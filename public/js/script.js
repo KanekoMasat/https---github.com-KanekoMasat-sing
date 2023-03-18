@@ -5,6 +5,8 @@ const headerArea = document.getElementById('header-container');
 let textPosition = null;
 const buttonArea = document.getElementById('menu-btn');
 const bodyArea = document.getElementById('body-container');
+const myTextarea2 = document.getElementById('testTextarea2');
+const boldButton3 = document.getElementById('boldButton3');
 
 // foucasTarget.onselect = (event) => {
 //     let x = event.pageX;
@@ -35,7 +37,6 @@ foucasTarget.addEventListener('mouseup', function (event) {
         console.log(buttonArea.tagName);
         console.log(start);
         console.log(end);
-        console.log(headerTop);
         console.log('----------------------');
         textPosition = createArray(start, end);
         console.log(textPosition);
@@ -112,18 +113,6 @@ function createArray(start, end) {
 
 const boldButton = document.getElementById("boldButton");
 
-//押されたら<b>タグで囲む
-function boldSelection() {
-    const start = foucasTarget.selectionStart;
-    const end = foucasTarget.selectionEnd;
-
-    const selectedText = foucasTarget.value.substring(start, end);
-    const boldText = "<b>" + selectedText + "</b>";
-
-    const newText = foucasTarget.value.substring(0, start) + boldText + foucasTarget.value.substring(end);
-    foucasTarget.value = newText;
-}
-
 boldButton.onclick = function () {
     applyBold();
 };
@@ -155,9 +144,11 @@ boldButton2.addEventListener("click", function () {
     if (myText.style.fontWeight !== "bold") {
         myText.style.fontWeight = "bold";
         testTextarea.style.fontWeight = "bold";
+        myTextarea2.style.fontWeight = "bold";
     } else {
         myText.style.fontWeight = "normal";
         testTextarea.style.fontWeight = "normal";
+        myTextarea2.style.fontWeight = "normal";
     }
 
     var selectedText = "";
@@ -173,3 +164,39 @@ boldButton2.addEventListener("click", function () {
 
 });
 
+
+
+myTextarea2.addEventListener('input', notification);
+boldButton3.addEventListener('click', innerhtml);
+
+//押されたら<b>タグで囲む
+function boldSelection() {
+    const start = myTextarea2.selectionStart;
+    const end = myTextarea2.selectionEnd;
+
+    const selectedText = myTextarea2.value.substring(start, end);
+    const boldText = "<b>" + selectedText + "</b>";
+
+    const newText = myTextarea2.value.substring(0, start) + boldText + myTextarea2.value.substring(end);
+    myTextarea2.value = newText;
+
+    notification();
+
+}
+
+function formatSelectedText() {
+    const selectedText = myTextarea2.value.substring(myTextarea2.selectionStart, myTextarea2.selectionEnd);
+    const boldText = `<b>${selectedText}</b>`;
+    const formattedText = myTextarea2.value.substring(0, myTextarea2.selectionStart) + boldText + myTextarea2.value.substring(myTextarea2.selectionEnd);
+    myTextarea2.innerHTML = formattedText;
+}
+
+function notification() {
+    console.log('myTextarea2の内容が変更されました');
+}
+
+function innerhtml() {
+    let text = myTextarea2.value;
+    let boldText = `<b>${text}</b>`;
+    myTextarea2.innerHTML = boldText;
+}
