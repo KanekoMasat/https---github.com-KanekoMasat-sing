@@ -29,6 +29,7 @@
                     <button type="button" class="menu-btn" onclick="alert('こぶしボタンが押されました')">こぶし</button>
                     <button type="button" class="menu-btn" onclick="alert('しゃくりボタンが押されました')">しゃくり</button>
                     <button type="button" class="menu-btn" onclick="alert('フォールボタンが押されました')">フォール</button>
+                    <button type="button" class="menu-btn" id="boldButton">B</button>
                 </ul>
             </div>
         </div>
@@ -37,5 +38,11 @@
             <button class="secret" type="submit">保存</button>
         </form>
     </div>
+
+    <button id="boldButton2">太字</button>
+    <p id="myText">これはサンプルテキストです。</p>
+    <textarea name="" id="testTextarea" cols="30" rows="10"></textarea>
+
+
     <script src="{{ asset('js/script.js') }}"></script>
 @endsection
