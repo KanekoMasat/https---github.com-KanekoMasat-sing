@@ -7,6 +7,9 @@ const buttonArea = document.getElementById('menu-btn');
 const bodyArea = document.getElementById('body-container');
 const myTextarea2 = document.getElementById('testTextarea2');
 const boldButton3 = document.getElementById('boldButton3');
+const boldButton4 = document.getElementById('boldButton4');
+const italicButton = document.getElementById('italicButton');
+
 
 // foucasTarget.onselect = (event) => {
 //     let x = event.pageX;
@@ -77,13 +80,12 @@ foucasTarget.addEventListener('mouseup', function (event) {
 
 //このイベントの問題点: 選択するのが400mSec以内に終わった場合消える→これは妥協か？
 bodyArea.addEventListener('mousedown', function (event) {
-    console.log(event.target.tagName);
     textPosition.forEach(element => {
         if (event.target.tagName !== 'BUTTON') {
             if (element === foucasTarget.selectionStart) {
                 setTimeout(function () {
                     changeTarget.style.display = "none";
-                    console.log("changeTargetのstyleをnoneにしました");
+                    // console.log("changeTargetのstyleをnoneにしました");
                 }, 400);
             }
         }
@@ -199,4 +201,59 @@ function innerhtml() {
     let text = myTextarea2.value;
     let boldText = `<b>${text}</b>`;
     myTextarea2.innerHTML = boldText;
+}
+
+boldButton4.addEventListener('click', setBold);
+italicButton.addEventListener('click', setItalic);
+
+// function setBold() {
+//     var selection = window.getSelection();
+//     var range = selection.getRangeAt(0);
+//     var selectedText = range.extractContents();
+//     console.log(selectedText);
+//     var bold = document.createElement("strong");
+//     bold.appendChild(selectedText);
+//     range.insertNode(bold);
+// }
+
+function setItalic() {
+    let selection = window.getSelection();
+    console.log(selection);
+    let range = selection.getRangeAt(0);
+    console.log(range.toString());
+    let selectedText = range.extractContents();
+    let italic = document.createElement("i");
+    italic.appendChild(selectedText);
+    range.insertNode(italic);
+}
+
+function setUnderLine() {
+
+}
+
+function setBold() {
+    if (window.getSelection().style.fontWeight === "bold") {
+        window.getSelection().style.fontWeight = "normal";
+    } else if (document.selection && document.selection.type != "Control" && document.selection.style.fontWeight === "bold") {
+        document.selection.style.fontWeight = "normal";
+    } else if (window.getSelection().style.fontWeight === "normal") {
+        /// 太字用のspan要素作成
+        const span = document.createElement("span");
+        span.style.fontWeight = `bold`;
+        /// 現在のテキスト選択を取得
+        const userSelection = window.getSelection();
+        /// 現在の選択範囲を取得
+        const selectedTextRange = userSelection.getRangeAt(0);
+        /// その範囲を太字span要素で囲む
+        selectedTextRange.surroundContents(span);
+    }
+    /// 太字用のspan要素作成
+    const span = document.createElement("span")
+    span.style.fontWeight = `bold`
+    /// 現在のテキスト選択を取得
+    const userSelection = window.getSelection()
+    /// 現在の選択範囲を取得
+    const selectedTextRange = userSelection.getRangeAt(0)
+    /// その範囲を太字span要素で囲む
+    selectedTextRange.surroundContents(span)
 }

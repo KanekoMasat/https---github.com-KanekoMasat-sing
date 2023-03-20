@@ -46,6 +46,9 @@
 
     <textarea name="" id="testTextarea2" cols="30" rows="10">mytextarea2</textarea>
 
-    <div contenteditable>contenteditable要素</div>
+    <div id="editable" contenteditable="true">JavaScript</div>
+    <button id="boldButton4">B</button>
+    <button id="italicButton"><i>I</i></button>
+    <button onclick='document.execCommand("underline");'><u>U</u></button>
     <script src="{{ asset('js/script.js') }}"></script>
 @endsection

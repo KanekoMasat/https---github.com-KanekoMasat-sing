@@ -83,3 +83,15 @@ li {
     position: relative;
     z-index: 0px;
 }
+
+.bold-font {
+    font-weight: bold;
+}
+
+.italic-font {
+    font-style: italic;
+}
+
+.underLine {
+    text-decoration: underline;
+}
