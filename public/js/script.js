@@ -9,6 +9,7 @@ const myTextarea2 = document.getElementById('testTextarea2');
 const boldButton3 = document.getElementById('boldButton3');
 const boldButton4 = document.getElementById('boldButton4');
 const italicButton = document.getElementById('italicButton');
+const underlineButton = document.getElementById('underlineButton');
 
 
 // foucasTarget.onselect = (event) => {
@@ -205,6 +206,7 @@ function innerhtml() {
 
 boldButton4.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
+underlineButton.addEventListener('click', setUnderline);
 
 // function setBold() {
 //     var selection = window.getSelection();
@@ -222,38 +224,60 @@ function setItalic() {
     let range = selection.getRangeAt(0);
     console.log(range.toString());
     let selectedText = range.extractContents();
-    let italic = document.createElement("i");
+    let italic = document.createElement("span");
+    italic.className = "italic-font";
     italic.appendChild(selectedText);
     range.insertNode(italic);
 }
 
-function setUnderLine() {
-
-}
-
 function setBold() {
-    if (window.getSelection().style.fontWeight === "bold") {
-        window.getSelection().style.fontWeight = "normal";
-    } else if (document.selection && document.selection.type != "Control" && document.selection.style.fontWeight === "bold") {
-        document.selection.style.fontWeight = "normal";
-    } else if (window.getSelection().style.fontWeight === "normal") {
-        /// 太字用のspan要素作成
-        const span = document.createElement("span");
-        span.style.fontWeight = `bold`;
-        /// 現在のテキスト選択を取得
-        const userSelection = window.getSelection();
-        /// 現在の選択範囲を取得
-        const selectedTextRange = userSelection.getRangeAt(0);
-        /// その範囲を太字span要素で囲む
-        selectedTextRange.surroundContents(span);
-    }
-    /// 太字用のspan要素作成
-    const span = document.createElement("span")
-    span.style.fontWeight = `bold`
-    /// 現在のテキスト選択を取得
-    const userSelection = window.getSelection()
-    /// 現在の選択範囲を取得
-    const selectedTextRange = userSelection.getRangeAt(0)
-    /// その範囲を太字span要素で囲む
-    selectedTextRange.surroundContents(span)
+    let selection = window.getSelection();
+    console.log(selection);
+    let range = selection.getRangeAt(0);
+    console.log(range.toString());
+    let selectedText = range.extractContents();
+    let bold = document.createElement("span");
+    bold.className = "bold-font";
+    bold.appendChild(selectedText);
+    range.insertNode(bold);
 }
+
+function setUnderline() {
+    let selection = window.getSelection();
+    console.log(selection);
+    let range = selection.getRangeAt(0);
+    console.log(range.toString());
+    let selectedText = range.extractContents();
+    let underline = document.createElement("span");
+    underline.className = "underline";
+    underline.appendChild(selectedText);
+    range.insertNode(underline);
+}
+
+
+// function setBold() {
+//     if (window.getSelection().style.fontWeight === "bold") {
+//         window.getSelection().style.fontWeight = "normal";
+//     } else if (document.selection && document.selection.type != "Control" && document.selection.style.fontWeight === "bold") {
+//         document.selection.style.fontWeight = "normal";
+//     } else if (window.getSelection().style.fontWeight === "normal") {
+//         /// 太字用のspan要素作成
+//         const span = document.createElement("span");
+//         span.style.fontWeight = `bold`;
+//         /// 現在のテキスト選択を取得
+//         const userSelection = window.getSelection();
+//         /// 現在の選択範囲を取得
+//         const selectedTextRange = userSelection.getRangeAt(0);
+//         /// その範囲を太字span要素で囲む
+//         selectedTextRange.surroundContents(span);
+//     }
+//     /// 太字用のspan要素作成
+//     const span = document.createElement("span")
+//     span.style.fontWeight = `bold`
+//     /// 現在のテキスト選択を取得
+//     const userSelection = window.getSelection()
+//     /// 現在の選択範囲を取得
+//     const selectedTextRange = userSelection.getRangeAt(0)
+//     /// その範囲を太字span要素で囲む
+//     selectedTextRange.surroundContents(span)
+// }

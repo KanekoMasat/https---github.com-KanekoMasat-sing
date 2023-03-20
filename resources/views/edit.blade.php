@@ -49,6 +49,6 @@
     <div id="editable" contenteditable="true">JavaScript</div>
     <button id="boldButton4">B</button>
     <button id="italicButton"><i>I</i></button>
-    <button onclick='document.execCommand("underline");'><u>U</u></button>
+    <button id="underlineButton" {{--onclick='document.execCommand("underline");'--}}><u>U</u></button>
     <script src="{{ asset('js/script.js') }}"></script>
 @endsection
