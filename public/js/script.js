@@ -148,6 +148,7 @@ boldButton2.addEventListener("click", function () {
         myText.style.fontWeight = "bold";
         testTextarea.style.fontWeight = "bold";
         myTextarea2.style.fontWeight = "bold";
+        console.log(boldButton2.parentNode);
     } else {
         myText.style.fontWeight = "normal";
         testTextarea.style.fontWeight = "normal";
@@ -204,42 +205,18 @@ function innerhtml() {
     myTextarea2.innerHTML = boldText;
 }
 
-boldButton4.addEventListener('click', setBold);
-italicButton.addEventListener('click', setItalic);
-underlineButton.addEventListener('click', setUnderline);
-
-// function setBold() {
-//     var selection = window.getSelection();
-//     var range = selection.getRangeAt(0);
-//     var selectedText = range.extractContents();
-//     console.log(selectedText);
-//     var bold = document.createElement("strong");
-//     bold.appendChild(selectedText);
-//     range.insertNode(bold);
-// }
-
 function setItalic() {
     let selection = window.getSelection();
-    console.log(selection);
     let range = selection.getRangeAt(0);
-    console.log(range.toString());
-    let selectedText = range.extractContents();
-    let italic = document.createElement("span");
-    italic.className = "italic-font";
-    italic.appendChild(selectedText);
-    range.insertNode(italic);
-}
+    console.log(range.commonAncestorContainer.parentElement);
+    if (range.commonAncestorContainer.parentElement.tagName === "DIV") {
+        console.log("互い違いに歩き出した僕の両足は");
+        let selectedText = range.extractContents();
+        let italic = document.createElement("i");
+        italic.appendChild(selectedText);
+        range.insertNode(italic);
+    }
 
-function setBold() {
-    let selection = window.getSelection();
-    console.log(selection);
-    let range = selection.getRangeAt(0);
-    console.log(range.toString());
-    let selectedText = range.extractContents();
-    let bold = document.createElement("span");
-    bold.className = "bold-font";
-    bold.appendChild(selectedText);
-    range.insertNode(bold);
 }
 
 function setUnderline() {
@@ -253,6 +230,67 @@ function setUnderline() {
     underline.appendChild(selectedText);
     range.insertNode(underline);
 }
+boldButton4.addEventListener('click', newSetBold);
+italicButton.addEventListener('click', setItalic);
+underlineButton.addEventListener('click', setUnderline);
+
+// function setBold() {
+//     var selection = window.getSelection();
+//     var range = selection.getRangeAt(0);
+//     var selectedText = range.extractContents();
+//     console.log(selectedText);
+//     var bold = document.createElement("strong");
+//     bold.appendChild(selectedText);
+//     range.insertNode(bold);
+// }
+
+function setBold() {
+    let selection = window.getSelection();
+    console.log(selection);
+    let range = selection.getRangeAt(0);
+    console.log(range.toString());
+    let selectedText = range.extractContents();
+    let bold = document.createElement("span");
+    bold.className = "bold-font";
+    bold.appendChild(selectedText);
+    console.log(bold.parentNode);
+    range.insertNode(bold);
+}
+
+function newSetBold() {
+    const selection = document.getSelection();
+    const range = window.getSelection().getRangeAt(0);
+    const boldElement = document.createElement("b");
+    boldElement.appendChild(document.createTextNode(range.toString()));
+    range.deleteContents();
+    range.insertNode(boldElement);
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
+function newSetBold() {
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    const boldElement = document.createElement("b");
+    if (range.value) {
+
+    }
+    boldElement.appendChild(document.createTextNode(range.toString()));
+    range.deleteContents();
+    range.insertNode(boldElement);
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
+function removeBold() {
+    let selection = window.getSelection();
+    let range = selection.getRangeAt(0);
+
+
+}
+
+
+
 
 
 // function setBold() {
