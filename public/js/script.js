@@ -235,6 +235,7 @@ function sampleItalic() {
         charRange.setEnd(range.startContainer, range.startOffset + i + 1);
         textArray.push(charRange);
         console.log(charRange.toString());
+        console.log(charRange.commonAncestorContainer.parentElement.tagName);
     }
     console.log(textArray);
 
