@@ -10,7 +10,7 @@ const boldButton3 = document.getElementById('boldButton3');
 const boldButton4 = document.getElementById('boldButton4');
 const italicButton = document.getElementById('italicButton');
 const underlineButton = document.getElementById('underlineButton');
-
+const editable = document.getElementById('editable');
 
 // foucasTarget.onselect = (event) => {
 //     let x = event.pageX;
@@ -209,15 +209,143 @@ function setItalic() {
     let selection = window.getSelection();
     let range = selection.getRangeAt(0);
     console.log(range.commonAncestorContainer.parentElement);
+    console.log(range.commonAncestorContainer.parentElement.tagName);
+    console.log(range.intersectsNode(range.commonAncestorContainer.parentElement));
     if (range.commonAncestorContainer.parentElement.tagName === "DIV") {
         console.log("互い違いに歩き出した僕の両足は");
         let selectedText = range.extractContents();
         let italic = document.createElement("i");
         italic.appendChild(selectedText);
         range.insertNode(italic);
+    } else if (range.commonAncestorContainer.parentElement.tagName === "I") {
+        console.log("何もしません");
     }
 
 }
+
+function sampleItalic() {
+    var selection = window.getSelection();
+    var range = selection.getRangeAt(0);
+    console.log(range.startContainer);
+    console.log(range.endContainer);
+    console.log(range.commonAncestorContainer);
+    console.log(range.startOffset);
+    console.log(range.endOffset);
+
+    // 選択範囲内のすべてのノードを取得する
+    var nodes = getSelectedNodes(range);
+    console.log(nodes);
+
+    // すべてのノードが<i>タグで囲まれているかを確認する
+    var isAllWrappedInItalic = nodes.every(function (node) {
+        return node.parentNode.tagName === 'I';
+    });
+
+    if (isAllWrappedInItalic) {
+        // すべての<i>タグを取り除く
+        nodes.forEach(function (node) {
+            var parent = node.parentNode;
+            while (parent.tagName !== 'I') {
+                parent = parent.parentNode;
+            }
+            var textNode = document.createTextNode(node.textContent);
+            parent.parentNode.insertBefore(textNode, parent);
+            parent.parentNode.removeChild(parent);
+        });
+    } else {
+        // 選択範囲内のすべてのノードを<i>タグで囲む
+        var selectedText = range.toString();
+        var italicText = document.createElement('i');
+        italicText.appendChild(document.createTextNode(selectedText));
+        range.deleteContents();
+        range.insertNode(italicText);
+    }
+}
+
+function getSelectedNodes(range) {
+    var startContainer = range.startContainer;
+    var endContainer = range.endContainer;
+    var commonAncestor = range.commonAncestorContainer;
+
+    // 選択範囲内のすべてのノードを取得する
+    var nodes = [];
+    var node = startContainer;
+    while (node && node !== commonAncestor.nextSibling && range.comparePoint(node, 0) !== 1) {
+        nodes.push(node);
+        node = node.nextSibling || node.parentNode.nextSibling;
+    }
+
+    node = endContainer;
+    while (node && node !== commonAncestor.previousSibling && range.comparePoint(node, node.length) !== -1) {
+        nodes.push(node);
+        node = node.previousSibling || node.parentNode.previousSibling;
+    }
+
+    // ノードの重複を削除する
+    return nodes.filter(function (node, index) {
+        return nodes.indexOf(node) === index;
+    });
+}
+
+
+
+
+// italicButton.addEventListener("click", () => {
+//     const selection = window.getSelection();
+//     const range = selection.getRangeAt(0);
+
+//     const selectedNodes = getSelectedNodes(range);
+
+//     // 既にiタグで囲まれているかどうかを判定
+//     const isAlreadyWrapped = selectedNodes.every(node =>
+//         node.parentNode.tagName === "I"
+//     );
+
+//     if (isAlreadyWrapped) {
+//         // 選択範囲がすべてiタグで囲まれている場合はiタグを外す
+//         selectedNodes.forEach(node => {
+//             const parent = node.parentNode;
+//             parent.parentNode.insertBefore(node, parent);
+//             parent.parentNode.removeChild(parent);
+//         });
+//     } else {
+//         // 選択範囲がiタグで囲まれていない場合はiタグで囲む
+//         const iTag = document.createElement("i");
+//         range.surroundContents(iTag);
+//     }
+
+//     selection.removeAllRanges();
+// });
+
+// function getSelectedNodes(range) {
+//     const startNode = range.startContainer;
+//     const endNode = range.endContainer;
+//     const commonAncestorNode = range.commonAncestorContainer;
+
+//     const nodes = [];
+
+//     let currentNode = startNode;
+
+//     while (currentNode && currentNode !== commonAncestorNode) {
+//         nodes.push(currentNode);
+//         currentNode = currentNode.nextSibling;
+//     }
+
+//     currentNode = endNode;
+
+//     while (currentNode && currentNode !== commonAncestorNode) {
+//         nodes.push(currentNode);
+//         currentNode = currentNode.previousSibling;
+//     }
+
+//     nodes.push(commonAncestorNode);
+
+//     return nodes.filter(function (node, index) {
+//         return nodes.indexOf(node) === index;
+//     });
+// }
+
+
 
 function setUnderline() {
     let selection = window.getSelection();
@@ -231,7 +359,7 @@ function setUnderline() {
     range.insertNode(underline);
 }
 boldButton4.addEventListener('click', newSetBold);
-italicButton.addEventListener('click', setItalic);
+italicButton.addEventListener('click', sampleItalic);
 underlineButton.addEventListener('click', setUnderline);
 
 // function setBold() {
@@ -280,13 +408,6 @@ function newSetBold() {
     range.insertNode(boldElement);
     selection.removeAllRanges();
     selection.addRange(range);
-}
-
-function removeBold() {
-    let selection = window.getSelection();
-    let range = selection.getRangeAt(0);
-
-
 }
 
 
