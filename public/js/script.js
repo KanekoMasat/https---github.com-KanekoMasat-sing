@@ -2,7 +2,7 @@ const foucasTarget = document.getElementById('test-textarea');
 const formSampleTarget = document.getElementById('form-sample');
 let changeTarget = document.getElementById('tool-bar');
 const headerArea = document.getElementById('header-container');
-let textPosition = null;
+let textPosition = 1;
 const buttonArea = document.getElementById('menu-btn');
 const bodyArea = document.getElementById('body-container');
 const myTextarea2 = document.getElementById('testTextarea2');
@@ -11,6 +11,7 @@ const boldButton4 = document.getElementById('boldButton4');
 const italicButton = document.getElementById('italicButton');
 // const underlineButton = document.getElementById('underlineButton');
 const editable = document.getElementById('editable');
+const testButton = document.getElementById('testButton');
 
 // foucasTarget.onselect = (event) => {
 //     let x = event.pageX;
@@ -80,18 +81,18 @@ foucasTarget.addEventListener('mouseup', function (event) {
 // });
 
 //このイベントの問題点: 選択するのが400mSec以内に終わった場合消える→これは妥協か？
-bodyArea.addEventListener('mousedown', function (event) {
-    textPosition.forEach(element => {
-        if (event.target.tagName !== 'BUTTON') {
-            if (element === foucasTarget.selectionStart) {
-                setTimeout(function () {
-                    changeTarget.style.display = "none";
-                    // console.log("changeTargetのstyleをnoneにしました");
-                }, 400);
-            }
-        }
-    });
-});
+// bodyArea.addEventListener('mousedown', function (event) {
+//     textPosition.forEach(element => {
+//         if (event.target.tagName !== 'BUTTON') {
+//             if (element === foucasTarget.selectionStart) {
+//                 setTimeout(function () {
+//                     changeTarget.style.display = "none";
+//                     // console.log("changeTargetのstyleをnoneにしました");
+//                 }, 400);
+//             }
+//         }
+//     });
+// });
 
 buttonArea.addEventListener('click', () => {
     console.log(window.getSelection().toString());
@@ -223,21 +224,131 @@ function setItalic() {
 
 }
 
-function sampleItalic() {
-    var selection = window.getSelection();
-    var range = selection.getRangeAt(0);
 
-    // 選択範囲のテキストを1文字ずつ配列に格納
+
+
+
+function sampleItalic() {
+    let selection = window.getSelection();
+    let range = selection.getRangeAt(0);
+
+    // 選択範囲のテキストを1文字ずつrangeオブジェクトにして配列に格納
+    // const textArray = [];
+    // for (let i = 0; i < range.toString().length; i++) {
+    //     if (range.startContainer === range.endContainer) {
+    //         const charRange = document.createRange();
+    //         charRange.setStart(range.startContainer, range.startOffset + i);
+    //         charRange.setEnd(range.startContainer, range.startOffset + i + 1);
+    //         textArray.push(charRange);
+    //         console.log(charRange.toString());
+    //         console.log(charRange.commonAncestorContainer.parentElement.tagName);
+    //     } else if (range.startContainer !== range.endContainer) {
+    //         console.log("複数要素を跨いでいます");
+
+    //     }
+
+    // }
+    // console.log(textArray);  一旦コメントアウト
+
     const textArray = [];
-    for (let i = 0; i < range.toString().length; i++) {
-        const charRange = document.createRange();
-        charRange.setStart(range.startContainer, range.startOffset + i);
-        charRange.setEnd(range.startContainer, range.startOffset + i + 1);
-        textArray.push(charRange);
-        console.log(charRange.toString());
-        console.log(charRange.commonAncestorContainer.parentElement.tagName);
+    let container = range.startContainer;
+    let offset = range.startOffset;
+
+    // 選択範囲の文字列を1文字ずつ分割して、配列に追加する
+    if (range.startContainer === range.endContainer) {
+        //startContainerとendContainerが同じ場合
+        for (let i = 0; i < range.toString().length; i++) {
+            // 現在の文字の範囲を取得する
+            const charRange = document.createRange();
+            charRange.setStart(container, offset);
+            charRange.setEnd(container, offset + 1);
+            console.log("charRange.toString(): " + charRange.toString());
+            console.log("charRange.commonAncestorContainer.parentElement.tagName: " + charRange.commonAncestorContainer.parentElement.tagName);
+            textArray.push(charRange);
+
+            // containerとoffsetを更新する
+            if (offset + 1 >= container.length) {
+                container = container.nextSibling;
+                offset = 0;
+            } else {
+                offset++;
+            }
+        }
+    } else {
+        // startContainerとendContainerが違う場合の処理
+        if (range.startContainer !== range.endContainer) {
+            // 選択範囲に含まれるすべてのノードを取得する
+            const nodes = getNodesInRange2(range);
+            console.log(nodes);
+
+            // 各ノードについて、選択範囲内のテキスト範囲を1文字ずつ取得して配列に追加する
+            for (const node of nodes) {
+                let start = 0;
+                let end = node.textContent.length;
+
+                if (node === range.startContainer) {
+                    start = range.startOffset;
+                }
+                if (node === range.endContainer) {
+                    end = range.endOffset;
+                }
+
+                for (let i = start; i < end; i++) {
+                    const charRange = document.createRange();
+                    charRange.setStart(node, i);
+                    charRange.setEnd(node, i + 1);
+                    console.log("charRange.toString(): " + charRange.toString());
+                    console.log("charRange.commonAncestorContainer.parentElement.tagName: " + charRange.commonAncestorContainer.parentElement.tagName);
+                    textArray.push(charRange);
+                }
+            }
+        }
+
+        // 選択範囲に含まれるすべてのノードを取得する関数
+        function getNodesInRange1(range) {
+            const startNode = range.startContainer;
+            const endNode = range.endContainer;
+            const nodes = [];
+
+            let currentNode = startNode;
+            while (currentNode !== endNode.nextSibling) {
+                nodes.push(currentNode);
+                currentNode = currentNode.nextSibling;
+            }
+            console.log(nodes);
+            return nodes;
+
+        }
+
+        function getNodesInRange2(range) {
+            const startNode = range.startContainer;
+            const endNode = range.endContainer;
+            const nodes = [];
+
+            if (startNode === endNode) {
+                // 要素を跨がない場合
+                const startOffset = range.startOffset;
+                const endOffset = range.endOffset;
+                nodes.push(startNode.splitText(startOffset));
+                nodes[0].splitText(endOffset - startOffset);
+            } else {
+                // 要素を跨ぐ場合
+                let currentNode = startNode.nextSibling;
+                while (currentNode !== endNode) {
+                    nodes.push(currentNode);
+                    currentNode = currentNode.nextSibling;
+                }
+                nodes.push(endNode.splitText(range.endOffset));
+                nodes[0].splitText(range.startOffset);
+            }
+
+            return nodes;
+        }
+
+
     }
-    console.log(textArray);
+
+
 
     // 選択範囲内のすべてのノードを取得する
     var nodes = getSelectedNodes(range);
@@ -296,61 +407,6 @@ function getSelectedNodes(range) {
 
 
 
-// italicButton.addEventListener("click", () => {
-//     const selection = window.getSelection();
-//     const range = selection.getRangeAt(0);
-
-//     const selectedNodes = getSelectedNodes(range);
-
-//     // 既にiタグで囲まれているかどうかを判定
-//     const isAlreadyWrapped = selectedNodes.every(node =>
-//         node.parentNode.tagName === "I"
-//     );
-
-//     if (isAlreadyWrapped) {
-//         // 選択範囲がすべてiタグで囲まれている場合はiタグを外す
-//         selectedNodes.forEach(node => {
-//             const parent = node.parentNode;
-//             parent.parentNode.insertBefore(node, parent);
-//             parent.parentNode.removeChild(parent);
-//         });
-//     } else {
-//         // 選択範囲がiタグで囲まれていない場合はiタグで囲む
-//         const iTag = document.createElement("i");
-//         range.surroundContents(iTag);
-//     }
-
-//     selection.removeAllRanges();
-// });
-
-// function getSelectedNodes(range) {
-//     const startNode = range.startContainer;
-//     const endNode = range.endContainer;
-//     const commonAncestorNode = range.commonAncestorContainer;
-
-//     const nodes = [];
-
-//     let currentNode = startNode;
-
-//     while (currentNode && currentNode !== commonAncestorNode) {
-//         nodes.push(currentNode);
-//         currentNode = currentNode.nextSibling;
-//     }
-
-//     currentNode = endNode;
-
-//     while (currentNode && currentNode !== commonAncestorNode) {
-//         nodes.push(currentNode);
-//         currentNode = currentNode.previousSibling;
-//     }
-
-//     nodes.push(commonAncestorNode);
-
-//     return nodes.filter(function (node, index) {
-//         return nodes.indexOf(node) === index;
-//     });
-// }
-
 
 
 
@@ -365,32 +421,93 @@ function setUnderline() {
     underline.appendChild(selectedText);
     range.insertNode(underline);
 }
+
+function testFunction() {
+    let selection = window.getSelection();
+    let range = selection.getRangeAt(0);
+    const startNode = range.startContainer;
+    const endNode = range.endContainer;
+    let currentNode = startNode;
+    const childNodes = editable.childNodes;
+    console.log(childNodes[0].textContent);
+
+    if (range.startContainer === range.endContainer) {
+        console.log("選択範囲は一つのコンテナに収まっています");
+        console.log(editable.childNodes.length);
+        console.log(range.commonAncestorContainer.parentElement.tagName);
+        console.log(range.startContainer);
+        console.log(range.endContainer);
+        console.log(range.startOffset);
+        console.log(range.endOffset);
+        console.log(range.commonAncestorContainer);
+
+        //range.commonAncestorContainer.parentElement.tagNameを使って、親要素がIタグか調べる
+
+        //iタグだった場合
+        //iタグ消す
+
+        //iタグじゃなかった場合
+        //iタグで囲む
+
+    } else {
+        console.log("選択範囲のコンテナは2つ以上です");
+        console.log(editable.childNodes.length);
+        editable.childNodes.forEach(element => {
+            console.log(element.textContent);
+        });
+        console.log("startContainer: " + range.startContainer.textContent);
+        console.log("endContainer: " + range.endContainer.textContent);
+        console.log(range.startOffset);
+        console.log(range.endOffset);
+        console.log(range.commonAncestorContainer);
+
+        //まず各コンテナに分ける
+        const containers = [];
+        const ranges = [];
+
+        for (let i = 0; i < editable.childNodes.length; i++) {
+            if (editable.childNodes[i].textContent !== "") {
+                containers.push(editable.childNodes[i]);
+                console.log(i + "." + editable.childNodes[i].textContent);
+                console.log(i + "." + editable.childNodes[i].parentElement.tagName);
+
+            }
+        }
+
+
+        childNodes.forEach(element => {
+            if (element.textContent !== "") {
+                console.log(element.textContent.length);
+                for (let i = 0, j = element.textContent.length; i < j; i++) {
+                    let charRange = document.createRange();
+                    charRange.setStart(currentNode, i);
+                    charRange.setEnd(currentNode, i + 1);
+                    ranges.push(charRange);
+                    console.log(ranges[i].toString());
+                    console.log(ranges[i].startContainer);
+                }
+                if (endNode !== currentNode) {
+                    currentNode = currentNode.nextSibling;
+                }
+            }
+        });
+
+        console.log("------------------------");
+        console.log(ranges);
+    }
+
+
+
+}
+
+
 boldButton4.addEventListener('click', newSetBold);
 italicButton.addEventListener('click', sampleItalic);
 // underlineButton.addEventListener('click', setUnderline);
+testButton.addEventListener('click', testFunction);
 
-// function setBold() {
-//     var selection = window.getSelection();
-//     var range = selection.getRangeAt(0);
-//     var selectedText = range.extractContents();
-//     console.log(selectedText);
-//     var bold = document.createElement("strong");
-//     bold.appendChild(selectedText);
-//     range.insertNode(bold);
-// }
 
-function setBold() {
-    let selection = window.getSelection();
-    console.log(selection);
-    let range = selection.getRangeAt(0);
-    console.log(range.toString());
-    let selectedText = range.extractContents();
-    let bold = document.createElement("span");
-    bold.className = "bold-font";
-    bold.appendChild(selectedText);
-    console.log(bold.parentNode);
-    range.insertNode(bold);
-}
+
 
 function newSetBold() {
     const selection = document.getSelection();
