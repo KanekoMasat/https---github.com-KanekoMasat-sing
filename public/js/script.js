@@ -12,6 +12,7 @@ const italicButton = document.getElementById('italicButton');
 const underlineButton = document.getElementById('underlineButton');
 const editable = document.getElementById('editable');
 const testButton = document.getElementById('testButton');
+const boldRemove = document.getElementById('boldRemove');
 
 // foucasTarget.onselect = (event) => {
 //     let x = event.pageX;
@@ -405,6 +406,10 @@ function setUnderline() {
 
 
     let selectedText = range.extractContents();
+    let cloneRange = range.cloneContents();
+    console.log(selectedText.textContent);
+    range.deleteContents();
+
     let underline = document.createElement("span");
     underline.className = "underline";
     underline.appendChild(selectedText);
@@ -412,43 +417,36 @@ function setUnderline() {
 }
 
 function testFunction() {
+    const ranges1 = [];
+    const ranges2 = [];
     let selection = window.getSelection();
     let range = selection.getRangeAt(0);
     let text = selection.toString();
     const editableChildNodes = editable.childNodes;
-    const editableChildNodesCount = editableChildNodes.length;
-    const editableLastChildNodes = editable.lastChild;
 
     if (range.startContainer === range.endContainer) {
         console.log("選択範囲は一つのコンテナに収まっています");
-        console.log(editable.childNodes.length);
-        console.log(range.commonAncestorContainer.parentElement.tagName);
-        console.log(range.startContainer);
-        console.log(range.endContainer);
-        console.log(range.startOffset);
-        console.log(range.endOffset);
-        console.log(range.commonAncestorContainer);
-
     } else {
         console.log("選択範囲のコンテナは2つ以上です");
-        console.log(editable.childNodes.length);
-        editableChildNodes.forEach(element => {
-            console.log(element.textContent);
-        });
 
         const fragment = range.cloneContents();
         range.deleteContents();
         let test = document.createElement("span");
         test.appendChild(fragment);
-        console.log(fragment);
         range.insertNode(test);
-        console.log(test);
-        console.log(fragment.children);
 
         // 子孫ノードを走査する関数
         function traverse(node) {
+            console.log("関数traverseが呼び出されました");
+            console.log(node.nodeType);
+            console.log(node.childNodes);
+            if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+                node = node.childNodes;
+            }
             if (node.nodeType === Node.ELEMENT_NODE) { // ノードが要素ノードの場合
-                console.log(node); // ノードを処理するコードをここに記述
+                // ノードを処理するコードをここに記述
+                console.log(node);
+                ranges1.push(node);
                 node.childNodes.forEach(element => {
                     console.log(element.textContent);
                 });
@@ -457,25 +455,27 @@ function testFunction() {
                 for (let i = 0; i < children.length; i++) {
                     traverse(children[i]); // 子ノードを再帰的に走査する
                 }
+            } else {
+                console.log("要素ノードではありません");
+                if (node.textContent !== "") {
+                    ranges2.push(node);
+                }
             }
         }
 
         // 親ノードを走査する
-        const Traveler = traverse(editable);
-        console.log(Traveler);
-
+        console.log(fragment);
+        traverse(test);
+        console.log(ranges1);
+        console.log(ranges2);
 
     }
-
-
-
-
-    //各文字ごとに分解
-    const ranges = [];
     console.log("------------------------");
 }
 
+function boldRemoveFunction() {
 
+}
 
 
 
@@ -493,6 +493,7 @@ boldButton4.addEventListener('click', newSetBold);
 italicButton.addEventListener('click', sampleItalic);
 underlineButton.addEventListener('click', setUnderline);
 testButton.addEventListener('click', testFunction);
+boldRemove.addEventListener('click', boldRemoveFunction);
 
 
 
