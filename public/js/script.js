@@ -572,7 +572,8 @@ function boldRemoveFunction() {
 boldButton4.addEventListener('click', newSetBold);
 italicButton.addEventListener('click', sampleItalic);
 underlineButton.addEventListener('click', setUnderline);
-testButton.addEventListener('click', testFunction);
+// testButton.addEventListener('click', testFunction);
+testButton.addEventListener('click', setSpanBold);
 boldRemove.addEventListener('click', boldRemoveFunction);
 
 
@@ -590,7 +591,54 @@ function newSetBold() {
 }
 
 function setSpanBold() {
+    const ranges1 = [];
+    const ranges2 = [];
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
+    const cloneRange = range.cloneContents();
+    const cloneRangeChildNodes = cloneRange.childNodes;
+    console.log(cloneRangeChildNodes);
+    const cloneRangeCount = cloneRange.childNodes.length;
+    for (let i = 0; i < cloneRangeCount; i++) {
+        traverse(cloneRangeChildNodes[i]);
+    }
+    console.log(ranges1);
+    console.log(ranges2);
+    range.deleteContents();
+    for (let i = 0; i < ranges2.length; i++) {
+        range.insertNode(ranges2[ranges2.length - 1 - i]);
+    }
+
+
+    function traverse(node) {
+        console.log("関数traverseが呼び出されました");
+        console.log(node.nodeType);
+        console.log(node.childNodes);
+        if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) { // このif文OK
+            node = node.childNodes;
+            console.log("#document-fragmentです");
+        }
+        if (node.nodeType === Node.ELEMENT_NODE) { // ノードが要素ノードの場合
+            console.log("要素ノードです");
+            // ノードを処理するコードをここに記述
+            console.log(node);
+            console.log(node.nodeName);
+            ranges1.push(node);
+            node.childNodes.forEach(element => {
+                console.log(element.textContent);
+            });
+
+            const children = node.childNodes;
+            for (let i = 0; i < children.length; i++) {
+                traverse(children[i]); // 子ノードを再帰的に走査する
+            }
+        } else if (node.nodeType === Node.TEXT_NODE) {
+            console.log("テキストノードです");
+            if (node.textContent !== "") {
+                console.log(node);
+                ranges2.push(node);
+            }
+        }
+    }
 }
 
