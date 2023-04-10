@@ -468,25 +468,105 @@ function testFunction() {
         traverse(test);
         console.log(ranges1);
         console.log(ranges2);
+        for (let i = 0; i < ranges2.length; i++) {
+            console.log(ranges2[i].nodeName);
+
+        }
 
     }
     console.log("------------------------");
 }
 
 function boldRemoveFunction() {
+    let selection = window.getSelection();
 
-}
+    let range = selection.getRangeAt(0);
+
+    let cloneRange = range.cloneContents();
+
+    let bDocument = cloneRange.querySelectorAll('b');
+
+    let cloneRangeChildNodes = cloneRange.childNodes;
+
+    console.log("cloneRange");
+    console.log(cloneRange);
+    console.log("------------------------");
+    console.log("cloneChildNodes");
+    console.log(cloneRangeChildNodes);
+    console.log("------------------------");
 
 
-
-function allChildsNodesName(nodes) {
-    nodes.forEach(element => {
-        if (element.nodeName !== "#text") {
-            return true;
+    let index = 1;
+    let i = 0;
+    let nodes = [];
+    cloneRangeChildNodes.forEach(element => {
+        if (element.nodeName === "B") {
+            console.log(element.childNodes[0]);
+            console.log(element.hasChildNodes());
+            element.childNodes.forEach(elementChilds => {
+                if (elementChilds.nodeType === Node.TEXT_NODE) {
+                    nodes.push(elementChilds);
+                }
+                console.log(element.childNodes);
+                element.parentNode.appendChild(elementChilds);
+                console.log(elementChilds.parentNode);
+                console.log(element.parentNode);
+            });
         }
-    })
-    return false;
+        console.log(element.nodeType);
+        if (element.nodeType === Node.ELEMENT_NODE) {
+            if (element.nodeName === "B") {
+                element.parentNode.removeChild(element);
+            }
+        } else if (element.nodeType === Node.TEXT_NODE) {
+            nodes.push(element);
+        }
+    });
+    console.log(cloneRangeChildNodes.length);
+    console.log(cloneRangeChildNodes[0]);
+    console.log(cloneRangeChildNodes[1]);
+    range.deleteContents();
+    for (let i = 0; i < 2; i++) {
+        // range.insertNode(cloneRangeChildNodes[i]);
+        // console.log((i + 1) + "回目");
+    }
+
+
+
+    function traverse(node) {
+        // console.log("関数traverseが呼び出されました");
+        // let index = 1;
+        // // const bElement = node.querySelectorAll('b');
+        // // console.log(bElement);
+        // // const parentNode = bElement.parentNode;
+        // // while (bElement.firstChild) {
+        // //     parentNode.insertBefore(bElement.firstChild, bElement);
+        // // }
+        // // parentNode.removeChild(bElement);
+        // node.forEach(element => {
+        //     console.log(element);
+        //     if (element.nodeName === "B") {
+        //         // node.removeChild(element);
+        //         console.log(index + "回目です");
+        //         console.log(element);
+        //         console.log(element.nodeName);
+        //         console.log(element.childNodes);
+        //         node.removeChild(element);
+        //     }
+        //     index++;
+        // });
+        // console.log(node);
+    }
+
+    console.log(nodes);
+    for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].nodeType === Node.TEXT_NODE) {
+            console.log(nodes[i]);
+            range.insertNode(nodes[i]);
+        }
+    }
 }
+
 
 
 boldButton4.addEventListener('click', newSetBold);
@@ -509,19 +589,8 @@ function newSetBold() {
     selection.addRange(range);
 }
 
-function newSetBold() {
+function setSpanBold() {
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
-    const boldElement = document.createElement("b");
-    if (range.value) {
-
-    }
-    boldElement.appendChild(document.createTextNode(range.toString()));
-    range.deleteContents();
-    range.insertNode(boldElement);
-    selection.removeAllRanges();
-    selection.addRange(range);
 }
-
-
 

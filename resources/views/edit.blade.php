@@ -46,7 +46,9 @@
 
     <textarea name="" id="testTextarea2" cols="30" rows="10">mytextarea2</textarea>
 
-    <div id="editable" contenteditable="true">JavaScript</div>
+    <div>
+        <div id="editable" contenteditable="true" class="editable">JavaScript</div>
+    </div>
     <button id="boldButton4">B</button>
     <button id="italicButton"><i>I</i></button>
     <button id="testButton">テスト</button>

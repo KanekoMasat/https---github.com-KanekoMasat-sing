@@ -96,4 +96,6 @@ li {
     text-decoration: underline;
 }
 
-.notBold-font {}
+.editable {
+    padding: 3px 2px;
+}
