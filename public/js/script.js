@@ -195,24 +195,6 @@ function innerhtml() {
     myTextarea2.innerHTML = boldText;
 }
 
-function setItalic() {
-    let selection = window.getSelection();
-    let range = selection.getRangeAt(0);
-    console.log(range.commonAncestorContainer.parentElement);
-    console.log(range.commonAncestorContainer.parentElement.tagName);
-    console.log(range.intersectsNode(range.commonAncestorContainer.parentElement));
-    if (range.commonAncestorContainer.parentElement.tagName === "DIV") {
-        console.log("互い違いに歩き出した僕の両足は");
-        let selectedText = range.extractContents();
-        let italic = document.createElement("i");
-        italic.appendChild(selectedText);
-        range.insertNode(italic);
-    } else if (range.commonAncestorContainer.parentElement.tagName === "I") {
-        console.log("何もしません");
-    }
-
-}
-
 
 
 
@@ -399,22 +381,7 @@ function getSelectedNodes(range) {
 
 
 
-function setUnderline() {
-    let selection = window.getSelection();
-    let range = selection.getRangeAt(0);
-    const fragment = range.cloneContents();
 
-
-    let selectedText = range.extractContents();
-    let cloneRange = range.cloneContents();
-    console.log(selectedText.textContent);
-    range.deleteContents();
-
-    let underline = document.createElement("span");
-    underline.className = "underline";
-    underline.appendChild(selectedText);
-    range.insertNode(underline);
-}
 
 function testFunction() {
     const ranges1 = [];
@@ -569,28 +536,61 @@ function boldRemoveFunction() {
 
 
 
-boldButton4.addEventListener('click', newSetBold);
-italicButton.addEventListener('click', sampleItalic);
+boldButton4.addEventListener('click', setBold);
+italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
 // testButton.addEventListener('click', testFunction);
-testButton.addEventListener('click', setSpanBold);
+testButton.addEventListener('click', tagRemove);
 boldRemove.addEventListener('click', boldRemoveFunction);
 
 
 
-
-function newSetBold() {
+//太字
+function setBold() {
     const selection = document.getSelection();
-    const range = window.getSelection().getRangeAt(0);
-    const boldElement = document.createElement("b");
-    boldElement.appendChild(document.createTextNode(range.toString()));
+    const range = selection.getRangeAt(0);
+
+    let selectedText = range.extractContents();
+    console.log(selectedText.textContent);
     range.deleteContents();
-    range.insertNode(boldElement);
-    selection.removeAllRanges();
-    selection.addRange(range);
+
+    const bold = document.createElement("span");
+    bold.style.fontWeight = "bold";
+    bold.appendChild(selectedText);
+    range.insertNode(bold);
 }
 
-function setSpanBold() {
+//斜体
+function setItalic() {
+    const selection = document.getSelection();
+    const range = selection.getRangeAt(0);
+
+    let selectedText = range.extractContents();
+    console.log(selectedText.textContent);
+    range.deleteContents();
+
+    const italic = document.createElement("span");
+    italic.style.fontStyle = "italic";
+    italic.appendChild(selectedText);
+    range.insertNode(italic);
+}
+
+//下線
+function setUnderline() {
+    let selection = window.getSelection();
+    let range = selection.getRangeAt(0);
+
+    let selectedText = range.extractContents();
+    console.log(selectedText.textContent);
+    range.deleteContents();
+
+    const underline = document.createElement("span");
+    underline.style.borderBottom = "2px solid black";
+    underline.appendChild(selectedText);
+    range.insertNode(underline);
+}
+
+function tagRemove() {
     const ranges1 = [];
     const ranges2 = [];
     const selection = window.getSelection();
