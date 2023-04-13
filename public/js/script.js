@@ -13,6 +13,8 @@ const underlineButton = document.getElementById('underlineButton');
 const editable = document.getElementById('editable');
 const testButton = document.getElementById('testButton');
 const boldRemove = document.getElementById('boldRemove');
+const alertButton = document.getElementById('alertButton');
+
 
 // foucasTarget.onselect = (event) => {
 //     let x = event.pageX;
@@ -542,27 +544,60 @@ underlineButton.addEventListener('click', setUnderline);
 // testButton.addEventListener('click', testFunction);
 testButton.addEventListener('click', tagRemove);
 boldRemove.addEventListener('click', boldRemoveFunction);
+alertButton.addEventListener('click', function () {
+    const selection = document.getSelection();
+    const range = selection.getRangeAt(0);
+    alert(window.getComputedStyle(range.commonAncestorContainer.parentElement).fontWeight);
+});
 
 
 
 //太字
 function setBold() {
-    const selection = document.getSelection();
+    const selection = window.getSelection();
     const range = selection.getRangeAt(0);
 
-    let selectedText = range.extractContents();
-    console.log(selectedText.textContent);
-    range.deleteContents();
+    // console.log(range.commonAncestorContainer.parentElement);
+    // console.log(range.commonAncestorContainer.parentElement.style.fontWeight === "bold");
+    // let selectedText = range.extractContents();
+    // console.log(selectedText.textContent);
+    // const bold = document.createElement("span");
+    // bold.style.fontWeight = "bold";
+    // bold.appendChild(selectedText);
+    // range.insertNode(bold);
 
-    const bold = document.createElement("span");
-    bold.style.fontWeight = "bold";
-    bold.appendChild(selectedText);
-    range.insertNode(bold);
+    if (range.commonAncestorContainer.parentElement.style.fontWeight === "") {
+        //fontWeightが設定されていない場合
+        let selectedText = range.extractContents();
+        console.log(selectedText.textContent);
+        const bold = document.createElement("span");
+        bold.style.fontWeight = "bold";
+        console.log(range.startContainer.previousSibling);
+        console.log(range.endContainer.nextSibling);
+        console.log(range.cloneRange());
+        // if (window.getComputedStyle(range.startContainer.previousSibling) === window.getComputedStyle(range.endContainer.nextSibling)) {
+
+        // }
+
+        bold.appendChild(selectedText);
+        range.insertNode(bold);
+    } else if (range.commonAncestorContainer.parentElement.style.fontWeight === "bold") {
+        //fontWeightがboldの場合
+        const selectedNode = range.extractContents();
+
+
+    }
+
+    editable.childNodes.forEach(element => {
+        console.log(element);   //なぜかこれがおかしい。#textってなんぞや
+    })
+    console.log(editable.childNodes.length);
+
 }
 
 //斜体
 function setItalic() {
-    const selection = document.getSelection();
+    const selection = window.getSelection();
     const range = selection.getRangeAt(0);
 
     let selectedText = range.extractContents();
@@ -590,11 +625,22 @@ function setUnderline() {
     range.insertNode(underline);
 }
 
+/*
+    選択した状態の種類
+1. 何も装飾されていないテキストを装飾　→　すべて装飾する
+    1.1 前か後ろに同じstyleを持つspanタグがあれば、そのタグ内に文字を入れる
+    1.2 前後どちらも同じstyleを持つspanタグがあれば、どちらのタグも繋げる
+2. 装飾されたテキストを選択　→　装飾を消す
+    2.1 装飾されたテキスト内の一部のみ選択　→　前後の状態はそのままに選択した部分は装飾を消す、もし他に何もspanタグに記載がなければsapnタグごと消す
+3. 何も装飾されていないテキストと装飾されたテキストの二つを複合状態で選択　→　装飾されたテキストはそのままに、装飾されていないテキストは装飾する
+*/
 function tagRemove() {
     const ranges1 = [];
     const ranges2 = [];
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
+    const weight = window.getComputedStyle(range.commonAncestorContainer.parentElement).fontWeight;
+    console.log(weight);
     const cloneRange = range.cloneContents();
     const cloneRangeChildNodes = cloneRange.childNodes;
     console.log(cloneRangeChildNodes);
@@ -632,7 +678,7 @@ function tagRemove() {
             for (let i = 0; i < children.length; i++) {
                 traverse(children[i]); // 子ノードを再帰的に走査する
             }
-        } else if (node.nodeType === Node.TEXT_NODE) {
+        } else if (node.nodeType === Node.TEXT_NODE) {  //ノードがテキストノードの場合
             console.log("テキストノードです");
             if (node.textContent !== "") {
                 console.log(node);
