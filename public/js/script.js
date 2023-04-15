@@ -556,6 +556,9 @@ alertButton.addEventListener('click', function () {
 function setBold() {
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
+    editable.childNodes.forEach(element => {
+        console.log(element);
+    })
 
     // console.log(range.commonAncestorContainer.parentElement);
     // console.log(range.commonAncestorContainer.parentElement.style.fontWeight === "bold");
@@ -572,13 +575,9 @@ function setBold() {
         console.log(selectedText.textContent);
         const bold = document.createElement("span");
         bold.style.fontWeight = "bold";
-        console.log(range.startContainer.previousSibling);
-        console.log(range.endContainer.nextSibling);
-        console.log(range.cloneRange());
         // if (window.getComputedStyle(range.startContainer.previousSibling) === window.getComputedStyle(range.endContainer.nextSibling)) {
 
         // }
-
         bold.appendChild(selectedText);
         range.insertNode(bold);
     } else if (range.commonAncestorContainer.parentElement.style.fontWeight === "bold") {
@@ -588,11 +587,45 @@ function setBold() {
 
     }
 
+    console.log("----- editableのchildNodes -----")
     editable.childNodes.forEach(element => {
-        console.log(element);   //なぜかこれがおかしい。#textってなんぞや
-    })
-    console.log(editable.childNodes.length);
+        if (element.textContent !== "") {
+            console.log(element);   //なぜかこれがおかしい。#textってなんぞや　→　改行した時にも#textが挿入される？
+        }
 
+    });
+    console.log("----- 終わり ------");
+
+    //前のノードが文字入りのテキストノードならテキストノードを返し空白のノードなら空白ノードを消し、もう一つ前のノードを返す
+    if (range.startContainer.textContent !== "") {
+        console.log("前のノード: " + range.startContainer.textContent);
+    } else if (range.startContainer.textContent === "" && range.startContainer.previousSibling !== null) {
+        console.log(range.startContainer);
+        console.log("画面表示上での前のノード: " + range.startContainer.previousSibling.textContent);
+        // range.startContainer.parentNode.removeChild(range.startContainer);
+        console.log(editable.childNodes.length);
+    }
+    console.log(range.startContainer);
+
+
+    //次のノードが文字入りのテキストノードならテキストノードを返し空白のノードなら空白ノードを消し、もう一つ次のノードを返す
+    if (range.startContainer.nextSibling.textContent !== "\n    ") {
+        if (range.startContainer.nextSibling.nextSibling.textContent !== "") {
+            console.log("次のノード: " + range.startContainer.nextSibling.nextSibling);
+        } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.textContent !== null) {
+            console.log("画面表示上の次のノード" + range.startContainer.nextSibling.nextSibling.nextSibling.textContent);
+        }
+    }
+
+    //文頭の文字を選択した場合のif文
+    if (range.startContainer.nextSibling.textContent === "\n    ") {
+        if (range.startContainer.childNodes[0].nextSibling.textContent !== "") {
+            console.log("次のノード: " + range.startContainer.childNodes[0].nextSibling.textContent);
+        } else {
+            console.log("画面表示上での次のノード: " + range.startContainer.childNodes[0].nextSibling.nextSibling.textContent);
+            // range.startContainer.removeChild(range.startContainer.childNodes[0].nextSibling);
+        }
+    }
 }
 
 //斜体
