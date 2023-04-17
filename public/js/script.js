@@ -556,10 +556,6 @@ alertButton.addEventListener('click', function () {
 function setBold() {
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
-    editable.childNodes.forEach(element => {
-        console.log(element);
-    })
-
     // console.log(range.commonAncestorContainer.parentElement);
     // console.log(range.commonAncestorContainer.parentElement.style.fontWeight === "bold");
     // let selectedText = range.extractContents();
@@ -569,23 +565,33 @@ function setBold() {
     // bold.appendChild(selectedText);
     // range.insertNode(bold);
 
+    console.log(range.startContainer.previousSibling);
+    console.log(range.startContainer);
     if (range.commonAncestorContainer.parentElement.style.fontWeight === "") {
         //fontWeightが設定されていない場合
-        let selectedText = range.extractContents();
-        console.log(selectedText.textContent);
+        // let selectedText = range.extractContents();
+        // console.log(selectedText.textContent);
+
         const bold = document.createElement("span");
         bold.style.fontWeight = "bold";
-        // if (window.getComputedStyle(range.startContainer.previousSibling) === window.getComputedStyle(range.endContainer.nextSibling)) {
+        const you = range.startContainer.previousSibling;
+        console.log(you);
+        const stare = range.extractContents().childNodes[0];
+        console.log(stare);
 
-        // }
-        bold.appendChild(selectedText);
+        bold.appendChild(you.childNodes[0]);
+        bold.appendChild(stare);
+        // bold.appendChild(selectedText);
         range.insertNode(bold);
+        you.parentNode.removeChild(you);
+
     } else if (range.commonAncestorContainer.parentElement.style.fontWeight === "bold") {
         //fontWeightがboldの場合
         const selectedNode = range.extractContents();
-
-
     }
+
+
+
 
     console.log("----- editableのchildNodes -----")
     editable.childNodes.forEach(element => {
@@ -597,9 +603,12 @@ function setBold() {
     //前のノード取得(HTML表示上での)
     if (range.startContainer.textContent !== "") {
         console.log("前のノード: " + range.startContainer.textContent);
+
+        //前ノードがspanタグの場合
     } else if (range.startContainer.textContent === "" && range.startContainer.previousSibling !== null) {
-        console.log(range.startContainer);
         console.log("前のノード: " + range.startContainer.previousSibling.textContent + "（前ノード間に空白ノードあり）");
+
+        //文頭の場合
     } else if (range.startContainer.textContent === "" && range.startContainer.previousSibling === null) {
         console.log("文頭のため前ノードはない")
     }
@@ -623,12 +632,11 @@ function setBold() {
         //次ノードが文字入りテキストノード用分岐
     } else if (range.startContainer.nextSibling.nextSibling.textContent !== "") {
         console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.textContent);
+
         //次ノードがspanタグ用分岐
     } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling.nodeName === "SPAN") {
         console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.nextSibling.textContent);
     }
-
-
 }
 
 //斜体
