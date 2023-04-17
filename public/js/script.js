@@ -589,43 +589,46 @@ function setBold() {
 
     console.log("----- editableのchildNodes -----")
     editable.childNodes.forEach(element => {
-        if (element.textContent !== "") {
-            console.log(element);   //なぜかこれがおかしい。#textってなんぞや　→　改行した時にも#textが挿入される？
-        }
+        console.log(element);
 
     });
     console.log("----- 終わり ------");
 
-    //前のノードが文字入りのテキストノードならテキストノードを返し空白のノードなら空白ノードを消し、もう一つ前のノードを返す
+    //前のノード取得(HTML表示上での)
     if (range.startContainer.textContent !== "") {
         console.log("前のノード: " + range.startContainer.textContent);
     } else if (range.startContainer.textContent === "" && range.startContainer.previousSibling !== null) {
         console.log(range.startContainer);
-        console.log("画面表示上での前のノード: " + range.startContainer.previousSibling.textContent);
-        // range.startContainer.parentNode.removeChild(range.startContainer);
-        console.log(editable.childNodes.length);
+        console.log("前のノード: " + range.startContainer.previousSibling.textContent + "（前ノード間に空白ノードあり）");
+    } else if (range.startContainer.textContent === "" && range.startContainer.previousSibling === null) {
+        console.log("文頭のため前ノードはない")
     }
-    console.log(range.startContainer);
 
-
-    //次のノードが文字入りのテキストノードならテキストノードを返し空白のノードなら空白ノードを消し、もう一つ次のノードを返す
-    if (range.startContainer.nextSibling.textContent !== "\n    ") {
+    //次のノード取得(HTML表示上での)
+    //文頭分岐
+    if (range.startContainer.textContent === "" && range.startContainer.previousSibling === null) {
+        //次のノードがspanタグじゃない場合
         if (range.startContainer.nextSibling.nextSibling.textContent !== "") {
-            console.log("次のノード: " + range.startContainer.nextSibling.nextSibling);
-        } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.textContent !== null) {
-            console.log("画面表示上の次のノード" + range.startContainer.nextSibling.nextSibling.nextSibling.textContent);
+            console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.textContent);
+
+            //次のノードがspanタグの場合
+        } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling.nodeName === "SPAN") {
+            console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.nextSibling.textContent + "（次ノード間に空白ノードあり）");
         }
+
+        //文末分岐
+    } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling === null) {
+        console.log("文末のため、次のノードはない");
+
+        //次ノードが文字入りテキストノード用分岐
+    } else if (range.startContainer.nextSibling.nextSibling.textContent !== "") {
+        console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.textContent);
+        //次ノードがspanタグ用分岐
+    } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling.nodeName === "SPAN") {
+        console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.nextSibling.textContent);
     }
 
-    //文頭の文字を選択した場合のif文
-    if (range.startContainer.nextSibling.textContent === "\n    ") {
-        if (range.startContainer.childNodes[0].nextSibling.textContent !== "") {
-            console.log("次のノード: " + range.startContainer.childNodes[0].nextSibling.textContent);
-        } else {
-            console.log("画面表示上での次のノード: " + range.startContainer.childNodes[0].nextSibling.nextSibling.textContent);
-            // range.startContainer.removeChild(range.startContainer.childNodes[0].nextSibling);
-        }
-    }
+
 }
 
 //斜体
