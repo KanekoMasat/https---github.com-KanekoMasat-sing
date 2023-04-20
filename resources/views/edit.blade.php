@@ -46,9 +46,13 @@
 
     <textarea name="" id="testTextarea2" cols="30" rows="10">mytextarea2</textarea>
 
-    <div class="editable-wraper">
-        <div id="editable" contenteditable="true" class="editable">JavaScript<span style="font-weight: bold">高まる愛の中</span>変わる心情の中</div>
+    
+    <div id="editable" contenteditable="true" class="editable">
+        <div class="editable-inner">
+            JavaScript<span style="font-weight: bold">高まる愛の中</span>変わる心情の中
+        </div>
     </div>
+    
     <button id="boldButton4">B</button>
     <button id="italicButton"><i>I</i></button>
     <button id="testButton">テスト</button>

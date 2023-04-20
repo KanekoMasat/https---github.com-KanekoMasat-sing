@@ -554,89 +554,165 @@ alertButton.addEventListener('click', function () {
 
 //太字
 function setBold() {
+
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
-    // console.log(range.commonAncestorContainer.parentElement);
-    // console.log(range.commonAncestorContainer.parentElement.style.fontWeight === "bold");
-    // let selectedText = range.extractContents();
-    // console.log(selectedText.textContent);
-    // const bold = document.createElement("span");
-    // bold.style.fontWeight = "bold";
-    // bold.appendChild(selectedText);
-    // range.insertNode(bold);
-
-    console.log(range.startContainer.previousSibling);
-    console.log(range.startContainer);
-    if (range.commonAncestorContainer.parentElement.style.fontWeight === "") {
-        //fontWeightが設定されていない場合
-        // let selectedText = range.extractContents();
-        // console.log(selectedText.textContent);
-
-        const bold = document.createElement("span");
-        bold.style.fontWeight = "bold";
-        const you = range.startContainer.previousSibling;
-        console.log(you);
-        const stare = range.extractContents().childNodes[0];
-        console.log(stare);
-
-        bold.appendChild(you.childNodes[0]);
-        bold.appendChild(stare);
-        // bold.appendChild(selectedText);
-        range.insertNode(bold);
-        you.parentNode.removeChild(you);
-
-    } else if (range.commonAncestorContainer.parentElement.style.fontWeight === "bold") {
-        //fontWeightがboldの場合
-        const selectedNode = range.extractContents();
-    }
-
-
+    let nodes = [];
 
 
     console.log("----- editableのchildNodes -----")
-    editable.childNodes.forEach(element => {
-        console.log(element);
-
-    });
+    for (let i = 0; i < editable.childNodes.length; i++) {
+        console.log(editable.childNodes[1].childNodes[i]);
+    }
     console.log("----- 終わり ------");
 
-    //前のノード取得(HTML表示上での)
-    if (range.startContainer.textContent !== "") {
-        console.log("前のノード: " + range.startContainer.textContent);
 
-        //前ノードがspanタグの場合
-    } else if (range.startContainer.textContent === "" && range.startContainer.previousSibling !== null) {
-        console.log("前のノード: " + range.startContainer.previousSibling.textContent + "（前ノード間に空白ノードあり）");
+    console.log(range.commonAncestorContainer.parentNode.style.fontWeight);
+    const boldContainer = document.createElement("span");
+    boldContainer.style.fontWeight = "bold";
+    const rangeExtractContents = range.extractContents();
+    range.deleteContents();
+    boldContainer.appendChild(rangeExtractContents);
+    range.insertNode(boldContainer);
 
-        //文頭の場合
-    } else if (range.startContainer.textContent === "" && range.startContainer.previousSibling === null) {
-        console.log("文頭のため前ノードはない")
-    }
-
-    //次のノード取得(HTML表示上での)
-    //文頭分岐
-    if (range.startContainer.textContent === "" && range.startContainer.previousSibling === null) {
-        //次のノードがspanタグじゃない場合
-        if (range.startContainer.nextSibling.nextSibling.textContent !== "") {
-            console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.textContent);
-
-            //次のノードがspanタグの場合
-        } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling.nodeName === "SPAN") {
-            console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.nextSibling.textContent + "（次ノード間に空白ノードあり）");
+    console.log("----- 削除前のchildNodes -----")
+    for (let i = 0; i < range.commonAncestorContainer.childNodes.length; i++) {
+        console.log(range.commonAncestorContainer.childNodes[i]);
+        if (range.commonAncestorContainer.childNodes[i].textContent === "") {
+            nodes.push(range.commonAncestorContainer.childNodes[i]);
         }
-
-        //文末分岐
-    } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling === null) {
-        console.log("文末のため、次のノードはない");
-
-        //次ノードが文字入りテキストノード用分岐
-    } else if (range.startContainer.nextSibling.nextSibling.textContent !== "") {
-        console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.textContent);
-
-        //次ノードがspanタグ用分岐
-    } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling.nodeName === "SPAN") {
-        console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.nextSibling.textContent);
     }
+    console.log("----- 終わり ------");
+
+    for (let i = 0; i < nodes.length; i++) {
+        nodes[i].parentNode.removeChild(nodes[i]);
+    }
+
+    console.log("----- 削除後のchildNodes -----");
+
+    for (let i = 0; i < range.commonAncestorContainer.childNodes.length; i++) {
+        console.log(range.commonAncestorContainer.childNodes[i]);
+    }
+    console.log("----- 終わり ------");
+
+    console.log(range.startContainer.previousSibling);
+    console.log(range.startContainer);
+    console.log(range.startContainer.nextSibling);
+    console.log(range.commonAncestorContainer);
+    console.log(range.commonAncestorContainer.childNodes.length);
+    let node;
+    console.log(node);
+    const newLine = range.commonAncestorContainer.childNodes[0].textContent;
+
+    for (let i = 0, j = range.commonAncestorContainer.childNodes.length; i < j; i++) {
+        console.log(i + 1 + "回目です");
+        console.log(range.commonAncestorContainer.childNodes[i]);
+        if (range.commonAncestorContainer.childNodes[i].nodeName === "SPAN") {
+
+            if (node !== undefined && node.textContent !== "" && node.textContent !== newLine && node.style) {
+
+                if (range.commonAncestorContainer.childNodes[i].style.fontWeight === "bold") {
+                    console.log(node);
+
+                    if (range.commonAncestorContainer.childNodes[i].style.fontWeight === node.style.fontWeight) {
+
+                        const boldContainer = document.createElement("span");
+                        boldContainer.style.fontWeight = "bold";
+                        const boldText = node.textContent + range.commonAncestorContainer.childNodes[i].textContent;
+                        console.log(boldText);
+                        const boldTextNode = document.createTextNode(boldText);
+                        boldContainer.appendChild(boldTextNode);
+                        range.commonAncestorContainer.childNodes[i].parentNode.removeChild(range.commonAncestorContainer.childNodes[i]);
+                        node.parentNode.removeChild(node);
+                        range.insertNode(boldContainer);
+                        i--;
+                        j--;
+                    }
+                }
+            }
+        }
+        node = range.commonAncestorContainer.childNodes[i];
+    }
+
+    let nodes2 = [];
+    for (let i = 0; i < range.commonAncestorContainer.childNodes.length; i++) {
+        console.log(range.commonAncestorContainer.childNodes[i]);
+        if (range.commonAncestorContainer.childNodes[i].textContent === "") {
+            nodes2.push(range.commonAncestorContainer.childNodes[i]);
+        }
+    }
+
+    for (let i = 0; i < nodes2.length; i++) {
+        nodes2[i].parentNode.removeChild(nodes2[i]);
+    }
+
+
+
+    // if (range.commonAncestorContainer.parentElement.style.fontWeight === "") {
+    //     //fontWeightが設定されていない場合
+    //     // let selectedText = range.extractContents();
+    //     // console.log(selectedText.textContent);
+
+    //     const bold = document.createElement("span");
+    //     bold.style.fontWeight = "bold";
+    //     const you = range.startContainer.previousSibling;
+    //     const stare = range.extractContents().childNodes[0];
+    //     const who = you.childNodes[0].textContent + stare.textContent;
+    //     const love = document.createTextNode(who);
+
+    //     bold.appendChild(love);
+    //     // bold.appendChild(selectedText);
+    //     range.insertNode(bold);
+    //     you.parentNode.removeChild(you);
+
+    // } else if (range.commonAncestorContainer.parentElement.style.fontWeight === "bold") {
+    //     //fontWeightがboldの場合
+    //     const selectedNode = range.extractContents();
+    // }
+    //現在状況：一回限りで前のノード(font-Weight: bold)と選択した部分を結合できる
+    //          空白ノードがあれば消すのを試してみてもいいかも
+
+
+
+
+
+    // //前のノード取得(HTML表示上での)
+    // if (range.startContainer.textContent !== "") {
+    //     console.log("前のノード: " + range.startContainer.textContent);
+
+    //     //前ノードがspanタグの場合
+    // } else if (range.startContainer.textContent === "" && range.startContainer.previousSibling !== null) {
+    //     console.log("前のノード: " + range.startContainer.previousSibling.textContent + "（前ノード間に空白ノードあり）");
+
+    //     //文頭の場合
+    // } else if (range.startContainer.textContent === "" && range.startContainer.previousSibling === null) {
+    //     console.log("文頭のため前ノードはない")
+    // }
+
+    // //次のノード取得(HTML表示上での)
+    // //文頭分岐
+    // if (range.startContainer.textContent === "" && range.startContainer.previousSibling === null) {
+    //     //次のノードがspanタグじゃない場合
+    //     if (range.startContainer.nextSibling.nextSibling.textContent !== "") {
+    //         console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.textContent);
+
+    //         //次のノードがspanタグの場合
+    //     } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling.nodeName === "SPAN") {
+    //         console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.nextSibling.textContent + "（次ノード間に空白ノードあり）");
+    //     }
+
+    //     //文末分岐
+    // } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling === null) {
+    //     console.log("文末のため、次のノードはない");
+
+    //     //次ノードが文字入りテキストノード用分岐
+    // } else if (range.startContainer.nextSibling.nextSibling.textContent !== "") {
+    //     console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.textContent);
+
+    //     //次ノードがspanタグ用分岐
+    // } else if (range.startContainer.nextSibling.nextSibling.textContent === "" && range.startContainer.nextSibling.nextSibling.nextSibling.nodeName === "SPAN") {
+    //     console.log("次のノード: " + range.startContainer.nextSibling.nextSibling.nextSibling.textContent);
+    // }
 }
 
 //斜体
