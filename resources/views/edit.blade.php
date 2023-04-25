@@ -49,12 +49,12 @@
     
     <div id="editable" contenteditable="true" class="editable">
         <div class="editable-inner">
-            JavaScript<span style="font-weight: bold">高まる愛の中</span>変わる心情の中
+            JavaScript<span style="font-style: italic;">高まる愛の中</span>変わる心情の中
         </div>
     </div>
     
     <button id="boldButton4">B</button>
-    <button id="italicButton"><i>I</i></button>
+    <button id="italicButton" style="font-style: italic">I</button>
     <button id="testButton">テスト</button>
     <button id="underlineButton" {{-- onclick='document.execCommand("underline"); --}}><u>U</u></button>
     <button id="boldRemove">b削除</button>
