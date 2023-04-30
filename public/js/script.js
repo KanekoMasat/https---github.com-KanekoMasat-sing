@@ -13,7 +13,6 @@ const underlineButton = document.getElementById('underlineButton');
 const editable = document.getElementById('editable');
 const testButton = document.getElementById('testButton');
 const boldRemove = document.getElementById('boldRemove');
-const alertButton = document.getElementById('alertButton');
 
 
 foucasTarget.addEventListener('mouseup', function (event) {
@@ -534,11 +533,6 @@ underlineButton.addEventListener('click', setUnderline);
 // testButton.addEventListener('click', testFunction);
 testButton.addEventListener('click', tagRemove);
 boldRemove.addEventListener('click', boldRemoveFunction);
-alertButton.addEventListener('click', function () {
-    const selection = document.getSelection();
-    const range = selection.getRangeAt(0);
-    alert(window.getComputedStyle(range.commonAncestorContainer.parentElement).fontWeight);
-});
 
 
 
@@ -749,21 +743,6 @@ alertButton.addEventListener('click', function () {
 //     }
 // }
 
-/*
-選択した部分はspanタグが適用されているか
-1. 適用されていない
-2. 適用されている
-3. 一部適用されている
-2と3なら次の項目へ
-
-spanタグのstyleは
-1. 今から付与しようとしている属性と同じ
-2. 今から付与しようとしている属性と同じだが、違う属性も含まれている
-3. 今から付与しようとしている属性と違う
-
-選択範囲は
-1. タグが適用されている範囲の全て
-*/
 
 //子孫ノードを走査する関数
 function traverse(node) {
@@ -797,11 +776,24 @@ function traverse(node) {
 
 //斜体
 function setItalic() {
+    console.log("処理開始");
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
     edit(range, "italic");
+    let rangeParentNode = range.commonAncestorContainer.parentNode;
+    if (rangeParentNode.className !== "editable") {
+        while (rangeParentNode.className !== "editable-inner") {
+            rangeParentNode = rangeParentNode.parentNode;
+        }
+    } else {
+        rangeParentNode = range.commonAncestorContainer;
+    }
 
-    // let selectedText = range.extractContents();
+    combineAdjacentNodes(rangeParentNode);
+    // removeEmptyNodes(rangeParentNode);
+
+
+    // const selectedText = range.extractContents();
     // console.log(selectedText.textContent);
     // range.deleteContents();
 
@@ -817,7 +809,7 @@ function setUnderline() {
     const range = selection.getRangeAt(0);
     edit(range, "underLine");
 
-    // let selectedText = range.extractContents();
+    // const selectedText = range.extractContents();
     // console.log(selectedText.textContent);
     // range.deleteContents();
 
@@ -890,8 +882,6 @@ function edit(range, addAttribute) {
             parentElementAttribute.forEach(element => {
                 if (element.value === addAttribute) {
                     removeAttribute(element.value, parentElement);
-                } else {
-
                 }
             });
 
@@ -902,7 +892,7 @@ function edit(range, addAttribute) {
                 parentElement.parentNode.replaceChild(childTextContainer, parentElement);
             }
         } else {
-            console.log(range.commonAncestorContainer.parentNode);
+            setSpan(addAttribute, range);
         }
     } else {
 
@@ -910,6 +900,8 @@ function edit(range, addAttribute) {
 }
 //これまでの学習の課題として全ての処理を共通で動かせるようにする
 //一つずつの関数はなるべく短く心がける
+//現在状況：タグをノードごと外す、ついてないノードに付ける機能は完成
+//問題は一部にだけ付けたり、一部だけ外す方法
 
 //spanタグに付与予定の属性を取得できるメソッド
 function getElementAttribute(parentElement) {
@@ -936,11 +928,11 @@ function removeAttribute(attribute, element) {
 
 function setSpan(attribute, range) {
     if (attribute === "bold") {
-        setBold(range);
+        setSpanBold(range);
     } else if (attribute === "italic") {
-        setItalic(range);
+        setSpanItalic(range);
     } else if (attribute === "underLine") {
-        setUnderLine(range);
+        setSpanUnderLine(range);
     }
 }
 
@@ -972,4 +964,37 @@ function setSpanUnderLine() {
     underline.style.borderBottom = "2px solid black";
     underline.appendChild(selectedText);
     range.insertNode(underline);
+}
+
+function combineAdjacentNodes(element) {
+    const elementChilds = element.childNodes;
+    console.log(elementChilds);
+    let previousNode;
+    for (let i = 0, j = elementChilds.length; i < j; i++) {
+        console.log(i);
+        console.log(elementChilds[i]);
+        if (elementChilds[i].nodeType === Node.TEXT_NODE && elementChilds[i].textContent !== "" && previousNode !== undefined) {
+            if (previousNode.nodeType === Node.TEXT_NODE) {
+                const textNode = document.createTextNode(previousNode.textContent + elementChilds[i].textContent);
+                //ノードを消す
+                element.replaceChild(textNode, previousNode);
+                elementChilds[i].parentNode.removeChild(elementChilds[i]);
+                i--;
+                j--;
+
+                //現在状況：追加はできたが例の如く逆に追加される。対処を考える
+            }
+        }
+        previousNode = elementChilds[i];
+    }
+}
+
+function removeEmptyNodes(element) {
+    const elementChilds = element.childNodes;
+
+    elementChilds.forEach(node => {
+        if (node.textContent === "") {
+            node.parentNode.removeChild(node);
+        }
+    });
 }
