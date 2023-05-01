@@ -878,37 +878,20 @@ function edit(range, addAttribute) {
     if (range.startContainer === range.endContainer) {
         if (range.commonAncestorContainer.parentElement.tagName === "SPAN") {
             let resultNode;
-            let beforeNode = "";
-            let afterNode = "";
+            let beforeText = "";
+            let afterText = "";
             let afterNodeNumber;
-            let condition;
-            let fragment = document.createDocumentFragment();
-            const beforeNodeContainer = document.createElement("span");
-            const afterNodeContainer = document.createElement("span");
             const middleTextNode = document.createTextNode(range.toString());
             const rangeNumberArray = getNumbersBetween(range.startOffset, range.endOffset);
             const parentElement = range.commonAncestorContainer.parentElement;
             const parentElementTextArray = parentElement.textContent.split("");
 
-            //？付きで文字を配列に
-            // for (let i = 0; i < parentElementTextArray.length; i++) {
-            //     for (let j = 0; j < rangeNumberArray.length - 1; j++) {
-            //         if (rangeNumberArray[j] === i) {
-            //             resultNode.push("?");
-            //             condition = false;
-            //         }
-            //     }
-            //     if (condition || condition === undefined) {
-            //         resultNode.push(parentElementTextArray[i]);
-            //     }
-            //     condition = true;
-            // }
             resultNode = createElementTextArray(parentElementTextArray, rangeNumberArray);
 
             //？の部分を何番目か保存及び？前の文字取得
             for (let i = 0; i < resultNode.length; i++) {
                 if (resultNode[i].indexOf("?") === -1) {
-                    beforeNode += resultNode[i];
+                    beforeText += resultNode[i];
                 } else if (resultNode[i].indexOf("?") !== -1) {
                     afterNodeNumber = i;
                     i = resultNode.length;
@@ -924,28 +907,28 @@ function edit(range, addAttribute) {
 
             //？終わりからの文字取得
             for (let i = afterNodeNumber; i < resultNode.length; i++) {
-                afterNode += resultNode[i];
+                afterText += resultNode[i];
             }
 
             //空白でなければspanタグに入れる
-            if (beforeNode !== "") {
-                const beforeChangeTextNode = document.createTextNode(beforeNode);
-                setAttribute(addAttribute, beforeNodeContainer);
-                beforeNodeContainer.appendChild(beforeChangeTextNode);
-                fragment.appendChild(beforeNodeContainer);
-            }
+            // if (beforeNode !== "") {
+            //     const beforeChangeTextNode = document.createTextNode(beforeNode);
+            //     setAttribute(addAttribute, beforeNodeContainer);
+            //     beforeNodeContainer.appendChild(beforeChangeTextNode);
+            //     fragment.appendChild(beforeNodeContainer);
+            // }
 
-            //今回外れる
-            fragment.appendChild(middleTextNode);
+            // //今回外れる
+            // fragment.appendChild(middleTextNode);
 
-            //空白でなければspanタグに入れる
-            if (afterNode !== "") {
-                const afterChangeTextNode = document.createTextNode(afterNode);
-                setAttribute(addAttribute, afterNodeContainer);
-                afterNodeContainer.appendChild(afterChangeTextNode);
-                fragment.appendChild(afterNodeContainer);
-            }
-            console.log(fragment);
+            // //空白でなければspanタグに入れる
+            // if (afterNode !== "") {
+            //     const afterChangeTextNode = document.createTextNode(afterNode);
+            //     setAttribute(addAttribute, afterNodeContainer);
+            //     afterNodeContainer.appendChild(afterChangeTextNode);
+            //     fragment.appendChild(afterNodeContainer);
+            // }
+            console.log(concatNodes(beforeText, middleTextNode, afterText, addAttribute));
 
 
             //     const parentElementAttribute = getElementAttribute(range.commonAncestorContainer.parentElement);
@@ -1098,6 +1081,7 @@ function assignmentUnderLine(element) {
     element.style.borderBottom = "2px solid black";
 }
 
+//選択した部分だけ"？"にする
 function createElementTextArray(elementTextArray, numberRange) {
     let condition;
     const resultNode = [];
@@ -1114,4 +1098,28 @@ function createElementTextArray(elementTextArray, numberRange) {
         condition = true;
     }
     return resultNode;
+}
+
+function concatNodes(beforeText, middleTextNode, afterText, addAttribute) {
+    const beforeNodeContainer = document.createElement("span");
+    const afterNodeContainer = document.createElement("span");
+    let fragment = document.createDocumentFragment();
+
+    if (beforeText !== "") {
+        const beforeChangeTextNode = document.createTextNode(beforeText);
+        setAttribute(addAttribute, beforeNodeContainer);
+        beforeNodeContainer.appendChild(beforeChangeTextNode);
+        fragment.appendChild(beforeNodeContainer);
+    }
+
+    fragment.appendChild(middleTextNode);
+
+    if (afterText !== "") {
+        const afterChangeTextNode = document.createTextNode(afterText);
+        setAttribute(addAttribute, afterNodeContainer);
+        afterNodeContainer.appendChild(afterChangeTextNode);
+        fragment.appendChild(afterNodeContainer);
+    }
+
+    return fragment;
 }
