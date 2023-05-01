@@ -643,8 +643,6 @@ boldRemove.addEventListener('click', boldRemoveFunction);
 
 //             return result; // 結果を返す
 //         }
-//         //現在状況：選択した部分の親要素を取得して、boldかどうか判定できた
-//         //問題はどうやって選択した部分のみ消すのか
 
 //     } else {
 
@@ -780,17 +778,18 @@ function setItalic() {
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
     edit(range, "italic");
-    let rangeParentNode = range.commonAncestorContainer.parentNode;
-    if (rangeParentNode.className !== "editable") {
-        while (rangeParentNode.className !== "editable-inner") {
-            rangeParentNode = rangeParentNode.parentNode;
-        }
-    } else {
-        rangeParentNode = range.commonAncestorContainer;
-    }
+    // let rangeParentNode = range.commonAncestorContainer.parentNode;
+    // if (rangeParentNode.className !== "editable") {
+    //     while (rangeParentNode.className !== "editable-inner") {
+    //         rangeParentNode = rangeParentNode.parentNode;
+    //     }
+    // } else {
+    //     rangeParentNode = range.commonAncestorContainer;
+    // }
 
-    combineAdjacentNodes(rangeParentNode);
-    // removeEmptyNodes(rangeParentNode);
+    // combineAdjacentNodes(rangeParentNode);
+
+
 
 
     // const selectedText = range.extractContents();
@@ -875,40 +874,108 @@ function tagRemove() {
 }
 
 function edit(range, addAttribute) {
+    //ノードの範囲が複数のノードに跨っていない時
     if (range.startContainer === range.endContainer) {
         if (range.commonAncestorContainer.parentElement.tagName === "SPAN") {
+            let resultNode;
+            let beforeNode = "";
+            let afterNode = "";
+            let afterNodeNumber;
+            let condition;
+            let fragment = document.createDocumentFragment();
+            const beforeNodeContainer = document.createElement("span");
+            const afterNodeContainer = document.createElement("span");
+            const middleTextNode = document.createTextNode(range.toString());
+            const rangeNumberArray = getNumbersBetween(range.startOffset, range.endOffset);
             const parentElement = range.commonAncestorContainer.parentElement;
-            const parentElementAttribute = getElementAttribute(range.commonAncestorContainer.parentElement);
-            parentElementAttribute.forEach(element => {
-                if (element.value === addAttribute) {
-                    removeAttribute(element.value, parentElement);
-                }
-            });
+            const parentElementTextArray = parentElement.textContent.split("");
 
-            if (parentElement.style.length === 0) {
-                childText = parentElement.textContent;
-                childTextContainer = document.createTextNode(childText);
-                console.log(childTextContainer);
-                parentElement.parentNode.replaceChild(childTextContainer, parentElement);
+            //？付きで文字を配列に
+            // for (let i = 0; i < parentElementTextArray.length; i++) {
+            //     for (let j = 0; j < rangeNumberArray.length - 1; j++) {
+            //         if (rangeNumberArray[j] === i) {
+            //             resultNode.push("?");
+            //             condition = false;
+            //         }
+            //     }
+            //     if (condition || condition === undefined) {
+            //         resultNode.push(parentElementTextArray[i]);
+            //     }
+            //     condition = true;
+            // }
+            resultNode = createElementTextArray(parentElementTextArray, rangeNumberArray);
+
+            //？の部分を何番目か保存及び？前の文字取得
+            for (let i = 0; i < resultNode.length; i++) {
+                if (resultNode[i].indexOf("?") === -1) {
+                    beforeNode += resultNode[i];
+                } else if (resultNode[i].indexOf("?") !== -1) {
+                    afterNodeNumber = i;
+                    i = resultNode.length;
+                }
             }
-        } else {
-            setSpan(addAttribute, range);
+
+            //?が何文字あるか
+            for (let i = 0; i < resultNode.length; i++) {
+                if (resultNode[i].indexOf("?") !== -1) {
+                    afterNodeNumber++;
+                }
+            }
+
+            //？終わりからの文字取得
+            for (let i = afterNodeNumber; i < resultNode.length; i++) {
+                afterNode += resultNode[i];
+            }
+
+            //空白でなければspanタグに入れる
+            if (beforeNode !== "") {
+                const beforeChangeTextNode = document.createTextNode(beforeNode);
+                setAttribute(addAttribute, beforeNodeContainer);
+                beforeNodeContainer.appendChild(beforeChangeTextNode);
+                fragment.appendChild(beforeNodeContainer);
+            }
+
+            //今回外れる
+            fragment.appendChild(middleTextNode);
+
+            //空白でなければspanタグに入れる
+            if (afterNode !== "") {
+                const afterChangeTextNode = document.createTextNode(afterNode);
+                setAttribute(addAttribute, afterNodeContainer);
+                afterNodeContainer.appendChild(afterChangeTextNode);
+                fragment.appendChild(afterNodeContainer);
+            }
+            console.log(fragment);
+
+
+            //     const parentElementAttribute = getElementAttribute(range.commonAncestorContainer.parentElement);
+            //     parentElementAttribute.forEach(element => {
+            //         if (element.value === addAttribute) {
+            //             removeAttribute(element.value, parentElement);
+            //         }
+            //     });
+
+            //     if (parentElement.style.length === 0) {
+            //         childText = parentElement.textContent;
+            //         childTextContainer = document.createTextNode(childText);
+            //         console.log(childTextContainer);
+            //         parentElement.parentNode.replaceChild(childTextContainer, parentElement);
+            //     }
+            // } else {
+            //     setSpan(addAttribute, range);
         }
     } else {
 
     }
 }
-//これまでの学習の課題として全ての処理を共通で動かせるようにする
-//一つずつの関数はなるべく短く心がける
-//現在状況：タグをノードごと外す、ついてないノードに付ける機能は完成
-//問題は一部にだけ付けたり、一部だけ外す方法
+
 
 //spanタグに付与予定の属性を取得できるメソッド
 function getElementAttribute(parentElement) {
     const attribute = [];
-    const bold = { attributeName: "fontWeight", value: parentElement.style.fontWeight };
-    const italic = { attributeName: "fontStyle", value: parentElement.style.fontStyle };
-    const underLine = { attributeName: "borderBottom", value: parentElement.style.borderBottom };
+    const bold = { name: "bold", attributeName: "fontWeight", value: parentElement.style.fontWeight };
+    const italic = { name: "italic", attributeName: "fontStyle", value: parentElement.style.fontStyle };
+    const underLine = { name: "underLine", attributeName: "borderBottom", value: parentElement.style.borderBottom };
     attribute.push(bold);
     attribute.push(italic);
     attribute.push(underLine);
@@ -926,6 +993,7 @@ function removeAttribute(attribute, element) {
     }
 }
 
+//各spanタグを付与するメソッドの分岐
 function setSpan(attribute, range) {
     if (attribute === "bold") {
         setSpanBold(range);
@@ -936,6 +1004,18 @@ function setSpan(attribute, range) {
     }
 }
 
+//Elementオブジェクトに属性を付与する分岐
+function setAttribute(attribute, element) {
+    if (attribute === "bold") {
+        assignmentBold(element);
+    } else if (attribute === "italic") {
+        assignmentItalic(element);
+    } else if (attribute === "underLine") {
+        assignmentUnderLine(element);
+    }
+}
+
+//rangeオブジェクトの太字処理
 function setSpanBold(range) {
     let selectedText = range.extractContents();
     range.deleteContents();
@@ -946,6 +1026,7 @@ function setSpanBold(range) {
     range.insertNode(bold);
 }
 
+//rangeオブジェクトの斜体処理
 function setSpanItalic(range) {
     let selectedText = range.extractContents();
     range.deleteContents();
@@ -956,6 +1037,7 @@ function setSpanItalic(range) {
     range.insertNode(italic);
 }
 
+//rangeオブジェクトの下線処理
 function setSpanUnderLine() {
     let selectedText = range.extractContents();
     range.deleteContents();
@@ -966,6 +1048,7 @@ function setSpanUnderLine() {
     range.insertNode(underline);
 }
 
+//隣接するテキストノードの結合処理
 function combineAdjacentNodes(element) {
     const elementChilds = element.childNodes;
     console.log(elementChilds);
@@ -981,20 +1064,54 @@ function combineAdjacentNodes(element) {
                 elementChilds[i].parentNode.removeChild(elementChilds[i]);
                 i--;
                 j--;
-
-                //現在状況：追加はできたが例の如く逆に追加される。対処を考える
             }
         }
         previousNode = elementChilds[i];
     }
 }
 
-function removeEmptyNodes(element) {
-    const elementChilds = element.childNodes;
+//引数として二つの数字を受け取り、その間の数字を返す
+function getNumbersBetween(num1, num2) {
+    const result = [];
+    const min = Math.min(num1, num2);
+    const max = Math.max(num1, num2);
 
-    elementChilds.forEach(node => {
-        if (node.textContent === "") {
-            node.parentNode.removeChild(node);
+    for (let i = min; i <= max; i++) {
+        result.push(i);
+    }
+
+    return result;
+}
+
+//ノードの太字処理
+function assignmentBold(element) {
+    element.style.fontWeight = "bold";
+}
+
+//ノードの斜体処理
+function assignmentItalic(element) {
+    element.style.fontStyle = "italic";
+}
+
+//ノードの下線処理
+function assignmentUnderLine(element) {
+    element.style.borderBottom = "2px solid black";
+}
+
+function createElementTextArray(elementTextArray, numberRange) {
+    let condition;
+    const resultNode = [];
+    for (let i = 0; i < elementTextArray.length; i++) {
+        for (let j = 0; j < numberRange.length - 1; j++) {
+            if (numberRange[j] === i) {
+                resultNode.push("?");
+                condition = false;
+            }
         }
-    });
+        if (condition || condition === undefined) {
+            resultNode.push(elementTextArray[i]);
+        }
+        condition = true;
+    }
+    return resultNode;
 }
