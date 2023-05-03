@@ -878,56 +878,39 @@ function edit(range, addAttribute) {
     if (range.startContainer === range.endContainer) {
         if (range.commonAncestorContainer.parentElement.tagName === "SPAN") {
             let resultNode;
-            let beforeText = "";
-            let afterText = "";
-            let afterNodeNumber;
+            let beforeText;
+            let afterText;
             const middleTextNode = document.createTextNode(range.toString());
             const rangeNumberArray = getNumbersBetween(range.startOffset, range.endOffset);
             const parentElement = range.commonAncestorContainer.parentElement;
             const parentElementTextArray = parentElement.textContent.split("");
 
             resultNode = createElementTextArray(parentElementTextArray, rangeNumberArray);
+            beforeText = nodeSplit(resultNode)[0];
+            afterText = nodeSplit(resultNode)[1];
 
-            //？の部分を何番目か保存及び？前の文字取得
-            for (let i = 0; i < resultNode.length; i++) {
-                if (resultNode[i].indexOf("?") === -1) {
-                    beforeText += resultNode[i];
-                } else if (resultNode[i].indexOf("?") !== -1) {
-                    afterNodeNumber = i;
-                    i = resultNode.length;
-                }
-            }
-
-            //?が何文字あるか
-            for (let i = 0; i < resultNode.length; i++) {
-                if (resultNode[i].indexOf("?") !== -1) {
-                    afterNodeNumber++;
-                }
-            }
-
-            //？終わりからの文字取得
-            for (let i = afterNodeNumber; i < resultNode.length; i++) {
-                afterText += resultNode[i];
-            }
-
-            //空白でなければspanタグに入れる
-            // if (beforeNode !== "") {
-            //     const beforeChangeTextNode = document.createTextNode(beforeNode);
-            //     setAttribute(addAttribute, beforeNodeContainer);
-            //     beforeNodeContainer.appendChild(beforeChangeTextNode);
-            //     fragment.appendChild(beforeNodeContainer);
+            // //？の部分を何番目か保存及び？前の文字取得
+            // for (let i = 0; i < resultNode.length; i++) {
+            //     if (resultNode[i].indexOf("?") === -1) {
+            //         beforeText += resultNode[i];
+            //     } else if (resultNode[i].indexOf("?") !== -1) {
+            //         afterNodeNumber = i;
+            //         i = resultNode.length;
+            //     }
             // }
 
-            // //今回外れる
-            // fragment.appendChild(middleTextNode);
-
-            // //空白でなければspanタグに入れる
-            // if (afterNode !== "") {
-            //     const afterChangeTextNode = document.createTextNode(afterNode);
-            //     setAttribute(addAttribute, afterNodeContainer);
-            //     afterNodeContainer.appendChild(afterChangeTextNode);
-            //     fragment.appendChild(afterNodeContainer);
+            // //?が何文字あるか
+            // for (let i = 0; i < resultNode.length; i++) {
+            //     if (resultNode[i].indexOf("?") !== -1) {
+            //         afterNodeNumber++;
+            //     }
             // }
+
+            // //？終わりからの文字取得
+            // for (let i = afterNodeNumber; i < resultNode.length; i++) {
+            //     afterText += resultNode[i];
+            // }
+
             console.log(concatNodes(beforeText, middleTextNode, afterText, addAttribute));
 
 
@@ -998,6 +981,8 @@ function setAttribute(attribute, element) {
     }
 }
 
+
+//これより下はsetSpanメソッドより呼び出される
 //rangeオブジェクトの太字処理
 function setSpanBold(range) {
     let selectedText = range.extractContents();
@@ -1030,6 +1015,8 @@ function setSpanUnderLine() {
     underline.appendChild(selectedText);
     range.insertNode(underline);
 }
+//ここまで
+
 
 //隣接するテキストノードの結合処理
 function combineAdjacentNodes(element) {
@@ -1122,4 +1109,37 @@ function concatNodes(beforeText, middleTextNode, afterText, addAttribute) {
     }
 
     return fragment;
+}
+
+//"?"前後のテキストを返す(前後二つの変数を配列の形式で返す)
+function nodeSplit(node) {
+    const resultNode = [];
+    let afterNodeNumber;
+    let beforeText = "";
+    let afterText = "";
+
+    //"？"の部分を何番目か保存及び"？"前の文字取得
+    for (let i = 0; i < node.length; i++) {
+        if (node[i].indexOf("?") === -1) {
+            beforeText += node[i];
+        } else if (node[i].indexOf("?") !== -1) {
+            afterNodeNumber = i;
+            i = node.length;
+        }
+    }
+    resultNode.push(beforeText);
+
+    //文字列"?"後のインデックス番号取得
+    for (let i = 0; i < node.length; i++) {
+        if (node[i].indexOf("?") !== -1) {
+            afterNodeNumber++;
+        }
+    }
+
+    //"？"終わりからの文字取得
+    for (let i = afterNodeNumber; i < node.length; i++) {
+        afterText += node[i];
+    }
+    resultNode.push(afterText);
+    return resultNode;
 }
