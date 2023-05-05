@@ -788,6 +788,7 @@ function setItalic() {
     }
 
     combineAdjacentNodes(rangeParentNode);
+    emptySpanRemove(rangeParentNode);
 
 
 
@@ -804,6 +805,7 @@ function setItalic() {
 
 //下線
 function setUnderline() {
+    console.log("処理開始");
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
     edit(range, "underLine");
@@ -907,31 +909,38 @@ function edit(range, addAttribute) {
 
             parentElement.parentNode.replaceChild(fragment, parentNode);
 
-
-            //親ノードの属性取得
-            // const parentElementAttribute = getElementAttribute(range.commonAncestorContainer.parentElement);
-            // parentElementAttribute.forEach(element => {
-            //     if (element.value === addAttribute) {
-            //         removeAttribute(element.value, parentElement);
-            //     }
-            // });
-
-
-
-            //spanタグ削除
-            // if (parentElement.style.length === 0) {
-            //     childText = parentElement.textContent;
-            //     childTextContainer = document.createTextNode(childText);
-            //     console.log(childTextContainer);
-            //     parentElement.parentNode.replaceChild(childTextContainer, parentElement);
-            // }
-
-
         } else {
             setSpan(addAttribute, range);
         }
     } else {
-
+        const rangeFragment = document.createDocumentFragment();
+        const rangeChildNodes = range.extractContents().childNodes;
+        for (let i = 0, j = rangeChildNodes.length; i < j; i++) {
+            console.log(i + 1);
+            if (rangeChildNodes[i].nodeName === "SPAN" && duplicationJudgment(addAttribute, rangeChildNodes[i])) {//この処置を通過する場合、元のノードを返さなければ、元のノードは消える
+                setAttribute(addAttribute, rangeChildNodes[i]);
+                rangeFragment.appendChild(rangeChildNodes[i]);
+                i--;
+                j--;
+                //変数を減らす理由はappendChild()で配列内から取得しているため総数も変化しているから
+            } else if (rangeChildNodes[i].nodeName === "SPAN" && !(duplicationJudgment(addAttribute, rangeChildNodes[i]))) {
+                rangeFragment.appendChild(rangeChildNodes[i]);
+                i--;
+                j--;
+            } else if (rangeChildNodes[i].nodeType === Node.TEXT_NODE) {
+                const rangeChildNodesContainer = document.createElement("span");
+                setAttribute(addAttribute, rangeChildNodesContainer);
+                rangeChildNodesContainer.appendChild(document.createTextNode(rangeChildNodes[i].textContent));
+                rangeFragment.appendChild(rangeChildNodesContainer);
+                //変数を減らしてないのは、別の変数に入れ替えてdocument-fragmentに入れているため、配列の総数は変わってないから
+            }
+            console.log(rangeChildNodes[i]);
+        }
+        rangeFragment.childNodes.forEach(element => {
+            console.log(element);
+        })
+        range.deleteContents();
+        range.insertNode(rangeFragment);
     }
 }
 
@@ -946,6 +955,16 @@ function getElementAttribute(parentElement) {
     attribute.push(italic);
     attribute.push(underLine);
     return attribute;
+}
+
+function duplicationJudgment(addAttribute, node) {
+    const elementAttribute = getElementAttribute(node);
+    for (let i = 0; i < elementAttribute.length; i++) {
+        if (addAttribute === elementAttribute[i].name && elementAttribute[i].value === "") {
+            return true;
+        }
+    }
+    return false;
 }
 
 //spanタグに付与予定の属性を削除できるメソッド(単一属性のみ)
@@ -1006,7 +1025,7 @@ function setSpanItalic(range) {
 }
 
 //rangeオブジェクトの下線処理
-function setSpanUnderLine() {
+function setSpanUnderLine(range) {
     let selectedText = range.extractContents();
     range.deleteContents();
 
@@ -1050,6 +1069,7 @@ function getNumbersBetween(num1, num2) {
     return result;
 }
 
+//これら下の3つのメソッドはsetAttributeと依存関係にある(setAttributeより呼び出されている)
 //ノードの太字処理
 function assignmentBold(element) {
     element.style.fontWeight = "bold";
@@ -1064,6 +1084,8 @@ function assignmentItalic(element) {
 function assignmentUnderLine(element) {
     element.style.borderBottom = "2px solid black";
 }
+
+
 
 //選択した部分だけ"？"にする(引数に範囲と配列を受け取る)
 function createElementTextArray(elementTextArray, numberRange) {
@@ -1140,4 +1162,15 @@ function nodeSplit(node) {
     }
     resultNode.push(afterText);
     return resultNode;
+}
+
+function emptySpanRemove(node) {
+    const nodeChildNodes = node.childNodes;
+    for (let i = 0, j = nodeChildNodes.length; i < j; i++) {
+        if (nodeChildNodes[i].textContent === "") {
+            node.removeChild(nodeChildNodes[i]);
+            i--;
+            j--;
+        }
+    }
 }
