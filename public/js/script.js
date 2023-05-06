@@ -772,6 +772,27 @@ function traverse(node) {
     }
 }
 
+//太字
+function setBold() {
+    console.log("処理開始");
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    edit(range, "bold");
+    let rangeParentNode = range.commonAncestorContainer.parentNode;
+    if (rangeParentNode.className !== "editable") {
+        while (rangeParentNode.className !== "editable-inner") {
+            rangeParentNode = rangeParentNode.parentNode;
+        }
+    } else {
+        rangeParentNode = range.commonAncestorContainer;
+    }
+
+    combineAdjacentTextNodes(rangeParentNode);
+    emptySpanRemove(rangeParentNode);
+    console.log(rangeParentNode);
+
+}
+
 //斜体
 function setItalic() {
     console.log("処理開始");
@@ -787,9 +808,9 @@ function setItalic() {
         rangeParentNode = range.commonAncestorContainer;
     }
 
-    combineAdjacentNodes(rangeParentNode);
+    combineAdjacentTextNodes(rangeParentNode);
     emptySpanRemove(rangeParentNode);
-
+    console.log(rangeParentNode);
 
 
     //元のsetItalic
@@ -818,7 +839,9 @@ function setUnderline() {
         rangeParentNode = range.commonAncestorContainer;
     }
 
-    combineAdjacentNodes(rangeParentNode);
+    combineAdjacentTextNodes(rangeParentNode);
+    emptySpanRemove(rangeParentNode);
+    console.log(rangeParentNode);
 
 
 
@@ -916,7 +939,6 @@ function edit(range, addAttribute) {
         const rangeFragment = document.createDocumentFragment();
         const rangeChildNodes = range.extractContents().childNodes;
         for (let i = 0, j = rangeChildNodes.length; i < j; i++) {
-            console.log(i + 1);
             if (rangeChildNodes[i].nodeName === "SPAN" && duplicationJudgment(addAttribute, rangeChildNodes[i])) {//この処置を通過する場合、元のノードを返さなければ、元のノードは消える
                 setAttribute(addAttribute, rangeChildNodes[i]);
                 rangeFragment.appendChild(rangeChildNodes[i]);
@@ -934,11 +956,7 @@ function edit(range, addAttribute) {
                 rangeFragment.appendChild(rangeChildNodesContainer);
                 //変数を減らしてないのは、別の変数に入れ替えてdocument-fragmentに入れているため、配列の総数は変わってないから
             }
-            console.log(rangeChildNodes[i]);
         }
-        rangeFragment.childNodes.forEach(element => {
-            console.log(element);
-        })
         range.deleteContents();
         range.insertNode(rangeFragment);
     }
@@ -1037,8 +1055,8 @@ function setSpanUnderLine(range) {
 //ここまで
 
 
-//隣接するテキストノードの結合処理
-function combineAdjacentNodes(element) {
+//引数としてノードを渡し、隣接するテキストノードの結合処理
+function combineAdjacentTextNodes(element) {
     const elementChilds = element.childNodes;
     let previousNode;
     for (let i = 0, j = elementChilds.length; i < j; i++) {
@@ -1055,6 +1073,12 @@ function combineAdjacentNodes(element) {
         previousNode = elementChilds[i];
     }
 }
+
+//引数としてノードを渡し、隣接するspanタグ(同じ属性を持つ←これが大事)を結合
+function combineAdjacentSpanNodes() {
+
+}
+
 
 //引数として二つの数字を受け取り、その間の数字を返す
 function getNumbersBetween(num1, num2) {
