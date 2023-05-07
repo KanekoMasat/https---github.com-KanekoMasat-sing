@@ -527,7 +527,7 @@ function boldRemoveFunction() {
 
 
 
-// boldButton4.addEventListener('click', setBold);
+boldButton4.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
 // testButton.addEventListener('click', testFunction);
@@ -537,7 +537,7 @@ boldRemove.addEventListener('click', boldRemoveFunction);
 
 
 
-
+//参考になる可能性があるため、まだ残す  最終的には"このsetBold"を削除すること
 //太字
 // function setBold() {
 //     const ranges1 = [];
@@ -772,6 +772,7 @@ function traverse(node) {
     }
 }
 
+
 //太字
 function setBold() {
     console.log("処理開始");
@@ -810,7 +811,8 @@ function setItalic() {
 
     combineAdjacentTextNodes(rangeParentNode);
     emptySpanRemove(rangeParentNode);
-    console.log(rangeParentNode);
+    // console.log(rangeParentNode);
+    combineAdjacentSpanNodes(rangeParentNode);
 
 
     //元のsetItalic
@@ -844,7 +846,6 @@ function setUnderline() {
     console.log(rangeParentNode);
 
 
-
     //元のsetUnderLine
     // const selectedText = range.extractContents();
     // console.log(selectedText.textContent);
@@ -855,6 +856,9 @@ function setUnderline() {
     // underline.appendChild(selectedText);
     // range.insertNode(underline);
 }
+//これらの処理は共通化できそう
+
+
 
 //タグ削除
 function tagRemove() {
@@ -939,7 +943,7 @@ function edit(range, addAttribute) {
         const rangeFragment = document.createDocumentFragment();
         const rangeChildNodes = range.extractContents().childNodes;
         for (let i = 0, j = rangeChildNodes.length; i < j; i++) {
-            if (rangeChildNodes[i].nodeName === "SPAN" && duplicationJudgment(addAttribute, rangeChildNodes[i])) {//この処置を通過する場合、元のノードを返さなければ、元のノードは消える
+            if (rangeChildNodes[i].nodeName === "SPAN" && duplicationJudgment(addAttribute, rangeChildNodes[i])) {
                 setAttribute(addAttribute, rangeChildNodes[i]);
                 rangeFragment.appendChild(rangeChildNodes[i]);
                 i--;
@@ -961,18 +965,41 @@ function edit(range, addAttribute) {
         range.insertNode(rangeFragment);
     }
 }
+//問題点：なんか複数ノードが絡んだ時の挙動がおかしい
 
 
+//共通化できそう
 //spanタグに付与予定の属性を取得できるメソッド
 function getElementAttribute(parentElement) {
     const attribute = [];
     const bold = { name: "bold", attributeName: "fontWeight", value: parentElement.style.fontWeight };
     const italic = { name: "italic", attributeName: "fontStyle", value: parentElement.style.fontStyle };
     const underLine = { name: "underLine", attributeName: "borderBottom", value: parentElement.style.borderBottom };
-    attribute.push(bold);
-    attribute.push(italic);
-    attribute.push(underLine);
+    attribute.push(bold, italic, underLine);
     return attribute;
+}
+
+function getStyle(node) {
+    let binaryString = "";
+
+    if (node.style.fontWeight === "bold") {
+        binaryString += "1";
+    } else {
+        binaryString += "0";
+    }
+
+    if (node.style.fontStyle === "italic") {
+        binaryString += "1";
+    } else {
+        binaryString += "0";
+    }
+
+    if (node.style.borderBottom === "underline") {
+        binaryString += "1";
+    } else {
+        binaryString += "0";
+    }
+    return binaryString;
 }
 
 function duplicationJudgment(addAttribute, node) {
@@ -1019,7 +1046,7 @@ function setAttribute(attribute, element) {
 }
 
 
-//これより下はsetSpanメソッドと依存関係
+//これより下はsetSpanメソッドと依存関係（共通化できそう）
 //rangeオブジェクトの太字処理
 function setSpanBold(range) {
     let selectedText = range.extractContents();
@@ -1063,7 +1090,6 @@ function combineAdjacentTextNodes(element) {
         if (elementChilds[i].nodeType === Node.TEXT_NODE && elementChilds[i].textContent !== "" && previousNode !== undefined) {
             if (previousNode.nodeType === Node.TEXT_NODE) {
                 const textNode = document.createTextNode(previousNode.textContent + elementChilds[i].textContent);
-                //ノードを消す
                 element.replaceChild(textNode, previousNode);
                 elementChilds[i].parentNode.removeChild(elementChilds[i]);
                 i--;
@@ -1074,9 +1100,22 @@ function combineAdjacentTextNodes(element) {
     }
 }
 
-//引数としてノードを渡し、隣接するspanタグ(同じ属性を持つ←これが大事)を結合
-function combineAdjacentSpanNodes() {
-
+//引数としてノードを渡し、隣り合った同じ属性を持つspanタグを結合
+function combineAdjacentSpanNodes(element) {
+    const elementChilds = element.childNodes;
+    let previousNode;
+    for (let i = 0, j = elementChilds.length; i < j; i++) {
+        console.log(i + 1);
+        if (previousNode !== undefined && previousNode.nodeType === Node.ELEMENT_NODE && elementChilds[i].nodeType === Node.ELEMENT_NODE) {
+            if (getStyle(previousNode) === getStyle(elementChilds[i])) {
+                previousNode.textContent = previousNode.textContent + elementChilds[i].textContent;
+                elementChilds[i].parentNode.removeChild(elementChilds[i]);
+                i--;
+                j--;
+            }
+        }
+        previousNode = elementChilds[i];
+    }
 }
 
 
@@ -1188,6 +1227,7 @@ function nodeSplit(node) {
     return resultNode;
 }
 
+//誤作動の原因である、テキストが入ってない(0文字)spanタグを削除する
 function emptySpanRemove(node) {
     const nodeChildNodes = node.childNodes;
     for (let i = 0, j = nodeChildNodes.length; i < j; i++) {
@@ -1198,3 +1238,36 @@ function emptySpanRemove(node) {
         }
     }
 }
+
+
+//使用未定（使うかわからん）
+// class ElementAttribute {
+//     constructor(name, attributeName, value) {
+//         this.name = name;
+//         this.attributeName = attributeName;
+//         this.value = value;
+//     }
+//     getName() {
+//         return this.name;
+//     }
+
+//     getAttributeName() {
+//         return this.attributeName;
+//     }
+
+//     getValue() {
+//         return this.value;
+//     }
+// }
+
+// class AttributeManager {
+//     static getElementAttribute(parentElement) {
+//         const attribute = [];
+//         attribute.push(
+//             new ElementAttribute("bold", "fontWeight", parentElement.style.fontWeight),
+//             new ElementAttribute("italic", "fontStyle", parentElement.style.fontStyle),
+//             new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom)
+//         );
+//         return attribute;
+//     }
+// }
