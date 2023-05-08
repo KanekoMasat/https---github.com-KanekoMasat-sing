@@ -777,20 +777,23 @@ function traverse(node) {
 function setBold() {
     console.log("処理開始");
     const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    edit(range, "bold");
-    let rangeParentNode = range.commonAncestorContainer.parentNode;
-    if (rangeParentNode.className !== "editable") {
-        while (rangeParentNode.className !== "editable-inner") {
-            rangeParentNode = rangeParentNode.parentNode;
+    if (selection && selection.toString().length > 0) {
+        const range = selection.getRangeAt(0);
+        edit(range, "bold");
+        let rangeParentNode = range.commonAncestorContainer.parentNode;
+        if (rangeParentNode.className !== "editable") {
+            while (rangeParentNode.className !== "editable-inner") {
+                rangeParentNode = rangeParentNode.parentNode;
+            }
+        } else {
+            rangeParentNode = range.commonAncestorContainer;
         }
-    } else {
-        rangeParentNode = range.commonAncestorContainer;
+
+        combineAdjacentTextNodes(rangeParentNode);
+        emptySpanRemove(rangeParentNode);
+        combineAdjacentSpanNodes(rangeParentNode)
     }
 
-    combineAdjacentTextNodes(rangeParentNode);
-    emptySpanRemove(rangeParentNode);
-    console.log(rangeParentNode);
 
 }
 
@@ -798,21 +801,23 @@ function setBold() {
 function setItalic() {
     console.log("処理開始");
     const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    edit(range, "italic");
-    let rangeParentNode = range.commonAncestorContainer.parentNode;
-    if (rangeParentNode.className !== "editable") {
-        while (rangeParentNode.className !== "editable-inner") {
-            rangeParentNode = rangeParentNode.parentNode;
+    if (selection && selection.toString().length > 0) {
+        const range = selection.getRangeAt(0);
+        edit(range, "italic");
+        let rangeParentNode = range.commonAncestorContainer.parentNode;
+        if (rangeParentNode.className !== "editable") {
+            while (rangeParentNode.className !== "editable-inner") {
+                rangeParentNode = rangeParentNode.parentNode;
+            }
+        } else {
+            rangeParentNode = range.commonAncestorContainer;
         }
-    } else {
-        rangeParentNode = range.commonAncestorContainer;
+
+        combineAdjacentTextNodes(rangeParentNode);
+        emptySpanRemove(rangeParentNode);
+        combineAdjacentSpanNodes(rangeParentNode);
     }
 
-    combineAdjacentTextNodes(rangeParentNode);
-    emptySpanRemove(rangeParentNode);
-    // console.log(rangeParentNode);
-    combineAdjacentSpanNodes(rangeParentNode);
 
 
     //元のsetItalic
@@ -830,20 +835,23 @@ function setItalic() {
 function setUnderline() {
     console.log("処理開始");
     const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    edit(range, "underLine");
-    let rangeParentNode = range.commonAncestorContainer.parentNode;
-    if (rangeParentNode.className !== "editable") {
-        while (rangeParentNode.className !== "editable-inner") {
-            rangeParentNode = rangeParentNode.parentNode;
+    if (selection && selection.toString().length > 0) {
+        const range = selection.getRangeAt(0);
+        edit(range, "underLine");
+        let rangeParentNode = range.commonAncestorContainer.parentNode;
+        if (rangeParentNode.className !== "editable") {
+            while (rangeParentNode.className !== "editable-inner") {
+                rangeParentNode = rangeParentNode.parentNode;
+            }
+        } else {
+            rangeParentNode = range.commonAncestorContainer;
         }
-    } else {
-        rangeParentNode = range.commonAncestorContainer;
+
+        combineAdjacentTextNodes(rangeParentNode);
+        emptySpanRemove(rangeParentNode);
+        combineAdjacentSpanNodes(rangeParentNode);
     }
 
-    combineAdjacentTextNodes(rangeParentNode);
-    emptySpanRemove(rangeParentNode);
-    console.log(rangeParentNode);
 
 
     //元のsetUnderLine
@@ -918,7 +926,8 @@ function tagRemove() {
 function edit(range, addAttribute) {
     //ノードの範囲が複数のノードに跨っていない時
     if (range.startContainer === range.endContainer) {
-        if (range.commonAncestorContainer.parentElement.tagName === "SPAN") {
+        //選択範囲がspanタグの時
+        if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getattributeStatus(addAttribute, range.commonAncestorContainer.parentElement)) {
             let resultNode;
             let beforeText;
             let afterText;
@@ -933,10 +942,17 @@ function edit(range, addAttribute) {
             afterText = nodeSplit(resultNode)[1];
 
             const fragment = concatNodes(beforeText, middleTextNode, afterText, addAttribute);
+            fragment.childNodes.forEach(element => {
+                console.log(element);
+            });
 
             parentElement.parentNode.replaceChild(fragment, parentNode);
 
-        } else {
+        } else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && !(getattributeStatus(addAttribute, range.commonAncestorContainer.parentElement))) {
+            console.log("");
+        }
+        else {
+            //選択範囲がテキストノードの時
             setSpan(addAttribute, range);
         }
     } else {
@@ -962,6 +978,7 @@ function edit(range, addAttribute) {
             }
         }
         range.deleteContents();
+        console.log(rangeFragment);
         range.insertNode(rangeFragment);
     }
 }
@@ -979,7 +996,7 @@ function getElementAttribute(parentElement) {
     return attribute;
 }
 
-function getStyle(node) {
+function getStateOfStyle(node) {
     let binaryString = "";
 
     if (node.style.fontWeight === "bold") {
@@ -1105,9 +1122,9 @@ function combineAdjacentSpanNodes(element) {
     const elementChilds = element.childNodes;
     let previousNode;
     for (let i = 0, j = elementChilds.length; i < j; i++) {
-        console.log(i + 1);
         if (previousNode !== undefined && previousNode.nodeType === Node.ELEMENT_NODE && elementChilds[i].nodeType === Node.ELEMENT_NODE) {
-            if (getStyle(previousNode) === getStyle(elementChilds[i])) {
+            if (getStateOfStyle(previousNode) === getStateOfStyle(elementChilds[i])) {
+                console.log(i + 1);
                 previousNode.textContent = previousNode.textContent + elementChilds[i].textContent;
                 elementChilds[i].parentNode.removeChild(elementChilds[i]);
                 i--;
@@ -1130,6 +1147,23 @@ function getNumbersBetween(num1, num2) {
     }
 
     return result;
+}
+
+//引数として属性名とノードを受け取り、ノードに属性が付与されているか真偽値で返す
+function getattributeStatus(addAttribute, node) {
+    let attribute;
+    const status = AttributeManager.getElementAttribute(node);
+    while (attribute === undefined) {
+        status.forEach(element => {
+            if (element.name === addAttribute) {
+                attribute = element;
+            }
+        });
+    }
+    if (attribute.value === "") {
+        return false;
+    }
+    return true;
 }
 
 //これら下の3つのメソッドはsetAttributeと依存関係にある(setAttributeより呼び出されている)
@@ -1169,6 +1203,7 @@ function createElementTextArray(elementTextArray, numberRange) {
     return resultNode;
 }
 
+//注意！このメソッドはrangeオブジェクトがひとつのContainerに収まっているかつ、その属性が付与されていないと使えない
 //前中後のテキスト及び与える属性名を引数にそれらを連結する
 function concatNodes(beforeText, middleTextNode, afterText, addAttribute) {
     const beforeNodeContainer = document.createElement("span");
@@ -1241,33 +1276,33 @@ function emptySpanRemove(node) {
 
 
 //使用未定（使うかわからん）
-// class ElementAttribute {
-//     constructor(name, attributeName, value) {
-//         this.name = name;
-//         this.attributeName = attributeName;
-//         this.value = value;
-//     }
-//     getName() {
-//         return this.name;
-//     }
+class ElementAttribute {
+    constructor(name, attributeName, value) {
+        this.name = name;
+        this.attributeName = attributeName;
+        this.value = value;
+    }
+    getName() {
+        return this.name;
+    }
 
-//     getAttributeName() {
-//         return this.attributeName;
-//     }
+    getAttributeName() {
+        return this.attributeName;
+    }
 
-//     getValue() {
-//         return this.value;
-//     }
-// }
+    getValue() {
+        return this.value;
+    }
+}
 
-// class AttributeManager {
-//     static getElementAttribute(parentElement) {
-//         const attribute = [];
-//         attribute.push(
-//             new ElementAttribute("bold", "fontWeight", parentElement.style.fontWeight),
-//             new ElementAttribute("italic", "fontStyle", parentElement.style.fontStyle),
-//             new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom)
-//         );
-//         return attribute;
-//     }
-// }
+class AttributeManager {
+    static getElementAttribute(parentElement) {
+        const attribute = [];
+        attribute.push(
+            new ElementAttribute("bold", "fontWeight", parentElement.style.fontWeight),
+            new ElementAttribute("italic", "fontStyle", parentElement.style.fontStyle),
+            new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom)
+        );
+        return attribute;
+    }
+}
