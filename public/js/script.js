@@ -186,161 +186,6 @@ function innerhtml() {
     myTextarea2.innerHTML = boldText;
 }
 
-
-
-
-
-function sampleItalic() {
-    let selection = window.getSelection();
-    let range = selection.getRangeAt(0);
-
-    // 選択範囲のテキストを1文字ずつrangeオブジェクトにして配列に格納
-    // const textArray = [];
-    // for (let i = 0; i < range.toString().length; i++) {
-    //     if (range.startContainer === range.endContainer) {
-    //         const charRange = document.createRange();
-    //         charRange.setStart(range.startContainer, range.startOffset + i);
-    //         charRange.setEnd(range.startContainer, range.startOffset + i + 1);
-    //         textArray.push(charRange);
-    //         console.log(charRange.toString());
-    //         console.log(charRange.commonAncestorContainer.parentElement.tagName);
-    //     } else if (range.startContainer !== range.endContainer) {
-    //         console.log("複数要素を跨いでいます");
-
-    //     }
-
-    // }
-    // console.log(textArray);  一旦コメントアウト
-
-    const textArray = [];
-    let container = range.startContainer;
-    let offset = range.startOffset;
-
-    // 選択範囲の文字列を1文字ずつ分割して、配列に追加する
-    if (range.startContainer === range.endContainer) {
-        //startContainerとendContainerが同じ場合
-        for (let i = 0; i < range.toString().length; i++) {
-            // 現在の文字の範囲を取得する
-            const charRange = document.createRange();
-            charRange.setStart(container, offset);
-            charRange.setEnd(container, offset + 1);
-            console.log("charRange.toString(): " + charRange.toString());
-            console.log("charRange.commonAncestorContainer.parentElement.tagName: " + charRange.commonAncestorContainer.parentElement.tagName);
-            textArray.push(charRange);
-
-            // containerとoffsetを更新する
-            if (offset + 1 >= container.length) {
-                container = container.nextSibling;
-                offset = 0;
-            } else {
-                offset++;
-            }
-        }
-    } else {
-        // startContainerとendContainerが違う場合の処理
-        if (range.startContainer !== range.endContainer) {
-            // 選択範囲に含まれるすべてのノードを取得する
-            const nodes = getNodesInRange2(range);
-            console.log(nodes);
-
-            // 各ノードについて、選択範囲内のテキスト範囲を1文字ずつ取得して配列に追加する
-            for (const node of nodes) {
-                let start = 0;
-                let end = node.textContent.length;
-
-                if (node === range.startContainer) {
-                    start = range.startOffset;
-                }
-                if (node === range.endContainer) {
-                    end = range.endOffset;
-                }
-
-                for (let i = start; i < end; i++) {
-                    const charRange = document.createRange();
-                    charRange.setStart(node, i);
-                    charRange.setEnd(node, i + 1);
-                    console.log("charRange.toString(): " + charRange.toString());
-                    console.log("charRange.commonAncestorContainer.parentElement.tagName: " + charRange.commonAncestorContainer.parentElement.tagName);
-                    textArray.push(charRange);
-                }
-            }
-        }
-
-        // 選択範囲に含まれるすべてのノードを取得する関数
-        function getNodesInRange1(range) {
-            const startNode = range.startContainer;
-            const endNode = range.endContainer;
-            const nodes = [];
-
-            let currentNode = startNode;
-            while (currentNode !== endNode.nextSibling) {
-                nodes.push(currentNode);
-                currentNode = currentNode.nextSibling;
-            }
-            console.log(nodes);
-            return nodes;
-
-        }
-
-        function getNodesInRange2(range) {
-            const startNode = range.startContainer;
-            const endNode = range.endContainer;
-            const nodes = [];
-
-            if (startNode === endNode) {
-                // 要素を跨がない場合
-                const startOffset = range.startOffset;
-                const endOffset = range.endOffset;
-                nodes.push(startNode.splitText(startOffset));
-                nodes[0].splitText(endOffset - startOffset);
-            } else {
-                // 要素を跨ぐ場合
-                let currentNode = startNode.nextSibling;
-                while (currentNode !== endNode) {
-                    nodes.push(currentNode);
-                    currentNode = currentNode.nextSibling;
-                }
-                nodes.push(endNode.splitText(range.endOffset));
-                nodes[0].splitText(range.startOffset);
-            }
-
-            return nodes;
-        }
-
-
-    }
-
-
-
-    // 選択範囲内のすべてのノードを取得する
-    var nodes = getSelectedNodes(range);
-
-    // すべてのノードが<i>タグで囲まれているかを確認する
-    var isAllWrappedInItalic = nodes.every(function (node) {
-        return node.parentNode.tagName === 'I';
-    });
-
-    if (isAllWrappedInItalic) {
-        // すべての<i>タグを取り除く
-        nodes.forEach(function (node) {
-            var parent = node.parentNode;
-            while (parent.tagName !== 'I') {
-                parent = parent.parentNode;
-            }
-            var textNode = document.createTextNode(node.textContent);
-            parent.parentNode.insertBefore(textNode, parent);
-            parent.parentNode.removeChild(parent);
-        });
-    } else {
-        // 選択範囲内のすべてのノードを<i>タグで囲む
-        var selectedText = range.toString();
-        var italicText = document.createElement('i');
-        italicText.appendChild(document.createTextNode(selectedText));
-        range.deleteContents();
-        range.insertNode(italicText);
-    }
-}
-
 function getSelectedNodes(range) {
     var startContainer = range.startContainer;
     var endContainer = range.endContainer;
@@ -941,15 +786,19 @@ function edit(range, addAttribute) {
             beforeText = nodeSplit(resultNode)[0];
             afterText = nodeSplit(resultNode)[1];
 
-            const fragment = concatNodes(beforeText, middleTextNode, afterText, addAttribute);
-            fragment.childNodes.forEach(element => {
-                console.log(element);
-            });
+            const fragment = stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribute);
 
             parentElement.parentNode.replaceChild(fragment, parentNode);
 
         } else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && !(getattributeStatus(addAttribute, range.commonAncestorContainer.parentElement))) {
-            console.log("");
+            //付与しようとしている属性がparentElementに無かった場合の処理
+            const parentElement = range.commonAncestorContainer.parentElement;
+            const parentNode = range.commonAncestorContainer.parentNode;
+
+            range.deleteContents();
+            range.insertNode(document.createTextNode("歪"));
+
+            console.log("夜は薄着の天使が騒々しい");
         }
         else {
             //選択範囲がテキストノードの時
@@ -1203,9 +1052,9 @@ function createElementTextArray(elementTextArray, numberRange) {
     return resultNode;
 }
 
-//注意！このメソッドはrangeオブジェクトがひとつのContainerに収まっているかつ、その属性が付与されていないと使えない
+//注意！このメソッドはrangeオブジェクトがひとつのContainerに収まっているかつ、付与しようとしている属性がrangeオブジェクトの親ノードにいないと使えない
 //前中後のテキスト及び与える属性名を引数にそれらを連結する
-function concatNodes(beforeText, middleTextNode, afterText, addAttribute) {
+function stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribute) {
     const beforeNodeContainer = document.createElement("span");
     const afterNodeContainer = document.createElement("span");
     let fragment = document.createDocumentFragment();
@@ -1228,6 +1077,16 @@ function concatNodes(beforeText, middleTextNode, afterText, addAttribute) {
 
     return fragment;
 }
+
+//注意！このメソッドはrangeオブジェクトがひとつのContainerに収まっているかつ、付与しようとしている属性がrangeオブジェクトの親ノードに無い場合に使える
+//選択した部分にのみ属性を付与するメソッド(正確には、rangeオブジェクトの部分を新しいspanタグに入れ替える)
+function applyTagToPartialText(addAttribute, originalAttribute, range) {
+    const newSpanContainer = document.createElement("span");
+
+    range.deleteContents();
+    range.insertNode();
+}
+
 
 //"?"前後のテキストを返す(前後二つの変数を配列の形式で返す)
 function nodeSplit(node) {
