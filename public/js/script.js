@@ -215,10 +215,6 @@ function getSelectedNodes(range) {
 
 
 
-
-
-
-
 function testFunction() {
     const ranges1 = [];
     const ranges2 = [];
@@ -793,12 +789,14 @@ function edit(range, addAttribute) {
         } else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && !(getattributeStatus(addAttribute, range.commonAncestorContainer.parentElement))) {
             //付与しようとしている属性がparentElementに無かった場合の処理
             const parentElement = range.commonAncestorContainer.parentElement;
-            const parentNode = range.commonAncestorContainer.parentNode;
-
-            range.deleteContents();
-            range.insertNode(document.createTextNode("歪"));
-
-            console.log("夜は薄着の天使が騒々しい");
+            const parentElementAttributes = AttributeManager.getElementAttribute(parentElement);
+            const originalAttribute = [];
+            parentElementAttributes.forEach(attribute => {
+                if (attribute.getValue() !== "") {
+                    originalAttribute.push(attribute.getValue());
+                }
+            })
+            applyTagToPartialText("", "", "", range, "");
         }
         else {
             //選択範囲がテキストノードの時
@@ -1074,17 +1072,41 @@ function stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribu
         afterNodeContainer.appendChild(afterChangeTextNode);
         fragment.appendChild(afterNodeContainer);
     }
-
     return fragment;
 }
 
 //注意！このメソッドはrangeオブジェクトがひとつのContainerに収まっているかつ、付与しようとしている属性がrangeオブジェクトの親ノードに無い場合に使える
 //選択した部分にのみ属性を付与するメソッド(正確には、rangeオブジェクトの部分を新しいspanタグに入れ替える)
-function applyTagToPartialText(addAttribute, originalAttribute, range) {
-    const newSpanContainer = document.createElement("span");
+function applyTagToPartialText(addAttribute, originalAttribute, beforeText, range, afterText) {
+    const beforeNodeContainer = document.createElement("span");
+    const middleSpanContainer = document.createElement("span");
+    const afterNodeContainer = document.createElement("span");
+    let fragment = document.createDocumentFragment();
 
-    range.deleteContents();
-    range.insertNode();
+    if (beforeText !== "") {
+        const beforeChangeTextNode = document.createTextNode(beforeText);
+        for (let i = 0; i < originalAttribute.length; i++) {
+            setAttribute(originalAttribute[i], beforeNodeContainer);
+        }
+        beforeNodeContainer.appendChild(beforeChangeTextNode);
+        fragment.appendChild(beforeNodeContainer);
+    }
+
+    for (let i = 0; i < originalAttribute.length; i++) {
+        setAttribute(originalAttribute[i], middleSpanContainer);
+    }
+    setAttribute(addAttribute, middleSpanContainer);
+    middleSpanContainer.appendChild(document.createTextNode(range.toString()));
+
+    if (afterText !== "") {
+        const afterChangeTextNode = document.createTextNode(afterText);
+        for (let i = 0; i < originalAttribute.length; i++) {
+            setAttribute(originalAttribute[i], afterNodeContainer);
+        }
+        afterNodeContainer.appendChild(afterChangeTextNode);
+        fragment.appendChild(afterNodeContainer);
+    }
+    return fragment;
 }
 
 
