@@ -768,7 +768,7 @@ function edit(range, addAttribute) {
     //ノードの範囲が複数のノードに跨っていない時
     if (range.startContainer === range.endContainer) {
         //選択範囲がspanタグの時
-        if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getattributeStatus(addAttribute, range.commonAncestorContainer.parentElement)) {
+        if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement)) {
             let resultNode;
             let beforeText;
             let afterText;
@@ -786,7 +786,7 @@ function edit(range, addAttribute) {
 
             parentElement.parentNode.replaceChild(fragment, parentNode);
 
-        } else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && !(getattributeStatus(addAttribute, range.commonAncestorContainer.parentElement))) {
+        } else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && !(getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement))) {
             //付与しようとしている属性がparentElementに無かった場合の処理
             let resultNode;
             let beforeText;
@@ -1015,7 +1015,7 @@ function getNumbersBetween(num1, num2) {
 }
 
 //引数として属性名とノードを受け取り、ノードに属性が付与されているか真偽値で返す
-function getattributeStatus(addAttribute, node) {
+function getAttributeStatus(addAttribute, node) {
     let attribute;
     const status = AttributeManager.getElementAttribute(node);
     while (attribute === undefined) {
