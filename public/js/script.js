@@ -788,7 +788,18 @@ function edit(range, addAttribute) {
 
         } else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && !(getattributeStatus(addAttribute, range.commonAncestorContainer.parentElement))) {
             //付与しようとしている属性がparentElementに無かった場合の処理
+            let resultNode;
+            let beforeText;
+            let afterText;
             const parentElement = range.commonAncestorContainer.parentElement;
+            const parentNode = range.commonAncestorContainer.parentNode;
+
+            const rangeNumberArray = getNumbersBetween(range.startOffset, range.endOffset);
+            const parentElementTextArray = parentElement.textContent.split("");
+            resultNode = createElementTextArray(parentElementTextArray, rangeNumberArray);
+            beforeText = nodeSplit(resultNode)[0];
+            afterText = nodeSplit(resultNode)[1];
+
             const parentElementAttributes = AttributeManager.getElementAttribute(parentElement);
             const originalAttribute = [];
             parentElementAttributes.forEach(attribute => {
@@ -796,7 +807,14 @@ function edit(range, addAttribute) {
                     originalAttribute.push(attribute.getValue());
                 }
             })
-            applyTagToPartialText("", "", "", range, "");
+            const fragment = applyTagToPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
+            fragment.childNodes.forEach(element => {
+                console.log(element);
+            });
+
+            console.log(fragment.childNodes[1].style.borderBottom);
+            parentNode.parentNode.replaceChild(fragment, parentNode);
+            //問題：なんかfragmentはあってるのにうまく置換されない
         }
         else {
             //選択範囲がテキストノードの時
@@ -858,7 +876,7 @@ function getStateOfStyle(node) {
         binaryString += "0";
     }
 
-    if (node.style.borderBottom === "underline") {
+    if (node.style.borderBottom === "2px solid black") {
         binaryString += "1";
     } else {
         binaryString += "0";
@@ -1097,6 +1115,7 @@ function applyTagToPartialText(addAttribute, originalAttribute, beforeText, rang
     }
     setAttribute(addAttribute, middleSpanContainer);
     middleSpanContainer.appendChild(document.createTextNode(range.toString()));
+    fragment.appendChild(middleSpanContainer);
 
     if (afterText !== "") {
         const afterChangeTextNode = document.createTextNode(afterText);
