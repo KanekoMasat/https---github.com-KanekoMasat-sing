@@ -786,16 +786,19 @@ function edit(range, addAttribute) {
         }
     } else {
         //範囲が複数ノードでも選択した属性が全て同じだったら消す処理を入れたい
+        //このelse文において大きく二つ分かれる
+        //1. すでにある属性の拡張
+        //2. 属性の削除
         const rangeFragment = document.createDocumentFragment();
         const rangeChildNodes = range.extractContents().childNodes;
         for (let i = 0, j = rangeChildNodes.length; i < j; i++) {
-            if (rangeChildNodes[i].nodeName === "SPAN" && duplicationJudgment(addAttribute, rangeChildNodes[i])) {
+            if (rangeChildNodes[i].nodeName === "SPAN" && !(getAttributeStatus(addAttribute, rangeChildNodes[i]))) {
                 setAttribute(addAttribute, rangeChildNodes[i]);
                 rangeFragment.appendChild(rangeChildNodes[i]);
                 i--;
                 j--;
                 //変数を減らす理由はappendChild()で配列内から取得しているため総数も変化しているから
-            } else if (rangeChildNodes[i].nodeName === "SPAN" && !(duplicationJudgment(addAttribute, rangeChildNodes[i]))) {
+            } else if (rangeChildNodes[i].nodeName === "SPAN" && getAttributeStatus(addAttribute, rangeChildNodes[i])) {
                 rangeFragment.appendChild(rangeChildNodes[i]);
                 i--;
                 j--;
