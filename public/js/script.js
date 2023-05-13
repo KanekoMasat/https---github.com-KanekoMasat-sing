@@ -770,23 +770,8 @@ function edit(range, addAttribute) {
         //選択範囲がspanタグの時
         //この処理は親ノードに一つの属性しか設定されておらず、選択したノードをテキストノードのみにしたい場合の処理
         if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement) && getStyleCount(range.commonAncestorContainer.parentElement) === 1) {
-            //改善点: 本来このif文は一つの属性の時のみ動作するべき
-            let resultNode;
-            let beforeText;
-            let afterText;
-            const parentElement = range.commonAncestorContainer.parentElement;
-            const parentNode = range.commonAncestorContainer.parentNode;
 
-            const middleTextNode = document.createTextNode(range.toString());
-            const rangeNumberArray = getNumbersBetween(range.startOffset, range.endOffset);
-            const parentElementTextArray = parentElement.textContent.split("");
-            resultNode = createElementTextArray(parentElementTextArray, rangeNumberArray);
-            beforeText = nodeSplit(resultNode)[0];
-            afterText = nodeSplit(resultNode)[1];
-
-            const fragment = stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribute);
-
-            parentElement.parentNode.replaceChild(fragment, parentNode);
+            removeSpanElement(addAttribute, range);
 
         } else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && !(getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement))) {
             //付与しようとしている属性がparentElementに無かった場合の処理
@@ -905,6 +890,26 @@ function removeAttribute(attribute, element) {
     } else if (attribute === "underLine") {
         element.style.borderBottom = "";
     }
+}
+
+//同じContainer内で選択範囲のspanタグを消したい場合のメソッド
+function removeSpanElement(addAttribute, range) {
+    let resultNode;
+    let beforeText;
+    let afterText;
+    const parentElement = range.commonAncestorContainer.parentElement;
+    const parentNode = range.commonAncestorContainer.parentNode;
+
+    const middleTextNode = document.createTextNode(range.toString());
+    const rangeNumberArray = getNumbersBetween(range.startOffset, range.endOffset);
+    const parentElementTextArray = parentElement.textContent.split("");
+    resultNode = createElementTextArray(parentElementTextArray, rangeNumberArray);
+    beforeText = nodeSplit(resultNode)[0];
+    afterText = nodeSplit(resultNode)[1];
+
+    const fragment = stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribute);
+
+    parentElement.parentNode.replaceChild(fragment, parentNode);
 }
 
 //各spanタグを付与するメソッドの分岐
