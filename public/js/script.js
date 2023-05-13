@@ -768,7 +768,9 @@ function edit(range, addAttribute) {
     //ノードの範囲が複数のノードに跨っていない時
     if (range.startContainer === range.endContainer) {
         //選択範囲がspanタグの時
-        if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement)) {
+        //この処理は親ノードに一つの属性しか設定されておらず、選択したノードをテキストノードのみにしたい場合の処理
+        if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement) && getStyleCount(range.commonAncestorContainer.parentElement) === 1) {
+            //改善点: 本来このif文は一つの属性の時のみ動作するべき
             let resultNode;
             let beforeText;
             let afterText;
@@ -808,19 +810,18 @@ function edit(range, addAttribute) {
                 }
             })
             const fragment = applyTagToPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
-            fragment.childNodes.forEach(element => {
-                console.log(element);
-            });
 
-            console.log(fragment.childNodes[1].style.borderBottom);
             parentNode.parentNode.replaceChild(fragment, parentNode);
-            //問題：なんかfragmentはあってるのにうまく置換されない
+        }
+        else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement) && getStyleCount(range.commonAncestorContainer.parentElement) > 1) {
+            removeAttribute(addAttribute, range.commonAncestorContainer.parentElement);
         }
         else {
             //選択範囲がテキストノードの時
             setSpan(addAttribute, range);
         }
     } else {
+        //範囲が複数ノードでも選択した属性が全て同じだったら消す処理を入れたい
         const rangeFragment = document.createDocumentFragment();
         const rangeChildNodes = range.extractContents().childNodes;
         for (let i = 0, j = rangeChildNodes.length; i < j; i++) {
@@ -843,24 +844,12 @@ function edit(range, addAttribute) {
             }
         }
         range.deleteContents();
-        console.log(rangeFragment);
         range.insertNode(rangeFragment);
     }
 }
 //問題点：なんか複数ノードが絡んだ時の挙動がおかしい
 
-
-//共通化できそう
-//spanタグに付与予定の属性を取得できるメソッド
-function getElementAttribute(parentElement) {
-    const attribute = [];
-    const bold = { name: "bold", attributeName: "fontWeight", value: parentElement.style.fontWeight };
-    const italic = { name: "italic", attributeName: "fontStyle", value: parentElement.style.fontStyle };
-    const underLine = { name: "underLine", attributeName: "borderBottom", value: parentElement.style.borderBottom };
-    attribute.push(bold, italic, underLine);
-    return attribute;
-}
-
+//引数にノードを受け取り、当該ノードがどのような属性を持っているかを二進数(文字列)で返す
 function getStateOfStyle(node) {
     let binaryString = "";
 
@@ -884,8 +873,21 @@ function getStateOfStyle(node) {
     return binaryString;
 }
 
+//スタイルの数を取得
+function getStyleCount(node) {
+    const attributes = AttributeManager.getElementAttribute(node);
+    let attributesCount = 0;
+    attributes.forEach(attribute => {
+        if (attribute.getValue() !== "") {
+            attributesCount++;
+        }
+    })
+    return attributesCount;
+}
+
+//付与しようとしている属性があるかどうか真偽値で返す
 function duplicationJudgment(addAttribute, node) {
-    const elementAttribute = getElementAttribute(node);
+    const elementAttribute = AttributeManager.getElementAttribute(node);
     for (let i = 0; i < elementAttribute.length; i++) {
         if (addAttribute === elementAttribute[i].name && elementAttribute[i].value === "") {
             return true;
@@ -894,7 +896,7 @@ function duplicationJudgment(addAttribute, node) {
     return false;
 }
 
-//spanタグに付与予定の属性を削除できるメソッド(単一属性のみ)
+//spanタグから指定の属性を削除できるメソッド(正確には属性に空白を代入する)
 function removeAttribute(attribute, element) {
     if (attribute === "bold") {
         element.style.fontWeight = "";
@@ -905,7 +907,7 @@ function removeAttribute(attribute, element) {
     }
 }
 
-//各spanタグを付与するメソッドの分岐()
+//各spanタグを付与するメソッドの分岐
 function setSpan(attribute, range) {
     if (attribute === "bold") {
         setSpanBold(range);
@@ -1014,7 +1016,7 @@ function getNumbersBetween(num1, num2) {
     return result;
 }
 
-//引数として属性名とノードを受け取り、ノードに属性が付与されているか真偽値で返す
+//引数として属性名とノードを受け取り、当該ノードにその属性が付与されているか真偽値で返す
 function getAttributeStatus(addAttribute, node) {
     let attribute;
     const status = AttributeManager.getElementAttribute(node);
