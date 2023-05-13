@@ -770,33 +770,12 @@ function edit(range, addAttribute) {
         //選択範囲がspanタグの時
         //この処理は親ノードに一つの属性しか設定されておらず、選択したノードをテキストノードのみにしたい場合の処理
         if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement) && getStyleCount(range.commonAncestorContainer.parentElement) === 1) {
-
+            //付与しようとしている属性を消したい場合の処理
             removeSpanElement(addAttribute, range);
 
         } else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && !(getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement))) {
-            //付与しようとしている属性がparentElementに無かった場合の処理
-            let resultNode;
-            let beforeText;
-            let afterText;
-            const parentElement = range.commonAncestorContainer.parentElement;
-            const parentNode = range.commonAncestorContainer.parentNode;
-
-            const rangeNumberArray = getNumbersBetween(range.startOffset, range.endOffset);
-            const parentElementTextArray = parentElement.textContent.split("");
-            resultNode = createElementTextArray(parentElementTextArray, rangeNumberArray);
-            beforeText = nodeSplit(resultNode)[0];
-            afterText = nodeSplit(resultNode)[1];
-
-            const parentElementAttributes = AttributeManager.getElementAttribute(parentElement);
-            const originalAttribute = [];
-            parentElementAttributes.forEach(attribute => {
-                if (attribute.getValue() !== "") {
-                    originalAttribute.push(attribute.getValue());
-                }
-            })
-            const fragment = applyTagToPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
-
-            parentNode.parentNode.replaceChild(fragment, parentNode);
+            //付与しようとしている属性を加えて新しいspanタグを作成する場合の処理
+            addAttributeToSpanTag(addAttribute, range);
         }
         else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement) && getStyleCount(range.commonAncestorContainer.parentElement) > 1) {
             removeAttribute(addAttribute, range.commonAncestorContainer.parentElement);
@@ -910,6 +889,32 @@ function removeSpanElement(addAttribute, range) {
     const fragment = stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribute);
 
     parentElement.parentNode.replaceChild(fragment, parentNode);
+}
+
+//同じContainer内で選択範囲のspanタグに属性を追加したい場合のメソッド
+function addAttributeToSpanTag(addAttribute, range) {
+    let resultNode;
+    let beforeText;
+    let afterText;
+    const parentElement = range.commonAncestorContainer.parentElement;
+    const parentNode = range.commonAncestorContainer.parentNode;
+
+    const rangeNumberArray = getNumbersBetween(range.startOffset, range.endOffset);
+    const parentElementTextArray = parentElement.textContent.split("");
+    resultNode = createElementTextArray(parentElementTextArray, rangeNumberArray);
+    beforeText = nodeSplit(resultNode)[0];
+    afterText = nodeSplit(resultNode)[1];
+
+    const parentElementAttributes = AttributeManager.getElementAttribute(parentElement);
+    const originalAttribute = [];
+    parentElementAttributes.forEach(attribute => {
+        if (attribute.getValue() !== "") {
+            originalAttribute.push(attribute.getValue());
+        }
+    })
+    const fragment = applyTagToPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
+
+    parentNode.parentNode.replaceChild(fragment, parentNode);
 }
 
 //各spanタグを付与するメソッドの分岐
