@@ -767,6 +767,9 @@ function tagRemove() {
 function edit(range, addAttribute) {
     //ノードの範囲が複数のノードに跨っていない時
     if (range.startContainer === range.endContainer) {
+        console.log(range.commonAncestorContainer.parentElement.tagName);
+        console.log(getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement));
+        console.log(getStyleCount(range.commonAncestorContainer.parentElement));
         //選択範囲がspanタグの時
         //この処理は親ノードに一つの属性しか設定されておらず、選択したノードをテキストノードのみにしたい場合の処理
         if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement) && getStyleCount(range.commonAncestorContainer.parentElement) === 1) {
@@ -912,7 +915,7 @@ function addAttributeToSpanTag(addAttribute, range) {
     const originalAttribute = [];
     parentElementAttributes.forEach(attribute => {
         if (attribute.getValue() !== "") {
-            originalAttribute.push(attribute.getValue());
+            originalAttribute.push(attribute.getName());
         }
     })
     const fragment = applyTagToPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
@@ -1111,12 +1114,14 @@ function stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribu
 //注意！このメソッドはrangeオブジェクトがひとつのContainerに収まっているかつ、付与しようとしている属性がrangeオブジェクトの親ノードに無い場合に使える
 //選択した部分にのみ属性を付与するメソッド(正確には、rangeオブジェクトの部分を新しいspanタグに入れ替える)
 function applyTagToPartialText(addAttribute, originalAttribute, beforeText, range, afterText) {
-    const beforeNodeContainer = document.createElement("span");
+    //問題点：addAttributeは属性の名前であるべきで値ではない
+    console.log(addAttribute);
+    console.log(originalAttribute);
     const middleSpanContainer = document.createElement("span");
-    const afterNodeContainer = document.createElement("span");
     let fragment = document.createDocumentFragment();
 
     if (beforeText !== "") {
+        const beforeNodeContainer = document.createElement("span");
         const beforeChangeTextNode = document.createTextNode(beforeText);
         for (let i = 0; i < originalAttribute.length; i++) {
             setAttribute(originalAttribute[i], beforeNodeContainer);
@@ -1133,6 +1138,7 @@ function applyTagToPartialText(addAttribute, originalAttribute, beforeText, rang
     fragment.appendChild(middleSpanContainer);
 
     if (afterText !== "") {
+        const afterNodeContainer = document.createElement("span");
         const afterChangeTextNode = document.createTextNode(afterText);
         for (let i = 0; i < originalAttribute.length; i++) {
             setAttribute(originalAttribute[i], afterNodeContainer);
