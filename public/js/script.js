@@ -767,11 +767,6 @@ function tagRemove() {
 function edit(range, addAttribute) {
     //ノードの範囲が複数のノードに跨っていない時
     if (range.startContainer === range.endContainer) {
-        console.log(range.commonAncestorContainer.parentElement.tagName);
-        console.log(getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement));
-        console.log(getStyleCount(range.commonAncestorContainer.parentElement));
-        //選択範囲がspanタグの時
-        //この処理は親ノードに一つの属性しか設定されておらず、選択したノードをテキストノードのみにしたい場合の処理
         if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement) && getStyleCount(range.commonAncestorContainer.parentElement) === 1) {
             //付与しようとしている属性を消したい場合の処理
             removeSpanElement(addAttribute, range);
@@ -787,34 +782,51 @@ function edit(range, addAttribute) {
             //選択範囲がテキストノードの時
             setSpan(addAttribute, range);
         }
-    } else {
-        //範囲が複数ノードでも選択した属性が全て同じだったら消す処理を入れたい
-        //このelse文において大きく二つ分かれる
-        //1. すでにある属性の拡張
-        //2. 属性の削除
+    }
+    //ノードが複数のノードに跨っている時
+    else {
         const rangeFragment = document.createDocumentFragment();
         const rangeChildNodes = range.extractContents().childNodes;
-        for (let i = 0, j = rangeChildNodes.length; i < j; i++) {
-            if (rangeChildNodes[i].nodeName === "SPAN" && !(getAttributeStatus(addAttribute, rangeChildNodes[i]))) {
-                setAttribute(addAttribute, rangeChildNodes[i]);
-                rangeFragment.appendChild(rangeChildNodes[i]);
-                i--;
-                j--;
-                //変数を減らす理由はappendChild()で配列内から取得しているため総数も変化しているから
-            } else if (rangeChildNodes[i].nodeName === "SPAN" && getAttributeStatus(addAttribute, rangeChildNodes[i])) {
-                rangeFragment.appendChild(rangeChildNodes[i]);
-                i--;
-                j--;
-            } else if (rangeChildNodes[i].nodeType === Node.TEXT_NODE) {
-                const rangeChildNodesContainer = document.createElement("span");
-                setAttribute(addAttribute, rangeChildNodesContainer);
-                rangeChildNodesContainer.appendChild(document.createTextNode(rangeChildNodes[i].textContent));
-                rangeFragment.appendChild(rangeChildNodesContainer);
-                //変数を減らしてないのは、別の変数に入れ替えてdocument-fragmentに入れているため、配列の総数は変わってないから
+        if (hasTextNodes(rangeChildNodes)) {
+            for (let i = 0, j = rangeChildNodes.length; i < j; i++) {
+                if (rangeChildNodes[i].nodeName === "SPAN" && !(getAttributeStatus(addAttribute, rangeChildNodes[i]))) {
+                    setAttribute(addAttribute, rangeChildNodes[i]);
+                    rangeFragment.appendChild(rangeChildNodes[i]);
+                    i--;
+                    j--;
+                    //変数を減らす理由はappendChild()で配列内から取得しているため総数も変化しているから
+                } else if (rangeChildNodes[i].nodeName === "SPAN" && getAttributeStatus(addAttribute, rangeChildNodes[i])) {
+                    rangeFragment.appendChild(rangeChildNodes[i]);
+                    i--;
+                    j--;
+                } else if (rangeChildNodes[i].nodeType === Node.TEXT_NODE) {
+                    const rangeChildNodesContainer = document.createElement("span");
+                    setAttribute(addAttribute, rangeChildNodesContainer);
+                    rangeChildNodesContainer.appendChild(document.createTextNode(rangeChildNodes[i].textContent));
+                    rangeFragment.appendChild(rangeChildNodesContainer);
+                    //変数を減らしてないのは、別の変数に入れ替えてdocument-fragmentに入れているため、配列の総数は変わってないから
+                }
             }
+            range.deleteContents();
+            range.insertNode(rangeFragment);
+        } else {
+            const commonAttribute = [];
+            for (let i = 0; i < rangeChildNodes.length; i++) {
+                const attributes = AttributeManager.getElementAttribute(rangeChildNodes[i]);
+                for (let j = 0; j < attributes.length; j++) {
+                    if (attributes[j].getValue() === "") {
+                        j = attributes.length + 1;
+                    }
+                    if (j === attributes.length - 1) {
+                        commonAttribute.push(attributes[j]);
+                    }
+                }
+            }
+            console.log(commonAttribute);
         }
-        range.deleteContents();
-        range.insertNode(rangeFragment);
+
+
+
     }
 }
 //問題点：なんか複数ノードが絡んだ時の挙動がおかしい
@@ -1049,6 +1061,16 @@ function getAttributeStatus(addAttribute, node) {
     return true;
 }
 
+//引数として渡したノード内にテキストノードがあるか調べる
+function hasTextNodes(nodes) {
+    for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].nodeType === Node.TEXT_NODE) {
+            return true;
+        }
+    }
+    return false;
+}
+
 //これら下の3つのメソッドはsetAttributeと依存関係にある(setAttributeより呼び出されている)
 //ノードの太字処理
 function assignmentBold(element) {
@@ -1196,7 +1218,7 @@ function emptySpanRemove(node) {
 }
 
 
-//使用未定（使うかわからん）
+
 class ElementAttribute {
     constructor(name, attributeName, value) {
         this.name = name;
