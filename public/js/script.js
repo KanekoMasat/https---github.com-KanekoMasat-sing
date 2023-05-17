@@ -13,6 +13,7 @@ const underlineButton = document.getElementById('underlineButton');
 const editable = document.getElementById('editable');
 const testButton = document.getElementById('testButton');
 const boldRemove = document.getElementById('boldRemove');
+const alertButton = document.getElementById("alertButton");
 
 
 foucasTarget.addEventListener('mouseup', function (event) {
@@ -374,7 +375,14 @@ underlineButton.addEventListener('click', setUnderline);
 // testButton.addEventListener('click', testFunction);
 testButton.addEventListener('click', tagRemove);
 boldRemove.addEventListener('click', boldRemoveFunction);
+alertButton.addEventListener("click", alertFunction);
 
+function alertFunction() {
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    console.log(selection);
+    console.log(range.extractContents());
+}
 
 
 
@@ -620,6 +628,7 @@ function setBold() {
     const selection = window.getSelection();
     if (selection && selection.toString().length > 0) {
         const range = selection.getRangeAt(0);
+        console.log(range.commonAncestorContainer);
         edit(range, "bold");
         let rangeParentNode = range.commonAncestorContainer.parentNode;
         if (rangeParentNode.className !== "editable") {
@@ -778,7 +787,7 @@ function edit(range, addAttribute) {
         }
         else if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement) && getStyleCount(range.commonAncestorContainer.parentElement) > 1) {
             //付与しようとしている属性を消したい場合の処理(属性のみでspanタグは消さない)
-            removeAttribute(addAttribute, range.commonAncestorContainer.parentElement);
+            removeSpanAttribute(addAttribute, range);
         }
         else {
             //選択範囲がテキストノードの時
@@ -793,7 +802,6 @@ function edit(range, addAttribute) {
         if (hasTextNodes(rangeChildNodes)) {
             applyAttributesToMultipleNodes(addAttribute, rangeChildNodes, range);
         } else {
-
             if (getNodesAttributeStatus(addAttribute, rangeChildNodes)) {
                 range.deleteContents();
                 const fragment = document.createDocumentFragment();
@@ -917,8 +925,33 @@ function addAttributeToSpanTag(addAttribute, range) {
         if (attribute.getValue() !== "") {
             originalAttribute.push(attribute.getName());
         }
-    })
+    });
     const fragment = applyTagToPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
+
+    parentNode.parentNode.replaceChild(fragment, parentNode);
+}
+
+function removeSpanAttribute(addAttribute, range) {
+    let resultNode;
+    let beforeText;
+    let afterText;
+    const parentElement = range.commonAncestorContainer.parentElement;
+    const parentNode = range.commonAncestorContainer.parentNode;
+
+    const rangeNumberArray = getNumbersBetween(range.startOffset, range.endOffset);
+    const parentElementTextArray = parentElement.textContent.split("");
+    resultNode = createElementTextArray(parentElementTextArray, rangeNumberArray);
+    beforeText = nodeSplit(resultNode)[0];
+    afterText = nodeSplit(resultNode)[1];
+
+    const parentElementAttributes = AttributeManager.getElementAttribute(parentElement);
+    const originalAttribute = [];
+    parentElementAttributes.forEach(attribute => {
+        if (attribute.getValue() !== "") {
+            originalAttribute.push(attribute.getName());
+        }
+    });
+    const fragment = removeAttributesFromPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
 
     parentNode.parentNode.replaceChild(fragment, parentNode);
 }
@@ -1134,12 +1167,43 @@ function stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribu
     return fragment;
 }
 
+//単一ノード用：複数の属性の中から一つの属性のみ消す
+function removeAttributesFromPartialText(addAttribute, originalAttribute, beforeText, range, afterText) {
+    const middleSpanContainer = document.createElement("span");
+    let fragment = document.createDocumentFragment();
+
+    if (beforeText !== "") {
+        const beforeNodeContainer = document.createElement("span");
+        const beforeChangeTextNode = document.createTextNode(beforeText);
+        for (let i = 0; i < originalAttribute.length; i++) {
+            setAttribute(originalAttribute[i], beforeNodeContainer);
+        }
+        beforeNodeContainer.appendChild(beforeChangeTextNode);
+        fragment.appendChild(beforeNodeContainer);
+    }
+
+    for (let i = 0; i < originalAttribute.length; i++) {
+        setAttribute(originalAttribute[i], middleSpanContainer);
+    }
+    removeAttribute(addAttribute, middleSpanContainer);
+    middleSpanContainer.appendChild(document.createTextNode(range.toString()));
+    fragment.appendChild(middleSpanContainer);
+
+    if (afterText !== "") {
+        const afterNodeContainer = document.createElement("span");
+        const afterChangeTextNode = document.createTextNode(afterText);
+        for (let i = 0; i < originalAttribute.length; i++) {
+            setAttribute(originalAttribute[i], afterNodeContainer);
+        }
+        afterNodeContainer.appendChild(afterChangeTextNode);
+        fragment.appendChild(afterNodeContainer);
+    }
+    return fragment;
+}
+
 //注意！このメソッドはrangeオブジェクトがひとつのContainerに収まっているかつ、付与しようとしている属性がrangeオブジェクトの親ノードに無い場合に使える
 //選択した部分にのみ属性を付与するメソッド(正確には、rangeオブジェクトの部分を新しいspanタグに入れ替える)
 function applyTagToPartialText(addAttribute, originalAttribute, beforeText, range, afterText) {
-    //問題点：addAttributeは属性の名前であるべきで値ではない
-    console.log(addAttribute);
-    console.log(originalAttribute);
     const middleSpanContainer = document.createElement("span");
     let fragment = document.createDocumentFragment();
 
@@ -1172,6 +1236,7 @@ function applyTagToPartialText(addAttribute, originalAttribute, beforeText, rang
     return fragment;
 }
 
+//複数ノード用：spanタグ適用処理
 function applyAttributesToMultipleNodes(addAttribute, nodes, range) {
     const rangeFragment = document.createDocumentFragment();
     for (let i = 0, j = nodes.length; i < j; i++) {
