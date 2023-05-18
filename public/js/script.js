@@ -347,7 +347,7 @@ function edit(range, addAttribute) {
         }
         else if (range.commonAncestorContainer.nodeType === Node.TEXT_NODE) {
             //まだ不完全
-            setSpan(addAttribute, range);
+            setSpanAttribute(range, addAttribute);
         }
     }
     //ノードが複数のノードに跨っている時
@@ -509,20 +509,6 @@ function removeSpanAttribute(addAttribute, range) {
     const fragment = removeAttributesFromPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
 
     parentNode.parentNode.replaceChild(fragment, parentNode);
-}
-
-//各spanタグを付与するメソッドの分岐
-function setSpan(attribute, range) {
-    if (attribute === "bold") {
-        // setSpanBold(range);
-        setSpanAttribute(range, attribute);
-    } else if (attribute === "italic") {
-        // setSpanItalic(range);
-        setSpanAttribute(range, attribute);
-    } else if (attribute === "underLine") {
-        // setSpanUnderLine(range);
-        setSpanAttribute(range, attribute);
-    }
 }
 
 //Elementオブジェクトに属性を付与する分岐
