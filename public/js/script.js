@@ -378,10 +378,10 @@ boldRemove.addEventListener('click', boldRemoveFunction);
 alertButton.addEventListener("click", alertFunction);
 
 function alertFunction() {
+    console.log("アラートボタン");
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
-    console.log(selection);
-    console.log(range.extractContents());
+    console.log(range.commonAncestorContainer.parentNode);
 }
 
 
@@ -789,8 +789,8 @@ function edit(range, addAttribute) {
             //付与しようとしている属性を消したい場合の処理(属性のみでspanタグは消さない)
             removeSpanAttribute(addAttribute, range);
         }
-        else {
-            //選択範囲がテキストノードの時
+        else if (range.commonAncestorContainer.nodeType === Node.TEXT_NODE) {
+            //まだ不完全
             setSpan(addAttribute, range);
         }
     }
