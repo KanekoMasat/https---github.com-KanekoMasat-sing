@@ -522,42 +522,6 @@ function setAttribute(attribute, element) {
     }
 }
 
-
-//これより下はsetSpanメソッドと依存関係（共通化できそう）
-//rangeオブジェクトの太字処理
-function setSpanBold(range) {
-    let selectedText = range.extractContents();
-    range.deleteContents();
-
-    const bold = document.createElement("span");
-    bold.style.fontWeight = "bold";
-    bold.appendChild(selectedText);
-    range.insertNode(bold);
-}
-
-//rangeオブジェクトの斜体処理
-function setSpanItalic(range) {
-    let selectedText = range.extractContents();
-    range.deleteContents();
-
-    const italic = document.createElement("span");
-    italic.style.fontStyle = "italic";
-    italic.appendChild(selectedText);
-    range.insertNode(italic);
-}
-
-//rangeオブジェクトの下線処理
-function setSpanUnderLine(range) {
-    let selectedText = range.extractContents();
-    range.deleteContents();
-
-    const underline = document.createElement("span");
-    underline.style.borderBottom = "2px solid black";
-    underline.appendChild(selectedText);
-    range.insertNode(underline);
-}
-//ここまで
-
 function setSpanAttribute(range, addAttribute) {
     let selectedText = range.extractContents();
     range.deleteContents();
