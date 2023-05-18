@@ -56,7 +56,7 @@
     <button id="boldButton4">B</button>
     <button id="italicButton" style="font-style: italic">I</button>
     <button id="testButton">テスト</button>
-    <button id="underlineButton" {{-- onclick='document.execCommand("underline"); --}}><u>U</u></button>
+    <button id="underlineButton"><u>U</u></button>
     <button id="boldRemove">b削除</button>
     <button id="alertButton">アラート</button>
     

@@ -514,11 +514,14 @@ function removeSpanAttribute(addAttribute, range) {
 //各spanタグを付与するメソッドの分岐
 function setSpan(attribute, range) {
     if (attribute === "bold") {
-        setSpanBold(range);
+        // setSpanBold(range);
+        setSpanAttribute(range, attribute);
     } else if (attribute === "italic") {
-        setSpanItalic(range);
+        // setSpanItalic(range);
+        setSpanAttribute(range, attribute);
     } else if (attribute === "underLine") {
-        setSpanUnderLine(range);
+        // setSpanUnderLine(range);
+        setSpanAttribute(range, attribute);
     }
 }
 
@@ -569,6 +572,13 @@ function setSpanUnderLine(range) {
 }
 //ここまで
 
+function setSpanAttribute(range, addAttribute) {
+    let selectedText = range.extractContents();
+    range.deleteContents();
+    const container = new SpanTag(selectedText);
+    container.setAttribute(addAttribute);
+    range.insertNode(container.getElement());
+}
 
 //引数としてノードを渡し、隣接するテキストノードの結合処理
 function combineAdjacentTextNodes(element) {
@@ -893,5 +903,30 @@ class AttributeManager {
             new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom)
         );
         return attribute;
+    }
+}
+
+class SpanTag {
+    constructor(value) {
+        this.container = document.createElement("span");
+        this.container.appendChild(value);
+    }
+
+    setValue(value) {
+        this.value = value;
+    }
+
+    setAttribute(attribute) {
+        if (attribute === "bold") {
+            this.container.style.fontWeight = "bold";
+        } else if (attribute === "italic") {
+            this.container.style.fontStyle = "italic";
+        } else if (attribute === "underLine") {
+            this.container.style.borderBottom = "2px solid black";
+        }
+    }
+
+    getElement() {
+        return this.container;
     }
 }
