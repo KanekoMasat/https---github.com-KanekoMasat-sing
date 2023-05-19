@@ -514,14 +514,15 @@ function removeSpanAttribute(addAttribute, range) {
 //Elementオブジェクトに属性を付与する分岐
 function setAttribute(attribute, element) {
     if (attribute === "bold") {
-        assignmentBold(element);
+        element.style.fontWeight = "bold";
     } else if (attribute === "italic") {
-        assignmentItalic(element);
+        element.style.fontStyle = "italic";
     } else if (attribute === "underLine") {
-        assignmentUnderLine(element);
+        element.style.borderBottom = "2px solid black";
     }
 }
 
+//rangeオブジェクトにspanタグを追加
 function setSpanAttribute(range, addAttribute) {
     let selectedText = range.extractContents();
     range.deleteContents();
@@ -619,23 +620,6 @@ function getNodesAttributeStatus(addAttribute, nodes) {
     }
     return true;
 }
-
-//これら下の3つのメソッドはsetAttributeと依存関係にある(setAttributeより呼び出されている)
-//ノードの太字処理
-function assignmentBold(element) {
-    element.style.fontWeight = "bold";
-}
-
-//ノードの斜体処理
-function assignmentItalic(element) {
-    element.style.fontStyle = "italic";
-}
-
-//ノードの下線処理
-function assignmentUnderLine(element) {
-    element.style.borderBottom = "2px solid black";
-}
-
 
 
 //選択した部分だけ"？"にする(引数に範囲と配列を受け取る)
