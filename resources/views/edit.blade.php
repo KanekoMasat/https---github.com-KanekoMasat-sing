@@ -39,13 +39,6 @@
         </form>
     </div>
 
-    <button id="boldButton2">太字</button>
-    <button id="boldButton3">太字(mytextarea)</button>
-    <p id="myText">これはサンプルテキストです。</p>
-    <textarea name="" id="testTextarea" cols="30" rows="10"></textarea>
-
-    <textarea name="" id="testTextarea2" cols="30" rows="10">mytextarea2</textarea>
-
     
     <div id="editable" contenteditable="true" class="editable">
         <div class="editable-inner">
@@ -55,9 +48,7 @@
     
     <button id="boldButton4">B</button>
     <button id="italicButton" style="font-style: italic">I</button>
-    <button id="testButton">テスト</button>
     <button id="underlineButton"><u>U</u></button>
-    <button id="boldRemove">b削除</button>
     <button id="alertButton">アラート</button>
     
     <script src="{{ asset('js/script.js') }}"></script>

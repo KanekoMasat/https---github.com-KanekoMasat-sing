@@ -6,13 +6,10 @@ let textPosition = 1;
 const buttonArea = document.getElementById('menu-btn');
 const bodyArea = document.getElementById('body-container');
 const myTextarea2 = document.getElementById('testTextarea2');
-const boldButton3 = document.getElementById('boldButton3');
 const boldButton4 = document.getElementById('boldButton4');
 const italicButton = document.getElementById('italicButton');
 const underlineButton = document.getElementById('underlineButton');
 const editable = document.getElementById('editable');
-const testButton = document.getElementById('testButton');
-const boldRemove = document.getElementById('boldRemove');
 const alertButton = document.getElementById("alertButton");
 
 
@@ -119,97 +116,6 @@ function applyBold() {
 
     textarea.value = beforeSelectedText + formattedSelectedText + afterSelectedText;
     textarea.setSelectionRange(startIndex + 29, endIndex + 29);
-}
-
-var boldButton2 = document.getElementById("boldButton2");
-var myText = document.getElementById("myText");
-var testTextarea = document.getElementById('testTextarea');
-
-boldButton2.addEventListener("click", function () {
-    if (myText.style.fontWeight !== "bold") {
-        myText.style.fontWeight = "bold";
-        testTextarea.style.fontWeight = "bold";
-        myTextarea2.style.fontWeight = "bold";
-        console.log(boldButton2.parentNode);
-    } else {
-        myText.style.fontWeight = "normal";
-        testTextarea.style.fontWeight = "normal";
-        myTextarea2.style.fontWeight = "normal";
-    }
-
-    var selectedText = "";
-    if (window.getSelection) {
-        // 現在の選択範囲を取得
-        selectedText = window.getSelection().toString();
-    } else if (document.selection && document.selection.type != "Control") {
-        // IE8以前の選択範囲を取得
-        selectedText = document.selection.createRange().text;
-    }
-
-    console.log(selectedText); // 選択されたテキストをコンソールに出力
-
-});
-
-
-
-myTextarea2.addEventListener('input', notification);
-boldButton3.addEventListener('click', innerhtml);
-
-//押されたら<b>タグで囲む
-function boldSelection() {
-    const start = myTextarea2.selectionStart;
-    const end = myTextarea2.selectionEnd;
-
-    const selectedText = myTextarea2.value.substring(start, end);
-    const boldText = "<b>" + selectedText + "</b>";
-
-    const newText = myTextarea2.value.substring(0, start) + boldText + myTextarea2.value.substring(end);
-    myTextarea2.value = newText;
-
-    notification();
-
-}
-
-function formatSelectedText() {
-    const selectedText = myTextarea2.value.substring(myTextarea2.selectionStart, myTextarea2.selectionEnd);
-    const boldText = `<b>${selectedText}</b>`;
-    const formattedText = myTextarea2.value.substring(0, myTextarea2.selectionStart) + boldText + myTextarea2.value.substring(myTextarea2.selectionEnd);
-    myTextarea2.innerHTML = formattedText;
-}
-
-function notification() {
-    console.log('myTextarea2の内容が変更されました');
-}
-
-function innerhtml() {
-    let text = myTextarea2.value;
-    let boldText = `<b>${text}</b>`;
-    myTextarea2.innerHTML = boldText;
-}
-
-function getSelectedNodes(range) {
-    var startContainer = range.startContainer;
-    var endContainer = range.endContainer;
-    var commonAncestor = range.commonAncestorContainer;
-
-    // 選択範囲内のすべてのノードを取得する
-    var nodes = [];
-    var node = startContainer;
-    while (node && node !== commonAncestor.nextSibling && range.comparePoint(node, 0) !== 1) {
-        nodes.push(node);
-        node = node.nextSibling || node.parentNode.nextSibling;
-    }
-
-    node = endContainer;
-    while (node && node !== commonAncestor.previousSibling && range.comparePoint(node, node.length) !== -1) {
-        nodes.push(node);
-        node = node.previousSibling || node.parentNode.previousSibling;
-    }
-
-    // ノードの重複を削除する
-    return nodes.filter(function (node, index) {
-        return nodes.indexOf(node) === index;
-    });
 }
 
 
