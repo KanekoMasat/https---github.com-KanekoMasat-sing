@@ -5,12 +5,13 @@ const headerArea = document.getElementById('header-container');
 let textPosition = 1;
 const buttonArea = document.getElementById('menu-btn');
 const bodyArea = document.getElementById('body-container');
-const myTextarea2 = document.getElementById('testTextarea2');
 const boldButton4 = document.getElementById('boldButton4');
 const italicButton = document.getElementById('italicButton');
 const underlineButton = document.getElementById('underlineButton');
-const editable = document.getElementById('editable');
+const editableInner = document.getElementById("editable-inner");
+const toolBar2 = document.getElementById("tool-bar2");
 const alertButton = document.getElementById("alertButton");
+
 
 
 foucasTarget.addEventListener('mouseup', function (event) {
@@ -119,10 +120,25 @@ function applyBold() {
 }
 
 
+let rangeSample;
+
+editableInner.addEventListener('click', function (event) {
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    if (rangeSample !== range) {
+        toolBar2.style.display = "block";
+    } else {
+        toolBar2.style.display = "none";
+    }
+    rangeSample = range;
+});
+
 boldButton4.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
 alertButton.addEventListener("click", alertFunction);
+
+
 
 function alertFunction() {
     console.log("アラートボタン");
@@ -136,7 +152,7 @@ function alertFunction() {
 
 
 //子孫ノードを走査する関数
-function traverse(node) {
+function traverse(node, range1, range2) {
     console.log("関数traverseが呼び出されました");
     console.log(node.nodeType);
     console.log(node.childNode);
@@ -148,7 +164,7 @@ function traverse(node) {
     if (node.nodeType === Node.ELEMENT_NODE) { // ノードが要素ノードの場合
         // ノードを処理するコードをここに記述
         console.log(node);
-        ranges1.push(node);
+        range1.push(node);
         node.childNodes.forEach(element => {
             console.log(element.textContent);
         });
@@ -160,9 +176,10 @@ function traverse(node) {
     } else {
         console.log("要素ノードではありません");
         if (node.textContent !== "") {
-            ranges2.push(node);
+            range2.push(node);
         }
     }
+    return [range1, range2];
 }
 
 //太字

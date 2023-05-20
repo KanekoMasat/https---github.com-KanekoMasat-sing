@@ -1,7 +1,3 @@
-/* .category-title {
-    font-family: sans-serif;
-} */
-
 .category-container {
     padding-bottom: 20px;
 }
@@ -30,14 +26,6 @@ li {
 .menuBar {
     display: flex;
     list-style: none;
-}
-
-.mixedNuts {
-    display: flex;
-    user-select: none;
-    cursor: pointer;
-    align-items: center;
-    white-space: nowrap;
 }
 
 /* ツールバー */
@@ -74,28 +62,15 @@ li {
     background-image: url(../storage/b067.gif);
 }
 
-/* .main-container {
-    position: relative;
-    z-index: 0px;
-} */
-
 .body-container {
     position: relative;
     z-index: 0px;
 }
 
-.bold-font {
-    font-weight: bold;
-}
-
-.italic-font {
-    font-style: italic;
-}
-
-.underline {
-    text-decoration: underline;
-}
-
 .editable {
     padding: 3px 2px;
+}
+
+.tool-bar2 {
+    display: none;
 }

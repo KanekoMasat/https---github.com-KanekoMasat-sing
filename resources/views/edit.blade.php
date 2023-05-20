@@ -41,15 +41,18 @@
 
     
     <div id="editable" contenteditable="true" class="editable">
-        <div class="editable-inner">
+        <div id="editable-inner" class="editable-inner">
             JavaScript<span style="font-style: italic;">高まる愛の中</span>変わる心情の中
         </div>
     </div>
     
-    <button id="boldButton4">B</button>
-    <button id="italicButton" style="font-style: italic">I</button>
-    <button id="underlineButton"><u>U</u></button>
-    <button id="alertButton">アラート</button>
+    <div id="tool-bar2" class="tool-bar2">
+        <button id="boldButton4">B</button>
+        <button id="italicButton" style="font-style: italic">I</button>
+        <button id="underlineButton"><u>U</u></button>
+        <button id="alertButton">アラート</button>
+    </div>
+   
     
     <script src="{{ asset('js/script.js') }}"></script>
 @endsection
