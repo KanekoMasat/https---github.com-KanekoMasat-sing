@@ -64,13 +64,35 @@ li {
 
 .body-container {
     position: relative;
+    display: flex;
     z-index: 0px;
 }
 
+/* ツールバー２*/
 .editable {
     padding: 3px 2px;
+    background-image: url(../storage/b067.gif);
+    z-index: 0px;
 }
 
 .tool-bar2 {
+    position: absolute;
     display: none;
+    z-index: 30px;
+}
+
+.tool-bar-menu2 {
+    display: inline-flex;
+    z-index: 30px;
+}
+
+/* 編集曲リスト */
+.edit-songs-wrapper {
+    border: 1px solid;
+    text-align: left;
+}
+
+.edit-songs-container2 {
+    /* margin-left: 35%; */
+    float: right;
 }

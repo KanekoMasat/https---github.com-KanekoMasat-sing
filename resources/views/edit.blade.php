@@ -39,18 +39,26 @@
         </form>
     </div>
 
-    
-    <div id="editable" contenteditable="true" class="editable">
-        <div id="editable-inner" class="editable-inner">
-            JavaScript<span style="font-style: italic;">高まる愛の中</span>変わる心情の中
+    <form action="">
+        @csrf
+        @method('PUT')
+        タイトル:
+        <input type="text">
+        <div id="editable" contenteditable="true" class="editable">
+            <div id="editable-inner" class="editable-inner">
+                {{ old('lyrics', $form->lyrics) }}
+            </div>
         </div>
-    </div>
+        <button type="submit">更新</button>
+    </form>
+    
     
     <div id="tool-bar2" class="tool-bar2">
-        <button id="boldButton4">B</button>
-        <button id="italicButton" style="font-style: italic">I</button>
-        <button id="underlineButton"><u>U</u></button>
-        <button id="alertButton">アラート</button>
+        <div class="tool-bar-menu2">
+            <button id="boldButton4">B</button>
+            <button id="italicButton" style="font-style: italic">I</button>
+            <button id="underlineButton"><u>U</u></button>
+        </div>
     </div>
    
     

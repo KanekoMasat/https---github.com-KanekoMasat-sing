@@ -1,5 +1,4 @@
 const foucasTarget = document.getElementById('test-textarea');
-const formSampleTarget = document.getElementById('form-sample');
 let changeTarget = document.getElementById('tool-bar');
 const headerArea = document.getElementById('header-container');
 let textPosition = 1;
@@ -8,9 +7,9 @@ const bodyArea = document.getElementById('body-container');
 const boldButton4 = document.getElementById('boldButton4');
 const italicButton = document.getElementById('italicButton');
 const underlineButton = document.getElementById('underlineButton');
-const editableInner = document.getElementById("editable-inner");
+const editable = document.getElementById("editable");
+console.log(editable);
 const toolBar2 = document.getElementById("tool-bar2");
-const alertButton = document.getElementById("alertButton");
 
 
 
@@ -39,39 +38,6 @@ foucasTarget.addEventListener('mouseup', function (event) {
 
     }
 });
-
-// foucasTarget.addEventListener('mouseup', function () {
-//     const selection = window.getSelection().toString();
-//     if (selection.length > 0) {
-//         console.log('テキストが選択されました。');
-
-//         // 選択されたテキストをクリックしたときに、クリックイベントをキャンセルする
-//         foucasTarget.addEventListener('click', function handleClick(event) {
-//             event.preventDefault();
-//             foucasTarget.removeEventListener('click', handleClick);
-//         }, { once: true });
-//     }
-// });
-
-// foucasTarget.addEventListener('mousedown', function () {
-//     setTimeout(function () {
-//         changeTarget.style.display = "none";
-//     }, 500)
-// });
-
-//このイベントの問題点: 選択するのが400mSec以内に終わった場合消える→これは妥協か？
-// bodyArea.addEventListener('mousedown', function (event) {
-//     textPosition.forEach(element => {
-//         if (event.target.tagName !== 'BUTTON') {
-//             if (element === foucasTarget.selectionStart) {
-//                 setTimeout(function () {
-//                     changeTarget.style.display = "none";
-//                     // console.log("changeTargetのstyleをnoneにしました");
-//                 }, 400);
-//             }
-//         }
-//     });
-// });
 
 buttonArea.addEventListener('click', () => {
     console.log(window.getSelection().toString());
@@ -120,32 +86,30 @@ function applyBold() {
 }
 
 
-let rangeSample;
+let previousRange;
 
-editableInner.addEventListener('click', function (event) {
+editable.addEventListener('click', function (event) {
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
-    if (rangeSample !== range) {
+    if (previousRange !== range && selection.toString().length > 0) {
         toolBar2.style.display = "block";
     } else {
         toolBar2.style.display = "none";
     }
-    rangeSample = range;
+    previousRange = range;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft; // x軸のスクロール量を取得
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop; // y軸のスクロール量を取得
+    const headerTop = headerArea.offsetTop;     //ヘッダーのy軸ピクセルを取得
+    const x = event.pageX - scrollLeft;
+    const y = event.pageY - scrollTop - 60;
+    toolBar2.style.left = x + 'px';
+    toolBar2.style.top = y + 'px';
+
 });
 
 boldButton4.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
-alertButton.addEventListener("click", alertFunction);
-
-
-
-function alertFunction() {
-    console.log("アラートボタン");
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    console.log(range.commonAncestorContainer.parentNode);
-}
 
 
 
