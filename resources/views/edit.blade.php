@@ -1,22 +1,21 @@
-@extends('layouts.default')
+@extends('layouts.edit_default')
 
-@section('title', 'サンプル')
-@section('styleSheet', 'style.css')
+@section('title', '編集ページ')
 
 @section('head')
-    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @endsection
 
 
 @section('main')
-    <form action="{{ route('form.update', ['form' => $form->id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('singing.update', ['singing' => $singing->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         曲名:
-        <input type="text" value="{{ old('title', $form->title) }}" name="title"><br>
+        <input type="text" value="{{ old('title', $singing->title) }}" name="title"><br>
         歌詞:
-        <input type="text" value="{{ old('lyrics', $form->lyrics) }}" name="lyrics"><br>
-        <button type="submit">更新</button>        
+        <input type="text" value="{{ old('lyrics', $singing->lyrics) }}" name="lyrics"><br>
+        <button type="submit">更新</button>
     </form>
 
     {{-- テスト --}}
@@ -34,7 +33,6 @@
             </div>
         </div>
         <form action="">
-            <textarea class="test-textarea" name="" id="test-textarea" cols="30" rows="10">{{ old('lyrics', $form->lyrics) }}</textarea>
             <button class="secret" type="submit">保存</button>
         </form>
     </div>
@@ -46,13 +44,13 @@
         <input type="text">
         <div id="editable" contenteditable="true" class="editable">
             <div id="editable-inner" class="editable-inner">
-                {{ old('lyrics', $form->lyrics) }}
+                {{ old('lyrics', $singing->lyrics) }}
             </div>
         </div>
         <button type="submit">更新</button>
     </form>
-    
-    
+
+
     <div id="tool-bar2" class="tool-bar2">
         <div class="tool-bar-menu2">
             <button id="boldButton4">B</button>
@@ -60,7 +58,7 @@
             <button id="underlineButton"><u>U</u></button>
         </div>
     </div>
-   
-    
+
+
     <script src="{{ asset('js/script.js') }}"></script>
 @endsection

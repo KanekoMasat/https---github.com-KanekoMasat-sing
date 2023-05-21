@@ -21,7 +21,7 @@ Route::get('/index', function () {
     return view('index');
 })->name('index')->middleware('auth');
 
-Route::resource('/form', SingingSheetController::class)->middleware('auth');
+Route::resource('/singing', SingingSheetController::class)->middleware('auth');
 Route::get('/definition', function () {
     return view('definition');
 })->name('definition');

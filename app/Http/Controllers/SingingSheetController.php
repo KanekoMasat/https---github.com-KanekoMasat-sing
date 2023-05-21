@@ -12,7 +12,7 @@ class SingingSheetController extends Controller
     public function index()
     {
         $singingSheets = SingingSheet::all();
-        return view('list', ['singingSheets' => $singingSheets]);
+        return view('song_list', ['singingSheets' => $singingSheets]);
     }
 
     /**
@@ -22,7 +22,7 @@ class SingingSheetController extends Controller
      */
     public function create()
     {
-        return view('form');
+        return view('song_create');
     }
 
     /**
@@ -35,7 +35,7 @@ class SingingSheetController extends Controller
     {
         $singingSheet = new SingingSheet($request->validated());
         $singingSheet->save();
-        return to_route('form.create')->with('success', '曲の登録が完了しました');
+        return to_route('singing_create')->with('success', '曲の登録が完了しました');
     }
 
     /**
@@ -55,9 +55,10 @@ class SingingSheetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(SingingSheet $form)
+    public function edit(SingingSheet $singing)
     {
-        return view('edit', ['form' => $form]);
+        $singingSheets = SingingSheet::all();
+        return view('edit', ['singing' => $singing, 'singingSheets' => $singingSheets]);
     }
 
     /**
@@ -73,7 +74,7 @@ class SingingSheetController extends Controller
         $updateData = $request->validated();
         $singingSheet->update($updateData);
 
-        return to_route('form.index')->with('success', '更新が完了しました');
+        return to_route('singing.index')->with('success', '更新が完了しました');
     }
 
     /**
@@ -87,6 +88,6 @@ class SingingSheetController extends Controller
         $singingSheet = SingingSheet::findOrFail($id);
         $singingSheet->delete();
 
-        return to_route('form.index')->with('success', '削除が成功しました');
+        return to_route('singing.index')->with('success', '削除が成功しました');
     }
 }

@@ -1,3 +1,9 @@
+html,
+body {
+    height: 100%;
+}
+
+
 .category-container {
     padding-bottom: 20px;
 }
@@ -62,10 +68,27 @@ li {
     background-image: url(../storage/b067.gif);
 }
 
+.header-container {
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.header-button-wrapper {
+    width: 90px;
+    transform: scale(1, 2);
+}
+
+.header-button {
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid;
+}
+
 .body-container {
     position: relative;
     display: flex;
     z-index: 0px;
+    height: 100%;
 }
 
 /* ツールバー２*/
@@ -87,12 +110,48 @@ li {
 }
 
 /* 編集曲リスト */
+
+.edit-songs-container {
+    border: 1px solid;
+}
+
 .edit-songs-wrapper {
+    height: 150px;
+    width: 450px;
     border: 1px solid;
     text-align: left;
+    overflow: scroll;
+}
+
+.edit-song {
+    padding-left: 5px;
+}
+
+.song-button {
+    text-decoration: none;
+    color: inherit;
+}
+
+.song-label {
+    display: flex;
+}
+
+.song-title {
+    font-size: large;
+    font-weight: bold;
+}
+
+.song-lyrics {
+    padding-left: 20px;
+}
+
+.delete-button-wrapper {
+    padding-top: 5px;
+    padding-right: 5px;
+    display: block;
+    margin-left: auto;
 }
 
 .edit-songs-container2 {
-    /* margin-left: 35%; */
-    float: right;
+    margin-left: 10px;
 }

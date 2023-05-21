@@ -8,21 +8,31 @@
 </head>
 
 <body>
-    <a href="{{ route('index') }}">トップページへ</a>
+    <header class="header-container">
+        <div class="header-button-wrapper">
+            <a href="{{ route('index') }}" class="header-button">トップへ</a>
+        </div>
+    </header>
     <div class="body-container" id="body-container">
         <div class="edit-songs-container">
-            @foreach($singingSheets as $singingSheet)
-            <div class="edit-songs-wrapper">
-                <a href="">
-                    <p><b>{{ $singingSheet->title }}</b></p>
-                    <p>{{ $singingSheet->lyrics }}</p>
-                </a>
-                <form {{-- action="{{ route('form.destroy', ['form' => $singingSheet->id]) }}" method="POST" --}} >
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">削除</button>
-                </form>
-            </div>
+            @foreach ($singingSheets as $singingSheet)
+                <div class="edit-songs-wrapper">
+                    <div class="edit-song">
+                        <a href="{{ route('singing.edit', ['singing' => $singingSheet->id]) }}" class="song-button">
+                            <div class="song-label">
+                                <p class="song-title">{{ $singingSheet->title }}</p>
+                                <form class="delete-button-wrapper"
+                                    action="{{ route('singing.destroy', ['singing' => $singingSheet->id]) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="delete-button" type="submit">削除</button>
+                                </form>
+                            </div>
+                            <p class="song-lyrics">{{ $singingSheet->lyrics }}</p>
+                        </a>
+                    </div>
+                </div>
             @endforeach
         </div>
         <main>
@@ -31,7 +41,7 @@
             </div>
         </main>
     </div>
-    
+
 </body>
 
 
