@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @endsection
 
-
+{{-- この辺のゴチャゴチャしてるのをリファクタリング --}}
 @section('main')
     <form action="{{ route('singing.update', ['singing' => $singing->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -18,30 +18,11 @@
         <button type="submit">更新</button>
     </form>
 
-    {{-- テスト --}}
-    <div class="form-sample" id="form-sample">
-        {{-- ツールバー --}}
-        <div class="tool-bar" id="tool-bar">
-            <div class="tool-bar-menu">
-                <ul class="menu-list" id="menu-list">
-                    <button type="button" class="menu-btn" id="menu-btn" onclick="alert('ビブラートボタンが押されました')">ビブラート</button>
-                    <button type="button" class="menu-btn" onclick="alert('こぶしボタンが押されました')">こぶし</button>
-                    <button type="button" class="menu-btn" onclick="alert('しゃくりボタンが押されました')">しゃくり</button>
-                    <button type="button" class="menu-btn" onclick="alert('フォールボタンが押されました')">フォール</button>
-                    <button type="button" class="menu-btn" id="boldButton">B</button>
-                </ul>
-            </div>
-        </div>
-        <form action="">
-            <button class="secret" type="submit">保存</button>
-        </form>
-    </div>
-
-    <form action="">
+    <form action="{{ route('singing.update', ['singing' => $singing->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         タイトル:
-        <input type="text">
+        <input type="text" value="{{ old('title', $singing->title) }}" name="title">
         <div id="editable" contenteditable="true" class="editable">
             <div id="editable-inner" class="editable-inner">
                 {{ old('lyrics', $singing->lyrics) }}

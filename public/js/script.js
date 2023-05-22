@@ -8,7 +8,6 @@ const boldButton4 = document.getElementById('boldButton4');
 const italicButton = document.getElementById('italicButton');
 const underlineButton = document.getElementById('underlineButton');
 const editable = document.getElementById("editable");
-console.log(editable);
 const toolBar2 = document.getElementById("tool-bar2");
 
 
@@ -78,7 +77,6 @@ function setBold() {
     const selection = window.getSelection();
     if (selection && selection.toString().length > 0) {
         const range = selection.getRangeAt(0);
-        console.log(range.commonAncestorContainer);
         edit(range, "bold");
         let rangeParentNode = range.commonAncestorContainer.parentNode;
         if (rangeParentNode.className !== "editable") {
@@ -199,6 +197,7 @@ function edit(range, addAttribute) {
 function getStateOfStyle(node) {
     let binaryString = "";
 
+    //再利用性のあるコードにする
     if (node.style.fontWeight === "bold") {
         binaryString += "1";
     } else {
@@ -369,7 +368,6 @@ function combineAdjacentSpanNodes(element) {
     for (let i = 0, j = elementChilds.length; i < j; i++) {
         if (previousNode !== undefined && previousNode.nodeType === Node.ELEMENT_NODE && elementChilds[i].nodeType === Node.ELEMENT_NODE) {
             if (getStateOfStyle(previousNode) === getStateOfStyle(elementChilds[i])) {
-                console.log(i + 1);
                 previousNode.textContent = previousNode.textContent + elementChilds[i].textContent;
                 elementChilds[i].parentNode.removeChild(elementChilds[i]);
                 i--;
