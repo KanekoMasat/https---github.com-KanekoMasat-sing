@@ -34,40 +34,6 @@ li {
     list-style: none;
 }
 
-/* ツールバー */
-.tool-bar {
-    position: absolute;
-    display: none;
-    pointer-events: none;
-    z-index: 30px;
-}
-
-.tool-bar-menu {
-    display: inline-flex;
-    pointer-events: none;
-}
-
-.menu-list {
-    display: flex;
-    list-style: none;
-    pointer-events: none;
-}
-
-.menu-btn {
-    text-align: center;
-    user-select: none;
-    pointer-events: auto;
-}
-
-.secret {
-    user-select: none;
-    pointer-events: none;
-}
-
-.test-textarea {
-    background-image: url(../storage/b067.gif);
-}
-
 .header-container {
     margin-bottom: 5px;
     margin-top: 15px;
@@ -81,46 +47,84 @@ li {
 .header-button {
     text-decoration: none;
     color: inherit;
-    border: 1px solid;
+    border: 1px groove;
+    border-radius: 5px;
+    font-family: sans-serif;
 }
 
 .body-container {
     position: relative;
     display: flex;
+    gap: 0px 10px;
+    margin-top: 6px;
     z-index: 0px;
     height: 100%;
 }
 
-/* ツールバー２*/
+.main-container {
+    width: 72%;
+}
+
+.main-form {
+    height: 100%;
+}
+
+.title-wrapper {
+    display: flex;
+    gap: 1px 10px;
+    height: 60px;
+}
+
+.title-form {
+    width: 30%;
+}
+
+.title-content {
+    font-size: 20px;
+    height: 65%;
+    width: 100%;
+}
+
 .editable {
+    height: 70%;
     padding: 3px 2px;
     background-image: url(../storage/b067.gif);
     z-index: 0px;
 }
 
-.tool-bar2 {
+.editable-inner {
+    font-size: 25px;
+    letter-spacing: 2px;
+    height: 30px;
+    margin-top: 6px;
+}
+
+/* ツールバーstart */
+.tool-bar {
     position: absolute;
     display: none;
     z-index: 30px;
 }
 
-.tool-bar-menu2 {
+.tool-bar-menu {
     display: inline-flex;
     z-index: 30px;
 }
 
+/* ツールバーend */
+
 /* 編集曲リスト */
 
 .edit-songs-container {
-    border: 1px solid;
+    border: 4px ridge;
+    border-radius: 10px;
+    width: 28%;
+    overflow: scroll;
 }
 
 .edit-songs-wrapper {
     height: 150px;
-    width: 450px;
-    border: 1px solid;
-    text-align: left;
-    overflow: scroll;
+    border-bottom: 4px ridge;
 }
 
 .edit-song {
@@ -150,8 +154,4 @@ li {
     padding-right: 5px;
     display: block;
     margin-left: auto;
-}
-
-.edit-songs-container2 {
-    margin-left: 10px;
 }

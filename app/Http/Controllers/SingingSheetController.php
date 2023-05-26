@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\SingingSheetRequest;
 use App\Models\SingingSheet;
+use Illuminate\Support\Facades\Validator;
 
 class SingingSheetController extends Controller
 {
@@ -35,7 +36,7 @@ class SingingSheetController extends Controller
     {
         $singingSheet = new SingingSheet($request->validated());
         $singingSheet->save();
-        return to_route('singing_create')->with('success', '曲の登録が完了しました');
+        return to_route('singing.create')->with('success', '曲の登録が完了しました');
     }
 
     /**
@@ -46,7 +47,7 @@ class SingingSheetController extends Controller
      */
     public function show($id)
     {
-        //
+        //歌詞の全画面モード時に使用予定
     }
 
     /**
@@ -72,6 +73,13 @@ class SingingSheetController extends Controller
     {
         $singingSheet = SingingSheet::findOrFail($id);
         $updateData = $request->validated();
+
+        // バリデーションに違反した場合、エラーメッセージをセットして同じページにリダイレクトする
+        $validator = Validator::make($request->all(), $request->rules());
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
         $singingSheet->update($updateData);
 
         return to_route('singing.index')->with('success', '更新が完了しました');

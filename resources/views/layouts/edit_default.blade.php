@@ -10,7 +10,9 @@
 <body>
     <header class="header-container">
         <div class="header-button-wrapper">
-            <a href="{{ route('index') }}" class="header-button">トップへ</a>
+            <a href="{{ route('index') }}" class="header-button">
+                トップへ
+            </a>
         </div>
     </header>
     <div class="body-container" id="body-container">
@@ -35,10 +37,8 @@
                 </div>
             @endforeach
         </div>
-        <main>
-            <div class="main-container">
-                @yield('main')
-            </div>
+        <main class="main-container">
+            @yield('main')
         </main>
     </div>
 

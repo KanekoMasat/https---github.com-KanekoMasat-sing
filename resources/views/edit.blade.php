@@ -8,38 +8,48 @@
 
 {{-- この辺のゴチャゴチャしてるのをリファクタリング --}}
 @section('main')
-    <form action="{{ route('singing.update', ['singing' => $singing->id]) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        曲名:
-        <input type="text" value="{{ old('title', $singing->title) }}" name="title"><br>
-        歌詞:
-        <input type="text" value="{{ old('lyrics', $singing->lyrics) }}" name="lyrics"><br>
-        <button type="submit">更新</button>
-    </form>
+    @foreach ($errors->all() as $error)
+        <p>{{ $error }}</p>
+    @endforeach
 
-    <form action="{{ route('singing.update', ['singing' => $singing->id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('singing.update', ['singing' => $singing->id]) }}" method="POST" enctype="multipart/form-data"
+        class="main-form" id="updateForm">
         @csrf
         @method('PUT')
-        タイトル:
-        <input type="text" value="{{ old('title', $singing->title) }}" name="title">
+        {{-- 曲名編集エリア --}}
+        <div class="title-wrapper">
+            <div class="title-label">
+                <h3>タイトル:</h3>
+            </div>
+            <div class="title-form">
+                <input type="text" value="{{ old('title', $singing->title) }}" name="title" class="title-content">
+            </div>
+        </div>
+
+        {{-- 歌詞編集エリア --}}
         <div id="editable" contenteditable="true" class="editable">
             <div id="editable-inner" class="editable-inner">
                 {{ old('lyrics', $singing->lyrics) }}
             </div>
         </div>
-        <button type="submit">更新</button>
+        {{-- 問題点：タグもそのまま保存されてえげつないことになった。一旦更新できないようにしとく --}}
+
+        <button type="submit" class="submit">更新</button>
+        <div id="my-textarea" contenteditable="true">
+
+        </div>
     </form>
 
 
-    <div id="tool-bar2" class="tool-bar2">
-        <div class="tool-bar-menu2">
-            <button id="boldButton4">B</button>
+    <div id="tool-bar" class="tool-bar">
+        <div class="tool-bar-menu">
+            <button id="boldButton">B</button>
             <button id="italicButton" style="font-style: italic">I</button>
             <button id="underlineButton"><u>U</u></button>
         </div>
     </div>
 
 
-    <script src="{{ asset('js/script.js') }}"></script>
+    {{-- <script src="{{ asset('js/script.js') }}"></script> --}}
+    <script src="{{ mix('js/app.js') }}"></script>
 @endsection
