@@ -1,23 +1,58 @@
-const bodyArea = document.getElementById('body-container');
 const boldButton4 = document.getElementById('boldButton');
 const italicButton = document.getElementById('italicButton');
 const underlineButton = document.getElementById('underlineButton');
 const editable = document.getElementById("editable");
 const toolBar = document.getElementById("tool-bar");
+const updateForm = document.getElementById("updateForm");
 
-document.getElementById("updateForm").addEventListener("submit", function (event) {
+updateForm.addEventListener("submit", function (event) {
     //フォームの規定の送信をしない処理
     event.preventDefault();
-    let form = event.target;
-    let formData = new FormData(form); // フォームのデータを取得
+    let formData = new FormData(updateForm); // フォームのデータを取得
 
     // 追加情報をフォームデータに追加
-    let lyrics = editable.innerHTML;  //うまく取得してキーにlyricsを設定すればいいんじゃね
-    formData.append("lyrics", lyrics);
+    formData.append("lyrics", editable.innerHTML);
 
     // フォームデータの内容を表示（デバッグ用）
     for (let pair of formData.entries()) {
         console.log(pair[0] + ": " + pair[1]);
+    }
+    if (formData.get("lyrics")) {
+        console.log(formData.get("lyrics"));
+    }
+    console.log(updateForm);
+    const inputHidden = document.createElement("input");
+    inputHidden.setAttribute("type", "hidden");
+    inputHidden.name = "lyrics";
+    inputHidden.value = convertToHTMLEntity(editable.innerHTML);
+    updateForm.append(inputHidden);
+    //updateFormの中にlyricsを入れなきゃけない
+    //さっきからずっとThe lyrics field is required.が出てくる
+
+    // updateForm.submit();
+
+    function convertToHTMLEntity(innerHTML) {
+        const encodedHTMLArray = innerHTML.toString().split("");
+        const editEncodedHTMLArray = [];
+        encodedHTMLArray.forEach(element => {
+            if (element === "<") {
+                editEncodedHTMLArray.push("&lt;");
+            } else if (element === ">") {
+                editEncodedHTMLArray.push("&gt;");
+            } else {
+                editEncodedHTMLArray.push(element);
+            }
+        });
+        return editEncodedHTMLArray.join("");
+    }
+
+    function convertHTMLEntities(text) {
+        console.log("呼び出されました");
+        const decodedHTML = text;
+        console.log(text);
+        decodedHTML.replace("&lt;", "<");
+        decodedHTML.replace("&gt;", ">");
+        return decodedHTML;
     }
 
     let editableInner = document.getElementById('editable-inner');
@@ -36,12 +71,14 @@ document.getElementById("updateForm").addEventListener("submit", function (event
         }
     });
     console.log(editEncodedHTMLArray.join(""));
-    let decodedHTML = decodeHTMLEntities(encodedHTML);
+    let decodedHTML = decodeHTMLEntities(editEncodedHTMLArray.join(""));
     let decodedHTML2 = decodeHTMLEntities(editEncodedHTMLArray.join(""));
     console.log(decodedHTML);
     console.log(decodedHTML2);
     editableInner.innerHTML = decodedHTML;
     myTextArea.innerHTML = decodedHTML2;
+
+
 });
 
 // // HTMLエンティティをデコードする関数
@@ -50,6 +87,12 @@ function decodeHTMLEntities(text) {
     textArea.innerHTML = text;
     return textArea.value;
 }
+
+//一旦イベント登録
+window.addEventListener("load", function (event) {
+    editable.innerHTML = decodeHTMLEntities(editable.innerHTML);
+    editable.innerHTML = decodeHTMLEntities(editable.innerHTML);
+});
 
 let previousRange;
 

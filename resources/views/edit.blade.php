@@ -4,6 +4,7 @@
 
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 {{-- この辺のゴチャゴチャしてるのをリファクタリング --}}
@@ -11,6 +12,9 @@
     @foreach ($errors->all() as $error)
         <p>{{ $error }}</p>
     @endforeach
+    {{ $errors->first('title') }}
+    {{ $errors->first('lyrics') }}
+
 
     <form action="{{ route('singing.update', ['singing' => $singing->id]) }}" method="POST" enctype="multipart/form-data"
         class="main-form" id="updateForm">
@@ -32,11 +36,9 @@
                 {{ old('lyrics', $singing->lyrics) }}
             </div>
         </div>
-        {{-- 問題点：タグもそのまま保存されてえげつないことになった。一旦更新できないようにしとく --}}
 
         <button type="submit" class="submit">更新</button>
         <div id="my-textarea" contenteditable="true">
-
         </div>
     </form>
 

@@ -74,6 +74,7 @@ class SingingSheetController extends Controller
         $singingSheet = SingingSheet::findOrFail($id);
         $updateData = $request->validated();
 
+
         // バリデーションに違反した場合、エラーメッセージをセットして同じページにリダイレクトする
         $validator = Validator::make($request->all(), $request->rules());
         if ($validator->fails()) {
