@@ -75,8 +75,11 @@ li {
     z-index: 0px;
 }
 
-.editable-inner {
+.editable-area {
     font-size: 25px;
+}
+
+.editable-inner {
     letter-spacing: 2px;
     height: 30px;
     margin-top: 6px;

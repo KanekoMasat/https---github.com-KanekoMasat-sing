@@ -32,9 +32,10 @@
 
         {{-- 歌詞編集エリア --}}
         <div id="editable" contenteditable="true" class="editable">
-            <div id="editable-inner" class="editable-inner">
+            <div id="editable-area" class="editable-area">
                 {{ old('lyrics', $singing->lyrics) }}
             </div>
+
         </div>
 
         <button type="submit" class="submit">更新</button>

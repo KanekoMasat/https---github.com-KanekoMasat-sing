@@ -9,6 +9,6 @@
         <li><a href="{{ route('singing.create') }}">新規作成</a></li>
         <li><a href="{{ route('singing.index') }}">曲の編集</a></li>
         <li><a href="{{ route('definition') }}">各テクニックの説明</a></li>
-        <li><a href="">お問い合わせ</a></li>
+        <li><a href="">このWebページについて</a></li>
     </ul>
 @endsection

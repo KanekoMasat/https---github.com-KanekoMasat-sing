@@ -35,6 +35,7 @@ class SingingSheetController extends Controller
     public function store(SingingSheetRequest $request)
     {
         $singingSheet = new SingingSheet($request->validated());
+        $singingSheet->lyrics = "<div class='editable-inner' id='editable-inner'>" . $singingSheet->lyrics . "</div>";
         $singingSheet->save();
         return to_route('singing.create')->with('success', '曲の登録が完了しました');
     }

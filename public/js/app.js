@@ -68,8 +68,10 @@ var boldButton4 = document.getElementById('boldButton');
 var italicButton = document.getElementById('italicButton');
 var underlineButton = document.getElementById('underlineButton');
 var editable = document.getElementById("editable");
+var editableArea = document.getElementById("editable-area");
 var toolBar = document.getElementById("tool-bar");
 var updateForm = document.getElementById("updateForm");
+var songLyrics = document.getElementById("song-lyrics");
 updateForm.addEventListener("submit", function (event) {
   //フォームの規定の送信をしない処理
   event.preventDefault();
@@ -98,11 +100,9 @@ updateForm.addEventListener("submit", function (event) {
   var inputHidden = document.createElement("input");
   inputHidden.setAttribute("type", "hidden");
   inputHidden.name = "lyrics";
-  inputHidden.value = convertToHTMLEntity(editable.innerHTML);
+  // inputHidden.value = convertToHTMLEntity(editable.innerHTML);
+  inputHidden.value = editable.innerHTML;
   updateForm.append(inputHidden);
-  //updateFormの中にlyricsを入れなきゃけない
-  //さっきからずっとThe lyrics field is required.が出てくる
-
   updateForm.submit();
   function convertToHTMLEntity(innerHTML) {
     var encodedHTMLArray = innerHTML.toString().split("");
@@ -126,30 +126,29 @@ updateForm.addEventListener("submit", function (event) {
     decodedHTML.replace("&gt;", ">");
     return decodedHTML;
   }
-  var editableInner = document.getElementById('editable-inner');
-  var myTextArea = document.getElementById("my-textarea");
-  var encodedHTML = editableInner.innerHTML;
-  console.log(encodedHTML);
-  var encodedHTMLArray = encodedHTML.toString().split("");
-  var editEncodedHTMLArray = [];
-  encodedHTMLArray.forEach(function (element) {
-    if (element === "<") {
-      editEncodedHTMLArray.push("&lt;");
-    } else if (element === ">") {
-      editEncodedHTMLArray.push("&gt;");
-    } else {
-      editEncodedHTMLArray.push(element);
-    }
-  });
-  console.log(editEncodedHTMLArray.join(""));
-  var decodedHTML = decodeHTMLEntities(editEncodedHTMLArray.join(""));
-  var decodedHTML2 = decodeHTMLEntities(editEncodedHTMLArray.join(""));
-  console.log(decodedHTML);
-  console.log(decodedHTML2);
-  editableInner.innerHTML = decodedHTML;
-  myTextArea.innerHTML = decodedHTML2;
 
-  //ブラウザでタグを手動で書いて読み込んだら適用された
+  // let editableInner = document.getElementById('editable-inner');
+  // let myTextArea = document.getElementById("my-textarea");
+  // let encodedHTML = editableInner.innerHTML;
+  // console.log(encodedHTML);
+  // const encodedHTMLArray = encodedHTML.toString().split("");
+  // const editEncodedHTMLArray = [];
+  // encodedHTMLArray.forEach(element => {
+  //     if (element === "<") {
+  //         editEncodedHTMLArray.push("&lt;");
+  //     } else if (element === ">") {
+  //         editEncodedHTMLArray.push("&gt;");
+  //     } else {
+  //         editEncodedHTMLArray.push(element);
+  //     }
+  // });
+  // console.log(editEncodedHTMLArray.join(""));
+  // let decodedHTML = decodeHTMLEntities(editEncodedHTMLArray.join(""));
+  // let decodedHTML2 = decodeHTMLEntities(editEncodedHTMLArray.join(""));
+  // console.log(decodedHTML);
+  // console.log(decodedHTML2);
+  // editableInner.innerHTML = decodedHTML;
+  // myTextArea.innerHTML = decodedHTML2;
 });
 
 // // HTMLエンティティをデコードする関数
@@ -159,11 +158,16 @@ function decodeHTMLEntities(text) {
   return textArea.value;
 }
 
-//一旦イベント登録
+//タグは許可したタグのみ表示する予定なので大丈夫
 window.addEventListener("load", function (event) {
   editable.innerHTML = decodeHTMLEntities(editable.innerHTML);
-  editable.innerHTML = decodeHTMLEntities(editable.innerHTML);
+  songLyrics.innerHTML = decodeHTMLEntities(songLyrics.innerHTML);
 });
+console.log(editableArea.innerHTML);
+console.log(songLyrics.innerHTML);
+//現在の問題点: 曲一覧がまるまるソースコードのまま
+//文字を全て削除した際に<div class="editable-inner"></div>がなくなり文字が小さくなる
+
 var previousRange;
 editable.addEventListener('click', function (event) {
   var selection = window.getSelection();
@@ -184,32 +188,6 @@ editable.addEventListener('click', function (event) {
 boldButton4.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
-
-//子孫ノードを走査する関数
-function traverse(node, range1, range2) {
-  if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-    node = node.childNodes;
-  }
-  console.log(node);
-  if (node.nodeType === Node.ELEMENT_NODE) {
-    // ノードが要素ノードの場合
-    // ノードを処理するコードをここに記述
-    range1.push(node);
-    node.childNodes.forEach(function (element) {
-      console.log(element.textContent);
-    });
-    var children = node.childNodes;
-    for (var i = 0; i < children.length; i++) {
-      traverse(children[i]); // 子ノードを再帰的に走査する
-    }
-  } else {
-    console.log("要素ノードではありません");
-    if (node.textContent !== "") {
-      range2.push(node);
-    }
-  }
-  return [range1, range2];
-}
 
 //太字
 function setBold() {

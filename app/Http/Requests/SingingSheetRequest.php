@@ -24,8 +24,27 @@ class SingingSheetRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required'],
-            'lyrics' => ['required'],
+            'title' => ['required', 'string', 'max:255'],
+            'lyrics' => ['required', 'string'],
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $lyrics = $this->input('lyrics');
+
+            // strip_tags関数を使用してspan, br, divタグ以外のタグを取り除く
+            $filteredLyrics = strip_tags($lyrics, '<span><br><div>');
+
+            // フィルタリング後の値をセットする
+            $this->merge(['lyrics' => $filteredLyrics]);
+        });
     }
 }

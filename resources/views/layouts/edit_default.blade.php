@@ -31,7 +31,7 @@
                                     <button class="delete-button" type="submit">削除</button>
                                 </form>
                             </div>
-                            <p class="song-lyrics">{{ $singingSheet->lyrics }}</p>
+                            <div class="song-lyrics" id="song-lyrics">{{ $singingSheet->lyrics }}</div>
                         </a>
                     </div>
                 </div>
@@ -40,6 +40,19 @@
         <main class="main-container">
             @yield('main')
         </main>
+        {{-- <script>
+            const songLyrics = document.getElementById("song-lyrics");
+            window.addEventListener("load", function(event) {
+                songLyrics.innerHTML = decodeHTMLEntities(songLyrics.innerHTML);
+
+                function decodeHTMLEntities(text) {
+                    let textArea = document.createElement('textarea');
+                    textArea.innerHTML = text;
+                    return textArea.value;
+                }
+            });
+        </script> --}}
+        <script src="{{ mix('js/app.js') }}"></script>
     </div>
 
 </body>
