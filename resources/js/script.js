@@ -2,17 +2,14 @@ const boldButton4 = document.getElementById('boldButton');
 const italicButton = document.getElementById('italicButton');
 const underlineButton = document.getElementById('underlineButton');
 const editable = document.getElementById("editable");
-const editableArea = document.getElementById("editable-area");
 const toolBar = document.getElementById("tool-bar");
 const updateForm = document.getElementById("updateForm");
-const songLyrics = document.getElementById("song-lyrics");
+const songLyrics = document.getElementsByClassName("song-lyrics");
 
 updateForm.addEventListener("submit", function (event) {
-    //フォームの規定の送信をしない処理
-    event.preventDefault();
-    let formData = new FormData(updateForm); // フォームのデータを取得
+    event.preventDefault(); //フォームの規定の送信をしない処理
 
-    // 追加情報をフォームデータに追加
+    let formData = new FormData(updateForm);
     formData.append("lyrics", editable.innerHTML);
 
     // フォームデータの内容を表示（デバッグ用）
@@ -22,7 +19,7 @@ updateForm.addEventListener("submit", function (event) {
     if (formData.get("lyrics")) {
         console.log(formData.get("lyrics"));
     }
-    console.log(updateForm);
+
     const inputHidden = document.createElement("input");
     inputHidden.setAttribute("type", "hidden");
     inputHidden.name = "lyrics";
@@ -31,55 +28,6 @@ updateForm.addEventListener("submit", function (event) {
     updateForm.append(inputHidden);
 
     updateForm.submit();
-
-    function convertToHTMLEntity(innerHTML) {
-        const encodedHTMLArray = innerHTML.toString().split("");
-        const editEncodedHTMLArray = [];
-        encodedHTMLArray.forEach(element => {
-            if (element === "<") {
-                editEncodedHTMLArray.push("&lt;");
-            } else if (element === ">") {
-                editEncodedHTMLArray.push("&gt;");
-            } else {
-                editEncodedHTMLArray.push(element);
-            }
-        });
-        return editEncodedHTMLArray.join("");
-    }
-
-    function convertHTMLEntities(text) {
-        console.log("呼び出されました");
-        const decodedHTML = text;
-        console.log(text);
-        decodedHTML.replace("&lt;", "<");
-        decodedHTML.replace("&gt;", ">");
-        return decodedHTML;
-    }
-
-    // let editableInner = document.getElementById('editable-inner');
-    // let myTextArea = document.getElementById("my-textarea");
-    // let encodedHTML = editableInner.innerHTML;
-    // console.log(encodedHTML);
-    // const encodedHTMLArray = encodedHTML.toString().split("");
-    // const editEncodedHTMLArray = [];
-    // encodedHTMLArray.forEach(element => {
-    //     if (element === "<") {
-    //         editEncodedHTMLArray.push("&lt;");
-    //     } else if (element === ">") {
-    //         editEncodedHTMLArray.push("&gt;");
-    //     } else {
-    //         editEncodedHTMLArray.push(element);
-    //     }
-    // });
-    // console.log(editEncodedHTMLArray.join(""));
-    // let decodedHTML = decodeHTMLEntities(editEncodedHTMLArray.join(""));
-    // let decodedHTML2 = decodeHTMLEntities(editEncodedHTMLArray.join(""));
-    // console.log(decodedHTML);
-    // console.log(decodedHTML2);
-    // editableInner.innerHTML = decodedHTML;
-    // myTextArea.innerHTML = decodedHTML2;
-
-
 });
 
 // // HTMLエンティティをデコードする関数
@@ -89,16 +37,71 @@ function decodeHTMLEntities(text) {
     return textArea.value;
 }
 
-//タグは許可したタグのみ表示する予定なので大丈夫
+editable.innerHTML = decodeHTMLEntities(editable.innerHTML);
+let editableFirstChild;
+editable.childNodes.forEach(element => {
+    if (element.nodeType === Node.ELEMENT_NODE) {
+        editableFirstChild = element;
+    }
+});
+editableFirstChild.id = "editable-firstChild"
+Array.from(songLyrics).forEach(element => {
+    element.innerHTML = decodeHTMLEntities(element.innerHTML).toString();
+    // console.log(decodeHTMLEntities(element.innerHTML).toString());
+});
+// ターゲット要素を取得
+let targetElement = document.getElementById("editable-firstChild");
+console.log(targetElement);
+
 window.addEventListener("load", function (event) {
-    editable.innerHTML = decodeHTMLEntities(editable.innerHTML);
-    songLyrics.innerHTML = decodeHTMLEntities(songLyrics.innerHTML);
+
+    // editable.innerHTML = decodeHTMLEntities(editable.innerHTML);
+    // let editableFirstChild;
+    // editable.childNodes.forEach(element => {
+    //     if (element.nodeType === Node.ELEMENT_NODE) {
+    //         editableFirstChild = element;
+    //     }
+    // });
+    // editableFirstChild.id = "editable-firstChild"
+    // Array.from(songLyrics).forEach(element => {
+    //     element.innerHTML = decodeHTMLEntities(element.innerHTML).toString();
+    //     console.log(decodeHTMLEntities(element.innerHTML).toString());
+    // });
+    // // ターゲット要素を取得
+    // let targetElement = document.getElementById("editable-firstChild");
+    // console.log(targetElement);
 });
 
-console.log(editableArea.innerHTML);
-console.log(songLyrics.innerHTML);
-//現在の問題点: 曲一覧がまるまるソースコードのまま
-//文字を全て削除した際に<div class="editable-inner"></div>がなくなり文字が小さくなる
+
+
+// MutationObserverのコールバック関数
+let observerCallback = function (mutationsList, observer) {
+    console.log("コールバック関数MutationObserverが呼び出されました");
+    mutationsList.forEach(function (mutation) {
+        if (mutation.type === "childList" && mutation.removedNodes.length > 0) {
+            // 削除されたノードが存在し、かつ要素が削除された場合にメッセージを表示
+            if (Array.from(mutation.removedNodes).includes(targetElement)) {
+                console.log("要素が削除されました");
+                //出力されたので、editableの中身にeditable-innerを追加する
+                const editableDivChild = document.createElement("div");
+                editableDivChild.id = "editable-firstChild";
+                editableDivChild.appendChild(document.createTextNode("歌詞入力部分"));
+                editable.appendChild(editableDivChild);
+                //div要素の追加までできた
+            }
+        }
+        mutationsList.forEach(function (mutation) {
+            if (mutation.type === "characterData") {
+                console.log("テキストが変更されました");
+                // テキストが変更された場合の処理
+            }
+        });
+    });
+};
+
+let observer = new MutationObserver(observerCallback);
+observer.observe(document.body, { childList: true, subtree: true });
+
 
 
 let previousRange;
@@ -137,6 +140,8 @@ function setBold() {
         const range = selection.getRangeAt(0);
         edit(range, "bold");
         let rangeParentNode = range.commonAncestorContainer.parentNode;
+        console.log(rangeParentNode);
+        console.log(range.commonAncestorContainer);
         if (rangeParentNode.className !== "editable") {
             while (rangeParentNode.className !== "editable-inner") {
                 rangeParentNode = rangeParentNode.parentNode;
@@ -284,7 +289,7 @@ function getStyleCount(node) {
         if (attribute.getValue() !== "") {
             attributesCount++;
         }
-    })
+    });
     return attributesCount;
 }
 

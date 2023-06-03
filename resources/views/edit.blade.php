@@ -21,7 +21,7 @@
         @csrf
         @method('PUT')
         {{-- 曲名編集エリア --}}
-        <div class="title-wrapper">
+        <div class="edit-title-wrapper">
             <div class="title-label">
                 <h3>タイトル:</h3>
             </div>
@@ -32,10 +32,7 @@
 
         {{-- 歌詞編集エリア --}}
         <div id="editable" contenteditable="true" class="editable">
-            <div id="editable-area" class="editable-area">
-                {{ old('lyrics', $singing->lyrics) }}
-            </div>
-
+            {{ old('lyrics', $singing->lyrics) }}
         </div>
 
         <button type="submit" class="submit">更新</button>

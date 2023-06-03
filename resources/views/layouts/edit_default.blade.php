@@ -10,9 +10,10 @@
 <body>
     <header class="header-container">
         <div class="header-button-wrapper">
-            <a href="{{ route('index') }}" class="header-button">
+            <a href="{{ route('index') }}" class="top-button">
                 トップへ
             </a>
+            <a href="{{ route('singing.create') }}" class="song-create-button">＋</a>
         </div>
     </header>
     <div class="body-container" id="body-container">
@@ -40,21 +41,7 @@
         <main class="main-container">
             @yield('main')
         </main>
-        {{-- <script>
-            const songLyrics = document.getElementById("song-lyrics");
-            window.addEventListener("load", function(event) {
-                songLyrics.innerHTML = decodeHTMLEntities(songLyrics.innerHTML);
-
-                function decodeHTMLEntities(text) {
-                    let textArea = document.createElement('textarea');
-                    textArea.innerHTML = text;
-                    return textArea.value;
-                }
-            });
-        </script> --}}
-        <script src="{{ mix('js/app.js') }}"></script>
     </div>
-
 </body>
 
 

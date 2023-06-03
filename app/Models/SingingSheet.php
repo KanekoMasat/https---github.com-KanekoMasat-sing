@@ -12,4 +12,9 @@ class SingingSheet extends Model
     protected $fillable = [
         'title', 'lyrics'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

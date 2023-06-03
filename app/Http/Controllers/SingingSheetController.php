@@ -23,7 +23,8 @@ class SingingSheetController extends Controller
      */
     public function create()
     {
-        return view('song_create');
+        $singingSheets = SingingSheet::all();
+        return view('song_create', ['singingSheets' => $singingSheets]);
     }
 
     /**
@@ -35,7 +36,7 @@ class SingingSheetController extends Controller
     public function store(SingingSheetRequest $request)
     {
         $singingSheet = new SingingSheet($request->validated());
-        $singingSheet->lyrics = "<div class='editable-inner' id='editable-inner'>" . $singingSheet->lyrics . "</div>";
+        $singingSheet->lyrics = "<div class='editable-inner'>" . $singingSheet->lyrics . "</div>";
         $singingSheet->save();
         return to_route('singing.create')->with('success', '曲の登録が完了しました');
     }

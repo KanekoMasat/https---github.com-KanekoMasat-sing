@@ -18,21 +18,39 @@ li {
 }
 
 .header-container {
+    /* もし余裕があればヘッダー固定する */
+    /* position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; */
     margin-bottom: 5px;
     margin-top: 15px;
 }
 
 .header-button-wrapper {
-    width: 90px;
-    transform: scale(1, 2);
+    height: 70%;
+    width: 28%;
+    display: flex;
+    transform: scale(1, 1.5);
 }
 
-.header-button {
+.top-button {
     text-decoration: none;
     color: inherit;
     border: 1px groove;
     border-radius: 5px;
     font-family: sans-serif;
+}
+
+.song-create-button {
+    text-decoration: none;
+    color: inherit;
+    border: 1px groove;
+    border-radius: 5px;
+    font-family: sans-serif;
+    margin-left: auto;
+    margin-right: 5px;
+    transform: scale(1.5, 0.9);
 }
 
 .body-container {
@@ -52,15 +70,23 @@ li {
     height: 100%;
 }
 
-.title-wrapper {
+.create-title-form {}
+
+.title-form {
+    width: 30%;
+}
+
+.create-title-wrapper {
+    margin-bottom: 0px;
+}
+
+.edit-title-wrapper {
     display: flex;
     gap: 1px 10px;
     height: 60px;
 }
 
-.title-form {
-    width: 30%;
-}
+
 
 .title-content {
     font-size: 20px;
@@ -68,14 +94,36 @@ li {
     width: 100%;
 }
 
+.create-title-content {
+    height: 50px;
+    width: 40%;
+    font-size: 25px;
+}
+
+.create-lyrics-wrapper {
+    margin-bottom: 0px;
+}
+
+.create-lyrics-content {
+    height: 50px;
+    width: 40%;
+    font-size: 25px;
+}
+
+.create-submit-button-wrapper {
+    width: 40%;
+}
+
+.create-submit-button {
+    margin: 40px;
+    transform: scale(2);
+}
+
 .editable {
     height: 70%;
     padding: 3px 2px;
     background-image: url(../storage/b067.gif);
     z-index: 0px;
-}
-
-.editable-area {
     font-size: 25px;
 }
 
@@ -85,7 +133,6 @@ li {
     margin-top: 6px;
 }
 
-/* ツールバーstart */
 .tool-bar {
     position: absolute;
     display: none;
@@ -96,10 +143,6 @@ li {
     display: inline-flex;
     z-index: 30px;
 }
-
-/* ツールバーend */
-
-/* 編集曲リスト */
 
 .edit-songs-container {
     border: 4px ridge;
