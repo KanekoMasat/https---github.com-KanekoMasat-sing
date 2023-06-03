@@ -39,6 +39,7 @@
         <div id="my-textarea" contenteditable="true">
         </div>
     </form>
+    {{ $singing->user_id }}
 
 
     <div id="tool-bar" class="tool-bar">

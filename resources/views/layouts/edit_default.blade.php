@@ -41,6 +41,7 @@
         <main class="main-container">
             @yield('main')
         </main>
+        <script src="{{ mix('js/editDefaultScript.js') }}"></script>
     </div>
 </body>
 

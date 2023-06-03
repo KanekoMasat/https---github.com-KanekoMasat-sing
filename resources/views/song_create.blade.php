@@ -13,17 +13,17 @@
         <form action="{{ route('singing.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="create-title-form">
-                <h3 class="create-title-wrapper">
+                <h2 class="create-title-wrapper">
                     曲名
-                </h3>
+                </h2>
                 <label for="title"><input type="text" name="title" placeholder="曲名"
                         class="create-title-content"></label>
             </div>
             <br>
             <div class="create-lyrics-form">
-                <h3 class="create-lyrics-wrapper">
+                <h2 class="create-lyrics-wrapper">
                     歌詞
-                </h3>
+                </h2>
                 <label for="lyrics"><input type="text" name="lyrics" placeholder="歌詞"
                         class="create-lyrics-content"></label>
             </div>

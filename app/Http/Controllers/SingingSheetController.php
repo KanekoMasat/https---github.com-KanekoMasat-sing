@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\SingingSheetRequest;
 use App\Models\SingingSheet;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class SingingSheetController extends Controller
@@ -12,7 +13,8 @@ class SingingSheetController extends Controller
 
     public function index()
     {
-        $singingSheets = SingingSheet::all();
+        $userId = Auth::id();
+        $singingSheets = SingingSheet::where('user_id', $userId)->get();
         return view('song_list', ['singingSheets' => $singingSheets]);
     }
 
@@ -23,7 +25,8 @@ class SingingSheetController extends Controller
      */
     public function create()
     {
-        $singingSheets = SingingSheet::all();
+        $userId = Auth::id();
+        $singingSheets = SingingSheet::where('user_id', $userId)->get();
         return view('song_create', ['singingSheets' => $singingSheets]);
     }
 
@@ -37,6 +40,7 @@ class SingingSheetController extends Controller
     {
         $singingSheet = new SingingSheet($request->validated());
         $singingSheet->lyrics = "<div class='editable-inner'>" . $singingSheet->lyrics . "</div>";
+        $singingSheet->user_id = Auth::id();
         $singingSheet->save();
         return to_route('singing.create')->with('success', '曲の登録が完了しました');
     }
@@ -60,7 +64,8 @@ class SingingSheetController extends Controller
      */
     public function edit(SingingSheet $singing)
     {
-        $singingSheets = SingingSheet::all();
+        $userId = Auth::id();
+        $singingSheets = SingingSheet::where('user_id', $userId)->get();
         return view('edit', ['singing' => $singing, 'singingSheets' => $singingSheets]);
     }
 

@@ -11,4 +11,9 @@
         <li><a href="{{ route('definition') }}">各テクニックの説明</a></li>
         <li><a href="">このWebページについて</a></li>
     </ul>
+
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit">ログアウト</button>
+    </form>
 @endsection

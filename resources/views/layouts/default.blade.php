@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>@yield('title', '歌い方')</title>
+    <title>@yield('title', 'My Singing Sheet')</title>
     <meta charset="UTF-8">
     @yield('head')
 </head>
@@ -10,8 +10,10 @@
 <body>
     <div class="body-container" id="body-container">
         <header class="header-container" id="header-container">
-            <h1>テキスト</h1>
-            <a href="{{ route('index') }}">トップページへ</a>
+            <h1>My Singing Sheet</h1>
+            <div class="lead-content">
+                <h2>~~ 歌い方を可視化する ~~</h2>
+            </div>
         </header>
         <main>
             <div class="main-container">
@@ -20,12 +22,10 @@
         </main>
         <footer>
             <h2>フッター部分</h2>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit">ログアウト</button>
-            </form>
-        </footer> 
+
+        </footer>
     </div>
-    
+
 </body>
+
 </html>
