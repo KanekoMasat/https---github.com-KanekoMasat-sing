@@ -1,5 +1,8 @@
 @extends('layouts.default')
 @section('title', 'トップ画面')
+@section('head')
+    <link rel="stylesheet" href="{{ asset('css/defaultStyle.css') }}">
+@endsection
 
 @section('main')
     @if (session()->has('success'))

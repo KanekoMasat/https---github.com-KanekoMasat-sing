@@ -17,6 +17,10 @@ li {
     user-select: none;
 }
 
+.lead-content {
+    margin-left: 40px;
+}
+
 .header-container {
     /* もし余裕があればヘッダー固定する */
     /* position: fixed;
