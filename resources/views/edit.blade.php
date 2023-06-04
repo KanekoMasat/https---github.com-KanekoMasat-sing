@@ -28,6 +28,9 @@
             <div class="title-form">
                 <input type="text" value="{{ old('title', $singing->title) }}" name="title" class="title-content">
             </div>
+            <div class="show-link-wrapper">
+                <a href="" class="show-link">&nbsp;全体表示（スクショ用）</a>
+            </div>
         </div>
 
         {{-- 歌詞編集エリア --}}

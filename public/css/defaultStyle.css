@@ -53,3 +53,10 @@ body {
     text-decoration: none;
     border-bottom: 2px solid;
 }
+
+.user-related-link {
+    color: rgb(125, 128, 222);
+    font-size: 20px;
+    text-decoration: none;
+    border-bottom: 2px solid;
+}

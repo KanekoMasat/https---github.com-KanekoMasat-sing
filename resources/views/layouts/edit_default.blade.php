@@ -24,12 +24,13 @@
                         <a href="{{ route('singing.edit', ['singing' => $singingSheet->id]) }}" class="song-button">
                             <div class="song-label">
                                 <p class="song-title">{{ $singingSheet->title }}</p>
-                                <form class="delete-button-wrapper"
+                                <form class="delete-form"
                                     action="{{ route('singing.destroy', ['singing' => $singingSheet->id]) }}"
                                     method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="delete-button" type="submit">削除</button>
+                                    <button class="delete-button" type="submit"
+                                        onclick="return confirm('シートの削除を行います。宜しいですか？※元には戻せません');">削除</button>
                                 </form>
                             </div>
                             <div class="song-lyrics" id="song-lyrics">{{ $singingSheet->lyrics }}</div>

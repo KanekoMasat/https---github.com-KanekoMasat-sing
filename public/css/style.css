@@ -95,6 +95,25 @@ li {
     height: 60px;
 }
 
+.show-link-wrapper {
+    align-self: flex-end;
+    margin-left: auto;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.show-link {
+    text-decoration: none;
+    padding: 1px;
+    display: inline-block;
+    /* color: gray; */
+    color: black;
+    background-color: lightgray;
+    border: ridge 3px;
+    border-radius: 6px;
+    transform: scale(1.2);
+}
+
 .title-content {
     font-size: 20px;
     height: 65%;
@@ -132,6 +151,9 @@ li {
     background-image: url(../storage/b067.gif);
     z-index: 0px;
     font-size: 25px;
+    border: 3px solid lightblue;
+    border-radius: 5px;
+    overflow: scroll;
 }
 
 .editable-inner {
@@ -189,7 +211,7 @@ li {
     padding-left: 20px;
 }
 
-.delete-button-wrapper {
+.delete-form {
     padding-top: 5px;
     padding-right: 5px;
     display: block;
@@ -199,6 +221,7 @@ li {
 .delete-button {
     border-radius: 10px;
     transform: scale(1.1);
+    z-index: 40px;
 }
 
 .update-button {
