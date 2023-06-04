@@ -35,12 +35,10 @@
             {{ old('lyrics', $singing->lyrics) }}
         </div>
 
-        <button type="submit" class="submit">更新</button>
+        <button type="submit" class="update-button">更新</button>
         <div id="my-textarea" contenteditable="true">
         </div>
     </form>
-    {{ $singing->user_id }}
-
 
     <div id="tool-bar" class="tool-bar">
         <div class="tool-bar-menu">

@@ -1,6 +1,11 @@
-html,
+html {
+    height: 100%;
+    background-color: rgb(219, 219, 202);
+}
+
 body {
     height: 100%;
+    padding: 6px;
 }
 
 
@@ -27,8 +32,8 @@ li {
     top: 0;
     left: 0;
     width: 100%; */
-    margin-bottom: 5px;
-    margin-top: 15px;
+    margin-bottom: 7px;
+    margin-top: 27px;
 }
 
 .header-button-wrapper {
@@ -38,30 +43,30 @@ li {
     transform: scale(1, 1.5);
 }
 
-.top-button {
+.back-to-top-link {
     text-decoration: none;
-    color: inherit;
-    border: 1px groove;
-    border-radius: 5px;
-    font-family: sans-serif;
+    color: black;
+    border: ridge 3px;
+    border-radius: 10px;
 }
 
 .song-create-button {
     text-decoration: none;
     color: inherit;
-    border: 1px groove;
+    border: 2px groove;
     border-radius: 5px;
     font-family: sans-serif;
+    font-size: large;
     margin-left: auto;
     margin-right: 5px;
-    transform: scale(1.5, 0.9);
+    transform: scale(1.5, 0.8);
 }
 
 .body-container {
     position: relative;
     display: flex;
     gap: 0px 10px;
-    margin-top: 6px;
+    margin-top: 9px;
     z-index: 0px;
     height: 100%;
 }
@@ -89,8 +94,6 @@ li {
     gap: 1px 10px;
     height: 60px;
 }
-
-
 
 .title-content {
     font-size: 20px;
@@ -151,6 +154,7 @@ li {
 .edit-songs-container {
     border: 4px ridge;
     border-radius: 10px;
+    border-color: rgba(104, 104, 101, 0.98);
     width: 28%;
     overflow: scroll;
 }
@@ -190,4 +194,16 @@ li {
     padding-right: 5px;
     display: block;
     margin-left: auto;
+}
+
+.delete-button {
+    border-radius: 10px;
+    transform: scale(1.1);
+}
+
+.update-button {
+    margin-top: 10px;
+    margin-left: 10px;
+    border-radius: 10px;
+    transform: scale(1.3);
 }

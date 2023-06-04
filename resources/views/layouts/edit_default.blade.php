@@ -10,7 +10,7 @@
 <body>
     <header class="header-container">
         <div class="header-button-wrapper">
-            <a href="{{ route('index') }}" class="top-button">
+            <a href="{{ route('index') }}" class="back-to-top-link">
                 トップへ
             </a>
             <a href="{{ route('singing.create') }}" class="song-create-button">＋</a>

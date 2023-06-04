@@ -60,7 +60,7 @@
         <div class="category-title">
             <h2>エッジボイス</h2>
         </div>
-        <p>ボーカルフライトも言われるテクニック</p>
+        <p>ボーカルフライとも言われるテクニック</p>
     </div>
 
     <div class="category-container">
