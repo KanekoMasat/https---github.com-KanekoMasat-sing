@@ -1,3 +1,56 @@
+html {
+    height: 100%;
+    background-color: rgb(219, 219, 202);
+}
+
+body {
+    height: 100%;
+    padding-left: 30px;
+}
+
+
+.webSite-title {
+    font-family: "Courier New";
+}
+
+.body-container {
+    margin-top: 70px;
+    padding-bottom: 40px;
+}
+
 .lead-content {
     margin-left: 30px;
+}
+
+.topSite-list-wrapper {
+    margin-top: 40px;
+}
+
+
+.topSite-list {
+    color: rgba(104, 104, 101, 0.98);
+    ;
+    list-style: disc;
+    margin-top: 20px;
+}
+
+.topSite-list-link {
+    font-size: 20px;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 2px solid;
+}
+
+.default-button {
+    margin-top: 30px;
+    margin-left: 30px;
+    border-radius: 10px;
+    transform: scale(1.2);
+}
+
+.back-to-top-link {
+    color: rgb(125, 128, 222);
+    font-size: 20px;
+    text-decoration: none;
+    border-bottom: 2px solid;
 }

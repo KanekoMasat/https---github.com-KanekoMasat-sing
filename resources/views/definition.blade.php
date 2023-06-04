@@ -1,8 +1,11 @@
 @extends('layouts.default')
 @section('title', '用語説明')
-@section('styleSheet', 'style.css')
+@section('head')
+    <link rel="stylesheet" href="{{ asset('css/defaultStyle.css') }}">
+@endsection
 
 @section('main')
+    <a href="{{ route('index') }}" class="back-to-top-link">トップへ</a>
     <div class="category-container">
         <div class="category-title">
             <h2>ビブラート</h2>
@@ -60,4 +63,18 @@
         <p>ボーカルフライトも言われるテクニック</p>
     </div>
 
+    <div class="category-container">
+        <div class="category-title">
+            <h2>ウィスパーボイス</h2>
+        </div>
+        <p>和訳するとささやき声。日本では声の成分の中に多く息が入った声のことを指すことが多い</p>
+        <p>話し声がウィスパーボイスのような人もいる</p>
+    </div>
+
+    <div class="category-container">
+        <div class="category-title">
+            <h2></h2>
+        </div>
+        <p></p>
+    </div>
 @endsection

@@ -25,3 +25,6 @@ Route::resource('/singing', SingingSheetController::class)->middleware('auth');
 Route::get('/definition', function () {
     return view('definition');
 })->name('definition');
+Route::get('/explanation', function () {
+    return view('explanation');
+})->name('explanation');

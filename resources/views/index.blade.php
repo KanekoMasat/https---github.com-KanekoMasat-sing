@@ -8,15 +8,18 @@
     @if (session()->has('success'))
         {{ session('success') }}
     @endif
-    <ul>
-        <li><a href="{{ route('singing.create') }}">新規作成</a></li>
-        <li><a href="{{ route('singing.index') }}">曲の編集</a></li>
-        <li><a href="{{ route('definition') }}">各テクニックの説明</a></li>
-        <li><a href="">このWebページについて</a></li>
-    </ul>
+    <div class="topSite-list-wrapper">
+        <ul>
+            <li class="topSite-list"><a href="{{ route('singing.create') }}" class="topSite-list-link">新規作成</a></li>
+            <li class="topSite-list"><a href="{{ route('singing.index') }}" class="topSite-list-link">曲の編集</a></li>
+            <li class="topSite-list"><a href="{{ route('definition') }}" class="topSite-list-link">各テクニック(表現)の説明</a></li>
+            <li class="topSite-list"><a href="{{ route('explanation') }}" class="topSite-list-link">このWebページについて</a></li>
+        </ul>
+    </div>
+
 
     <form action="{{ route('logout') }}" method="POST">
         @csrf
-        <button type="submit">ログアウト</button>
+        <button type="submit" class="default-button">ログアウト</button>
     </form>
 @endsection
