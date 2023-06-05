@@ -80,6 +80,25 @@ boldButton.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
 vibratoButton.addEventListener('click', setWavyUnderline);
+// vibratoButton.addEventListener('click', textFunction);
+
+//波線テスト処理
+function textFunction() {
+    console.log("処理開始");
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) {
+        const range = selection.getRangeAt(0);
+        const selectedText = range.extractContents();
+        const spanContainer = document.createElement("span");
+        spanContainer.appendChild(selectedText);
+        spanContainer.style.textDecoration = "underline";
+        spanContainer.style.textDecorationStyle = "wavy";
+        spanContainer.style.textDecorationColor = "rgb(100, 155, 17)";
+        spanContainer.style.textDecorationThickness = "3px";
+        range.deleteContents();
+        range.insertNode(spanContainer);
+    }
+}
 
 
 
@@ -191,6 +210,7 @@ function edit(range, addAttribute) {
             removeSpanAttribute(addAttribute, range);
         }
         else if (range.commonAncestorContainer.nodeType === Node.TEXT_NODE) {
+            //テキストノードのためspanタグを付与
             setSpanAttribute(range, addAttribute);
         }
     }
@@ -245,6 +265,13 @@ function getStateOfStyle(node) {
     } else {
         binaryString += "0";
     }
+
+    if (node.style.textDecoration === "underline") {
+        binaryString += "1";
+    } else {
+        binaryString += "0";
+    }
+
     return binaryString;
 }
 
@@ -279,6 +306,11 @@ function removeAttribute(attribute, element) {
         element.style.fontStyle = "";
     } else if (attribute === "underLine") {
         element.style.borderBottom = "";
+    } else if (attribute === "wavyUnderline") {
+        element.style.textDecoration = "";
+        element.style.textDecorationStyle = "";
+        element.style.textDecorationColor = "";
+        element.style.textDecorationThickness = "";
     }
 }
 
@@ -361,6 +393,11 @@ function setAttribute(attribute, element) {
         element.style.fontStyle = "italic";
     } else if (attribute === "underLine") {
         element.style.borderBottom = "2px solid black";
+    } else if (attribute === "wavyUnderline") {
+        element.style.textDecoration = "underline";
+        element.style.textDecorationStyle = "wavy";
+        element.style.textDecorationColor = "rgb(100, 155, 17)";
+        element.style.textDecorationThickness = "3px";
     }
 }
 
@@ -370,6 +407,7 @@ function setSpanAttribute(range, addAttribute) {
     range.deleteContents();
     const container = new SpanTag(selectedText);
     container.setAttribute(addAttribute);
+    console.log(addAttribute);
     range.insertNode(container.getElement());
 }
 
@@ -675,7 +713,8 @@ class AttributeManager {
         attribute.push(
             new ElementAttribute("bold", "fontWeight", parentElement.style.fontWeight),
             new ElementAttribute("italic", "fontStyle", parentElement.style.fontStyle),
-            new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom)
+            new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom),
+            new ElementAttribute("wavyUnderline", "textDecoration", parentElement.style.textDecoration)
         );
         return attribute;
     }
@@ -698,6 +737,11 @@ class SpanTag {
             this.container.style.fontStyle = "italic";
         } else if (attribute === "underLine") {
             this.container.style.borderBottom = "2px solid black";
+        } else if (attribute === "wavyUnderline") {
+            this.container.style.textDecoration = "underline";
+            this.container.style.textDecorationStyle = "wavy";
+            this.container.style.textDecorationColor = "rgb(100, 155, 17)";
+            this.container.style.textDecorationThickness = "3px";
         }
     }
 
