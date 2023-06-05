@@ -42,9 +42,14 @@
         <div id="my-textarea" contenteditable="true">
         </div>
     </form>
+    <p class="ProGamer">プロゲーマー</p>
 
     <div id="tool-bar" class="tool-bar">
         <div class="tool-bar-menu">
+            <button id="vibratoButton">ビブラート</button>
+            <button id="kobusiButton">こぶし</button>
+            <button id="glissUpButton">しゃくり</button>
+            <button id="fallButton">フォール</button>
             <button id="boldButton">B</button>
             <button id="italicButton" style="font-style: italic">I</button>
             <button id="underlineButton"><u>U</u></button>

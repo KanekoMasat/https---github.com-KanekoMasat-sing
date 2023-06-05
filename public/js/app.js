@@ -64,9 +64,10 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-var boldButton4 = document.getElementById('boldButton');
-var italicButton = document.getElementById('italicButton');
-var underlineButton = document.getElementById('underlineButton');
+var boldButton = document.getElementById("boldButton");
+var italicButton = document.getElementById("italicButton");
+var underlineButton = document.getElementById("underlineButton");
+var vibratoButton = document.getElementById("vibratoButton");
 var editable = document.getElementById("editable");
 var toolBar = document.getElementById("tool-bar");
 var updateForm = document.getElementById("updateForm");
@@ -137,9 +138,10 @@ updateForm.addEventListener("submit", function (event) {
 });
 
 //ここからは全てテキスト編集のためのコード
-boldButton4.addEventListener('click', setBold);
+boldButton.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
+vibratoButton.addEventListener('click', setWavyUnderline);
 
 //太字
 function setBold() {
@@ -192,6 +194,27 @@ function setUnderline() {
   if (selection && selection.toString().length > 0) {
     var range = selection.getRangeAt(0);
     edit(range, "underLine");
+    var rangeParentNode = range.commonAncestorContainer.parentNode;
+    if (rangeParentNode.className !== "editable") {
+      while (rangeParentNode.className !== "editable-inner") {
+        rangeParentNode = rangeParentNode.parentNode;
+      }
+    } else {
+      rangeParentNode = range.commonAncestorContainer;
+    }
+    combineAdjacentTextNodes(rangeParentNode);
+    emptySpanRemove(rangeParentNode);
+    combineAdjacentSpanNodes(rangeParentNode);
+  }
+}
+
+//波下線
+function setWavyUnderline() {
+  console.log("処理開始");
+  var selection = window.getSelection();
+  if (selection && selection.toString().length > 0) {
+    var range = selection.getRangeAt(0);
+    edit(range, "wavyUnderline");
     var rangeParentNode = range.commonAncestorContainer.parentNode;
     if (rangeParentNode.className !== "editable") {
       while (rangeParentNode.className !== "editable-inner") {

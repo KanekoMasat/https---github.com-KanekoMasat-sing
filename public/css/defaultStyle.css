@@ -1,6 +1,7 @@
 html {
     height: 100%;
     background-color: rgb(219, 219, 202);
+    z-index: 0px;
 }
 
 body {
@@ -59,4 +60,13 @@ body {
     font-size: 20px;
     text-decoration: none;
     border-bottom: 2px solid;
+}
+
+.proGamer {
+    text-decoration: underline;
+    /*下線を引く*/
+    text-decoration-style: wavy;
+    /*下線を波線で表示*/
+    text-decoration-color: rgb(100, 155, 17);
+    background-color: white;
 }

@@ -1,11 +1,11 @@
-const boldButton4 = document.getElementById('boldButton');
-const italicButton = document.getElementById('italicButton');
-const underlineButton = document.getElementById('underlineButton');
+const boldButton = document.getElementById("boldButton");
+const italicButton = document.getElementById("italicButton");
+const underlineButton = document.getElementById("underlineButton");
+const vibratoButton = document.getElementById("vibratoButton");
 const editable = document.getElementById("editable");
 const toolBar = document.getElementById("tool-bar");
 const updateForm = document.getElementById("updateForm");
 const songLyrics = document.getElementsByClassName("song-lyrics");
-
 
 Array.from(songLyrics).forEach(element => {
     element.innerHTML = decodeHTMLEntities(element.innerHTML).toString();
@@ -76,9 +76,10 @@ updateForm.addEventListener("submit", function (event) {
 
 
 //ここからは全てテキスト編集のためのコード
-boldButton4.addEventListener('click', setBold);
+boldButton.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
+vibratoButton.addEventListener('click', setWavyUnderline);
 
 
 
@@ -150,6 +151,27 @@ function setUnderline() {
     }
 }
 
+//波下線
+function setWavyUnderline() {
+    console.log("処理開始");
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) {
+        const range = selection.getRangeAt(0);
+        edit(range, "wavyUnderline");
+        let rangeParentNode = range.commonAncestorContainer.parentNode;
+        if (rangeParentNode.className !== "editable") {
+            while (rangeParentNode.className !== "editable-inner") {
+                rangeParentNode = rangeParentNode.parentNode;
+            }
+        } else {
+            rangeParentNode = range.commonAncestorContainer;
+        }
+
+        combineAdjacentTextNodes(rangeParentNode);
+        emptySpanRemove(rangeParentNode);
+        combineAdjacentSpanNodes(rangeParentNode);
+    }
+}
 
 
 function edit(range, addAttribute) {
