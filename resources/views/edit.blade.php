@@ -29,7 +29,7 @@
                 <input type="text" value="{{ old('title', $singing->title) }}" name="title" class="title-content">
             </div>
             <div class="show-link-wrapper">
-                <a href="" class="show-link">&nbsp;全体表示（スクショ用）</a>
+                <a href="{{ route('singing.show', ['singing' => $singing->id]) }}" class="show-link">&nbsp;全体表示（スクショ用）</a>
             </div>
         </div>
 
@@ -42,14 +42,13 @@
         <div id="my-textarea" contenteditable="true">
         </div>
     </form>
-    <p class="ProGamer">プロゲーマー</p>
-
+    <div>※テキスト選択中は色が変わります</div>
     <div id="tool-bar" class="tool-bar">
         <div class="tool-bar-menu">
             <button id="vibratoButton">ビブラート</button>
-            <button id="kobusiButton">こぶし</button>
-            <button id="glissUpButton">しゃくり</button>
-            <button id="fallButton">フォール</button>
+            <button id="blueColor">表現1</button>
+            <button id="greenColor">表現２</button>
+            <button id="orangeColor">表現3</button>
             <button id="boldButton">B</button>
             <button id="italicButton" style="font-style: italic">I</button>
             <button id="underlineButton"><u>U</u></button>

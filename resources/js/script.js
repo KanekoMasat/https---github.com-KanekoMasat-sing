@@ -260,7 +260,7 @@ function getStateOfStyle(node) {
         binaryString += "0";
     }
 
-    if (node.style.borderBottom === "2px solid black") {
+    if (node.style.borderBottom === "3px solid black") {
         binaryString += "1";
     } else {
         binaryString += "0";
@@ -392,7 +392,7 @@ function setAttribute(attribute, element) {
     } else if (attribute === "italic") {
         element.style.fontStyle = "italic";
     } else if (attribute === "underLine") {
-        element.style.borderBottom = "2px solid black";
+        element.style.borderBottom = "3x solid black";
     } else if (attribute === "wavyUnderline") {
         element.style.textDecoration = "underline";
         element.style.textDecorationStyle = "wavy";
@@ -736,7 +736,7 @@ class SpanTag {
         } else if (attribute === "italic") {
             this.container.style.fontStyle = "italic";
         } else if (attribute === "underLine") {
-            this.container.style.borderBottom = "2px solid black";
+            this.container.style.borderBottom = "3px solid black";
         } else if (attribute === "wavyUnderline") {
             this.container.style.textDecoration = "underline";
             this.container.style.textDecorationStyle = "wavy";

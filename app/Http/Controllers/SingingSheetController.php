@@ -53,7 +53,7 @@ class SingingSheetController extends Controller
      */
     public function show($id)
     {
-        //歌詞の全画面モード時に使用予定
+        return view('show');
     }
 
     /**
