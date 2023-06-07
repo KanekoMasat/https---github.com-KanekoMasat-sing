@@ -53,7 +53,8 @@ class SingingSheetController extends Controller
      */
     public function show($id)
     {
-        return view('show');
+        $singingSheet = SingingSheet::findOrFail($id);
+        return view('show', ['singingSheet' => $singingSheet]);
     }
 
     /**

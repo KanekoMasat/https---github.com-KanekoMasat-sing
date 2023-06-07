@@ -26,8 +26,10 @@
                 <h3>タイトル:</h3>
             </div>
             <div class="title-form">
-                <input type="text" value="{{ old('title', $singing->title) }}" name="title" class="title-content">
+                <input id="title" type="text" value="{{ old('title', $singing->title) }}" name="title"
+                    class="title-content">
             </div>
+            background-colorを直す。急務
             <div class="show-link-wrapper">
                 <a href="{{ route('singing.show', ['singing' => $singing->id]) }}" class="show-link">&nbsp;全体表示（スクショ用）</a>
             </div>
@@ -41,14 +43,17 @@
         <button type="submit" class="update-button">更新</button>
         <div id="my-textarea" contenteditable="true">
         </div>
+        <div>※テキスト選択中はPCの仕様上色が変わります</div>
+        <div>※(" " + "v" + " ")が連続して入力されていると自動的に"(v)"に置き換わります</div>
+        <div>※" " = 半角スペース</div>
     </form>
-    <div>※テキスト選択中は色が変わります</div>
+
     <div id="tool-bar" class="tool-bar">
         <div class="tool-bar-menu">
             <button id="vibratoButton">ビブラート</button>
-            <button id="blueColor">表現1</button>
-            <button id="greenColor">表現２</button>
-            <button id="orangeColor">表現3</button>
+            <button id="blueColor">表現1(青)</button>
+            <button id="greenColor">表現２(緑)</button>
+            <button id="orangeColor">表現3(橙)</button>
             <button id="boldButton">B</button>
             <button id="italicButton" style="font-style: italic">I</button>
             <button id="underlineButton"><u>U</u></button>

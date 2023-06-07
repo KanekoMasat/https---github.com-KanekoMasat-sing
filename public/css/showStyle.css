@@ -1,0 +1,48 @@
+html {
+    height: 100%;
+    background-color: rgb(219, 219, 202);
+}
+
+body {
+    display: flex;
+    height: 100%;
+}
+
+.body-container {
+    width: 70%;
+    margin-left: 150px;
+}
+
+.title-content {
+    text-align: center;
+}
+
+.lyrics-container {
+    height: 100%;
+    background-image: url(../storage/b067.gif);
+    z-index: 0px;
+    font-size: 30px;
+    border: 3px solid lightblue;
+    border-radius: 10px;
+}
+
+.lyrics-content {
+    padding-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.editable-inner {
+    letter-spacing: 4px;
+    height: 30px;
+    margin-top: 6px;
+    padding-bottom: 6px;
+}
+
+.edit-link {
+    margin-top: 40px;
+    color: rgb(125, 128, 222);
+    font-size: 20px;
+    text-decoration: none;
+    transform: scale(1.1);
+}

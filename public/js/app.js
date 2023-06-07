@@ -68,6 +68,9 @@ var boldButton = document.getElementById("boldButton");
 var italicButton = document.getElementById("italicButton");
 var underlineButton = document.getElementById("underlineButton");
 var vibratoButton = document.getElementById("vibratoButton");
+var blueButton = document.getElementById("blueColor");
+var greenButton = document.getElementById("greenColor");
+var orangeButton = document.getElementById("orangeColor");
 var editable = document.getElementById("editable");
 var toolBar = document.getElementById("tool-bar");
 var updateForm = document.getElementById("updateForm");
@@ -81,6 +84,19 @@ editable.addEventListener("input", function (event) {
     if (element.nodeName === "DIV" && element.textContent.length === 0 && editable.childNodes.length === 3) {
       element.textContent = "ここに歌詞を入力できます";
     }
+  });
+});
+
+//カーソルの位置が変わっちゃう
+editable.addEventListener("input", function (event) {
+  var divElement = [];
+  editable.childNodes.forEach(function (element) {
+    if (element.nodeName == "DIV") {
+      divElement.push(element);
+    }
+  });
+  divElement.forEach(function (element) {
+    element.textContent = element.textContent.replace(/\sv\s/g, "(v)");
   });
 });
 
@@ -142,25 +158,12 @@ boldButton.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
 vibratoButton.addEventListener('click', setWavyUnderline);
-// vibratoButton.addEventListener('click', textFunction);
 
-//波線テスト処理
-function textFunction() {
-  console.log("処理開始");
-  var selection = window.getSelection();
-  if (selection && selection.toString().length > 0) {
-    var range = selection.getRangeAt(0);
-    var selectedText = range.extractContents();
-    var spanContainer = document.createElement("span");
-    spanContainer.appendChild(selectedText);
-    spanContainer.style.textDecoration = "underline";
-    spanContainer.style.textDecorationStyle = "wavy";
-    spanContainer.style.textDecorationColor = "rgb(100, 155, 17)";
-    spanContainer.style.textDecorationThickness = "3px";
-    range.deleteContents();
-    range.insertNode(spanContainer);
-  }
-}
+//これら3つは同じプロパティを使用してるからちょい問題
+//処理めんどそうなので朝にやることを推奨
+blueButton.addEventListener('click', setBlue);
+greenButton.addEventListener('click', setGreen);
+orangeButton.addEventListener('click', setOrange);
 
 //太字
 function setBold() {
@@ -247,6 +250,75 @@ function setWavyUnderline() {
     combineAdjacentSpanNodes(rangeParentNode);
   }
 }
+
+//背景青
+function setBlue() {
+  console.log("処理開始");
+  var selection = window.getSelection();
+  if (selection && selection.toString().length > 0) {
+    var range = selection.getRangeAt(0);
+    edit(range, "blue");
+    var rangeParentNode = range.commonAncestorContainer.parentNode;
+    console.log(rangeParentNode);
+    console.log(range.commonAncestorContainer);
+    if (rangeParentNode.className !== "editable") {
+      while (rangeParentNode.className !== "editable-inner") {
+        rangeParentNode = rangeParentNode.parentNode;
+      }
+    } else {
+      rangeParentNode = range.commonAncestorContainer;
+    }
+    combineAdjacentTextNodes(rangeParentNode);
+    emptySpanRemove(rangeParentNode);
+    combineAdjacentSpanNodes(rangeParentNode);
+  }
+}
+
+//背景緑
+function setGreen() {
+  console.log("処理開始");
+  var selection = window.getSelection();
+  if (selection && selection.toString().length > 0) {
+    var range = selection.getRangeAt(0);
+    edit(range, "green");
+    var rangeParentNode = range.commonAncestorContainer.parentNode;
+    console.log(rangeParentNode);
+    console.log(range.commonAncestorContainer);
+    if (rangeParentNode.className !== "editable") {
+      while (rangeParentNode.className !== "editable-inner") {
+        rangeParentNode = rangeParentNode.parentNode;
+      }
+    } else {
+      rangeParentNode = range.commonAncestorContainer;
+    }
+    combineAdjacentTextNodes(rangeParentNode);
+    emptySpanRemove(rangeParentNode);
+    combineAdjacentSpanNodes(rangeParentNode);
+  }
+}
+
+//背景橙
+function setOrange() {
+  console.log("処理開始");
+  var selection = window.getSelection();
+  if (selection && selection.toString().length > 0) {
+    var range = selection.getRangeAt(0);
+    edit(range, "orange");
+    var rangeParentNode = range.commonAncestorContainer.parentNode;
+    console.log(rangeParentNode);
+    console.log(range.commonAncestorContainer);
+    if (rangeParentNode.className !== "editable") {
+      while (rangeParentNode.className !== "editable-inner") {
+        rangeParentNode = rangeParentNode.parentNode;
+      }
+    } else {
+      rangeParentNode = range.commonAncestorContainer;
+    }
+    combineAdjacentTextNodes(rangeParentNode);
+    emptySpanRemove(rangeParentNode);
+    combineAdjacentSpanNodes(rangeParentNode);
+  }
+}
 function edit(range, addAttribute) {
   //ノードの範囲が複数のノードに跨っていない時
   if (range.startContainer === range.endContainer) {
@@ -318,6 +390,11 @@ function getStateOfStyle(node) {
   } else {
     binaryString += "0";
   }
+  if (node.style.backgroundColor === "rgb(179, 247, 247)" || node.style.backgroundColor === "rgb(170, 211, 170)" || node.style.backgroundColor === "rgb(227, 199, 146)") {
+    binaryString += "1";
+  } else {
+    binaryString += "0";
+  }
   return binaryString;
 }
 
@@ -357,6 +434,8 @@ function removeAttribute(attribute, element) {
     element.style.textDecorationStyle = "";
     element.style.textDecorationColor = "";
     element.style.textDecorationThickness = "";
+  } else if (attribute === "blue" || attribute === "green" || attribute === "orange") {
+    element.style.backgroundColor = "";
   }
 }
 
@@ -434,6 +513,12 @@ function setAttribute(attribute, element) {
     element.style.textDecorationStyle = "wavy";
     element.style.textDecorationColor = "rgb(100, 155, 17)";
     element.style.textDecorationThickness = "3px";
+  } else if (attribute === "blue") {
+    element.style.backgroundColor = "rgb(179, 247, 247)";
+  } else if (attribute === "green") {
+    element.style.backgroundColor = "rgb(170, 211, 170)";
+  } else if (attribute === "orange") {
+    element.style.backgroundColor = "rgb(227, 199, 146)";
   }
 }
 
@@ -741,7 +826,7 @@ var AttributeManager = /*#__PURE__*/function () {
     key: "getElementAttribute",
     value: function getElementAttribute(parentElement) {
       var attribute = [];
-      attribute.push(new ElementAttribute("bold", "fontWeight", parentElement.style.fontWeight), new ElementAttribute("italic", "fontStyle", parentElement.style.fontStyle), new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom), new ElementAttribute("wavyUnderline", "textDecoration", parentElement.style.textDecoration));
+      attribute.push(new ElementAttribute("bold", "fontWeight", parentElement.style.fontWeight), new ElementAttribute("italic", "fontStyle", parentElement.style.fontStyle), new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom), new ElementAttribute("wavyUnderline", "textDecoration", parentElement.style.textDecoration), new ElementAttribute("blue", "backgroundColor", parentElement.style.backgroundColor), new ElementAttribute("green", "backgroundColor", parentElement.style.backgroundColor), new ElementAttribute("orange", "backgroundColor", parentElement.style.backgroundColor));
       return attribute;
     }
   }]);
@@ -772,6 +857,12 @@ var SpanTag = /*#__PURE__*/function () {
         this.container.style.textDecorationStyle = "wavy";
         this.container.style.textDecorationColor = "rgb(100, 155, 17)";
         this.container.style.textDecorationThickness = "3px";
+      } else if (attribute === "blue") {
+        this.container.style.backgroundColor = "rgb(179, 247, 247)";
+      } else if (attribute === "green") {
+        this.container.style.backgroundColor = "rgb(170, 211, 170)";
+      } else if (attribute === "orange") {
+        this.container.style.backgroundColor = "rgb(227, 199, 146)";
       }
     }
   }, {

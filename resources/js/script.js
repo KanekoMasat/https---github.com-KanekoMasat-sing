@@ -2,10 +2,14 @@ const boldButton = document.getElementById("boldButton");
 const italicButton = document.getElementById("italicButton");
 const underlineButton = document.getElementById("underlineButton");
 const vibratoButton = document.getElementById("vibratoButton");
+const blueButton = document.getElementById("blueColor");
+const greenButton = document.getElementById("greenColor");
+const orangeButton = document.getElementById("orangeColor");
 const editable = document.getElementById("editable");
 const toolBar = document.getElementById("tool-bar");
 const updateForm = document.getElementById("updateForm");
 const songLyrics = document.getElementsByClassName("song-lyrics");
+
 
 Array.from(songLyrics).forEach(element => {
     element.innerHTML = decodeHTMLEntities(element.innerHTML).toString();
@@ -21,6 +25,18 @@ editable.addEventListener("input", function (event) {
     });
 });
 
+//カーソルの位置が変わっちゃう
+editable.addEventListener("input", function (event) {
+    const divElement = [];
+    editable.childNodes.forEach(element => {
+        if (element.nodeName == "DIV") {
+            divElement.push(element);
+        }
+    });
+    divElement.forEach(element => {
+        element.textContent = element.textContent.replace(/\sv\s/g, "(v)");
+    });
+});
 
 // HTMLエンティティをデコードする関数
 function decodeHTMLEntities(text) {
@@ -80,25 +96,12 @@ boldButton.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
 vibratoButton.addEventListener('click', setWavyUnderline);
-// vibratoButton.addEventListener('click', textFunction);
 
-//波線テスト処理
-function textFunction() {
-    console.log("処理開始");
-    const selection = window.getSelection();
-    if (selection && selection.toString().length > 0) {
-        const range = selection.getRangeAt(0);
-        const selectedText = range.extractContents();
-        const spanContainer = document.createElement("span");
-        spanContainer.appendChild(selectedText);
-        spanContainer.style.textDecoration = "underline";
-        spanContainer.style.textDecorationStyle = "wavy";
-        spanContainer.style.textDecorationColor = "rgb(100, 155, 17)";
-        spanContainer.style.textDecorationThickness = "3px";
-        range.deleteContents();
-        range.insertNode(spanContainer);
-    }
-}
+//これら3つは同じプロパティを使用してるからちょい問題
+//処理めんどそうなので朝にやることを推奨
+blueButton.addEventListener('click', setBlue);
+greenButton.addEventListener('click', setGreen);
+orangeButton.addEventListener('click', setOrange);
 
 
 
@@ -122,7 +125,7 @@ function setBold() {
 
         combineAdjacentTextNodes(rangeParentNode);
         emptySpanRemove(rangeParentNode);
-        combineAdjacentSpanNodes(rangeParentNode)
+        combineAdjacentSpanNodes(rangeParentNode);
     }
 }
 
@@ -191,6 +194,80 @@ function setWavyUnderline() {
         combineAdjacentSpanNodes(rangeParentNode);
     }
 }
+
+//背景青
+function setBlue() {
+    console.log("処理開始");
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) {
+        const range = selection.getRangeAt(0);
+        edit(range, "blue");
+        let rangeParentNode = range.commonAncestorContainer.parentNode;
+        console.log(rangeParentNode);
+        console.log(range.commonAncestorContainer);
+        if (rangeParentNode.className !== "editable") {
+            while (rangeParentNode.className !== "editable-inner") {
+                rangeParentNode = rangeParentNode.parentNode;
+            }
+        } else {
+            rangeParentNode = range.commonAncestorContainer;
+        }
+
+        combineAdjacentTextNodes(rangeParentNode);
+        emptySpanRemove(rangeParentNode);
+        combineAdjacentSpanNodes(rangeParentNode);
+    }
+}
+
+//背景緑
+function setGreen() {
+    console.log("処理開始");
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) {
+        const range = selection.getRangeAt(0);
+        edit(range, "green");
+        let rangeParentNode = range.commonAncestorContainer.parentNode;
+        console.log(rangeParentNode);
+        console.log(range.commonAncestorContainer);
+        if (rangeParentNode.className !== "editable") {
+            while (rangeParentNode.className !== "editable-inner") {
+                rangeParentNode = rangeParentNode.parentNode;
+            }
+        } else {
+            rangeParentNode = range.commonAncestorContainer;
+        }
+
+        combineAdjacentTextNodes(rangeParentNode);
+        emptySpanRemove(rangeParentNode);
+        combineAdjacentSpanNodes(rangeParentNode);
+    }
+}
+
+
+//背景橙
+function setOrange() {
+    console.log("処理開始");
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) {
+        const range = selection.getRangeAt(0);
+        edit(range, "orange");
+        let rangeParentNode = range.commonAncestorContainer.parentNode;
+        console.log(rangeParentNode);
+        console.log(range.commonAncestorContainer);
+        if (rangeParentNode.className !== "editable") {
+            while (rangeParentNode.className !== "editable-inner") {
+                rangeParentNode = rangeParentNode.parentNode;
+            }
+        } else {
+            rangeParentNode = range.commonAncestorContainer;
+        }
+
+        combineAdjacentTextNodes(rangeParentNode);
+        emptySpanRemove(rangeParentNode);
+        combineAdjacentSpanNodes(rangeParentNode);
+    }
+}
+
 
 
 function edit(range, addAttribute) {
@@ -272,6 +349,12 @@ function getStateOfStyle(node) {
         binaryString += "0";
     }
 
+    if (node.style.backgroundColor === "rgb(179, 247, 247)" || node.style.backgroundColor === "rgb(170, 211, 170)" || node.style.backgroundColor === "rgb(227, 199, 146)") {
+        binaryString += "1";
+    } else {
+        binaryString += "0";
+    }
+
     return binaryString;
 }
 
@@ -311,6 +394,8 @@ function removeAttribute(attribute, element) {
         element.style.textDecorationStyle = "";
         element.style.textDecorationColor = "";
         element.style.textDecorationThickness = "";
+    } else if (attribute === "blue" || attribute === "green" || attribute === "orange") {
+        element.style.backgroundColor = "";
     }
 }
 
@@ -398,6 +483,12 @@ function setAttribute(attribute, element) {
         element.style.textDecorationStyle = "wavy";
         element.style.textDecorationColor = "rgb(100, 155, 17)";
         element.style.textDecorationThickness = "3px";
+    } else if (attribute === "blue") {
+        element.style.backgroundColor = "rgb(179, 247, 247)";
+    } else if (attribute === "green") {
+        element.style.backgroundColor = "rgb(170, 211, 170)";
+    } else if (attribute === "orange") {
+        element.style.backgroundColor = "rgb(227, 199, 146)";
     }
 }
 
@@ -714,7 +805,10 @@ class AttributeManager {
             new ElementAttribute("bold", "fontWeight", parentElement.style.fontWeight),
             new ElementAttribute("italic", "fontStyle", parentElement.style.fontStyle),
             new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom),
-            new ElementAttribute("wavyUnderline", "textDecoration", parentElement.style.textDecoration)
+            new ElementAttribute("wavyUnderline", "textDecoration", parentElement.style.textDecoration),
+            new ElementAttribute("blue", "backgroundColor", parentElement.style.backgroundColor),
+            new ElementAttribute("green", "backgroundColor", parentElement.style.backgroundColor),
+            new ElementAttribute("orange", "backgroundColor", parentElement.style.backgroundColor)
         );
         return attribute;
     }
@@ -742,6 +836,12 @@ class SpanTag {
             this.container.style.textDecorationStyle = "wavy";
             this.container.style.textDecorationColor = "rgb(100, 155, 17)";
             this.container.style.textDecorationThickness = "3px";
+        } else if (attribute === "blue") {
+            this.container.style.backgroundColor = "rgb(179, 247, 247)";
+        } else if (attribute === "green") {
+            this.container.style.backgroundColor = "rgb(170, 211, 170)";
+        } else if (attribute === "orange") {
+            this.container.style.backgroundColor = "rgb(227, 199, 146)";
         }
     }
 
