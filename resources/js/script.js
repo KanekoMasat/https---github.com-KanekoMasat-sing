@@ -113,8 +113,6 @@ function setBold() {
         const range = selection.getRangeAt(0);
         edit(range, "bold");
         let rangeParentNode = range.commonAncestorContainer.parentNode;
-        console.log(rangeParentNode);
-        console.log(range.commonAncestorContainer);
         if (rangeParentNode.className !== "editable") {
             while (rangeParentNode.className !== "editable-inner") {
                 rangeParentNode = rangeParentNode.parentNode;
@@ -203,8 +201,6 @@ function setBlue() {
         const range = selection.getRangeAt(0);
         edit(range, "blue");
         let rangeParentNode = range.commonAncestorContainer.parentNode;
-        console.log(rangeParentNode);
-        console.log(range.commonAncestorContainer);
         if (rangeParentNode.className !== "editable") {
             while (rangeParentNode.className !== "editable-inner") {
                 rangeParentNode = rangeParentNode.parentNode;
@@ -227,8 +223,6 @@ function setGreen() {
         const range = selection.getRangeAt(0);
         edit(range, "green");
         let rangeParentNode = range.commonAncestorContainer.parentNode;
-        console.log(rangeParentNode);
-        console.log(range.commonAncestorContainer);
         if (rangeParentNode.className !== "editable") {
             while (rangeParentNode.className !== "editable-inner") {
                 rangeParentNode = rangeParentNode.parentNode;
@@ -252,8 +246,6 @@ function setOrange() {
         const range = selection.getRangeAt(0);
         edit(range, "orange");
         let rangeParentNode = range.commonAncestorContainer.parentNode;
-        console.log(rangeParentNode);
-        console.log(range.commonAncestorContainer);
         if (rangeParentNode.className !== "editable") {
             while (rangeParentNode.className !== "editable-inner") {
                 rangeParentNode = rangeParentNode.parentNode;
@@ -349,7 +341,19 @@ function getStateOfStyle(node) {
         binaryString += "0";
     }
 
-    if (node.style.backgroundColor === "rgb(179, 247, 247)" || node.style.backgroundColor === "rgb(170, 211, 170)" || node.style.backgroundColor === "rgb(227, 199, 146)") {
+    if (node.style.backgroundColor === "rgb(179, 247, 247)") {
+        binaryString += "1";
+    } else {
+        binaryString += "0";
+    }
+
+    if (node.style.backgroundColor === "rgb(170, 211, 170)") {
+        binaryString += "1";
+    } else {
+        binaryString += "0";
+    }
+
+    if (node.style.backgroundColor === "rgb(227, 199, 146)") {
         binaryString += "1";
     } else {
         binaryString += "0";
@@ -394,13 +398,18 @@ function removeAttribute(attribute, element) {
         element.style.textDecorationStyle = "";
         element.style.textDecorationColor = "";
         element.style.textDecorationThickness = "";
-    } else if (attribute === "blue" || attribute === "green" || attribute === "orange") {
+    } else if (attribute === "blue") {
+        element.style.backgroundColor = "";
+    } else if (attribute === "green") {
+        element.style.backgroundColor = "";
+    } else if (attribute === "orange") {
         element.style.backgroundColor = "";
     }
 }
 
 //同じContainer内で選択範囲のspanタグを消したい場合のメソッド
 function removeSpanElement(addAttribute, range) {
+    console.log("spanタグ削除");
     let resultNode;
     let beforeText;
     let afterText;
@@ -445,7 +454,9 @@ function addAttributeToSpanTag(addAttribute, range) {
     parentNode.parentNode.replaceChild(fragment, parentNode);
 }
 
+//spanタグに付与されている属性を削除(spanタグ自体は消さない)
 function removeSpanAttribute(addAttribute, range) {
+    console.log("spanタグの属性削除");
     let resultNode;
     let beforeText;
     let afterText;
@@ -465,6 +476,7 @@ function removeSpanAttribute(addAttribute, range) {
             originalAttribute.push(attribute.getName());
         }
     });
+    console.log(originalAttribute);
     const fragment = removeAttributesFromPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
 
     parentNode.parentNode.replaceChild(fragment, parentNode);
@@ -498,7 +510,6 @@ function setSpanAttribute(range, addAttribute) {
     range.deleteContents();
     const container = new SpanTag(selectedText);
     container.setAttribute(addAttribute);
-    console.log(addAttribute);
     range.insertNode(container.getElement());
 }
 
@@ -638,6 +649,7 @@ function stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribu
 
 //単一ノード用：複数の属性の中から一つの属性のみ消す
 function removeAttributesFromPartialText(addAttribute, originalAttribute, beforeText, range, afterText) {
+    console.log(originalAttribute);
     const middleSpanContainer = document.createElement("span");
     let fragment = document.createDocumentFragment();
 
@@ -800,17 +812,39 @@ class ElementAttribute {
 
 class AttributeManager {
     static getElementAttribute(parentElement) {
-        const attribute = [];
-        attribute.push(
+        const attributes = [];
+        attributes.push(
             new ElementAttribute("bold", "fontWeight", parentElement.style.fontWeight),
             new ElementAttribute("italic", "fontStyle", parentElement.style.fontStyle),
             new ElementAttribute("underLine", "borderBottom", parentElement.style.borderBottom),
             new ElementAttribute("wavyUnderline", "textDecoration", parentElement.style.textDecoration),
-            new ElementAttribute("blue", "backgroundColor", parentElement.style.backgroundColor),
-            new ElementAttribute("green", "backgroundColor", parentElement.style.backgroundColor),
-            new ElementAttribute("orange", "backgroundColor", parentElement.style.backgroundColor)
+            new ElementAttribute("blue", "backgroundBlue", parentElement.style.backgroundColor),
+            new ElementAttribute("green", "backgroundGreen", parentElement.style.backgroundColor),
+            new ElementAttribute("orange", "backgroundOrange", parentElement.style.backgroundColor)
         );
-        return attribute;
+        if (parentElement.style.backgroundColor !== "") {
+            const color = parentElement.style.backgroundColor;
+            if (color === "rgb(179, 247, 247)") {
+                attributes.forEach(attribute => {
+                    if (attribute.getName() === "green" || attribute.getName() === "orange") {
+                        attribute.value = "";
+                    }
+                })
+            } else if (color === "rgb(170, 211, 170)") {
+                attributes.forEach(attribute => {
+                    if (attribute.getName() === "blue" || attribute.getName() === "orange") {
+                        attribute.value = "";
+                    }
+                })
+            } else if (color === "rgb(227, 199, 146)") {
+                attributes.forEach(attribute => {
+                    if (attribute.getName() === "blue" || attribute.getName() === "green") {
+                        attribute.value = "";
+                    }
+                })
+            }
+        }
+        return attributes;
     }
 }
 

@@ -6,12 +6,17 @@
 
 @section('main')
     <a href="{{ route('index') }}" class="back-to-top-link">トップへ</a>
+
+    <div>
+        <h1>歌唱テクニック・発声の紹介</h1>
+        <h3>※</h3>
+    </div>
     <div class="category-container">
         <div class="category-title">
             <h2>ビブラート</h2>
         </div>
         <img src="{{ asset('storage/ビブラート.png') }}" alt="">
-        <p>簡単に言うと、音を揺らす技術。
+        <p>簡単に言うと、声を揺らす技術。
             語尾を伸ばした際に使用されることが多い
         </p>
         <p>波が大きいビブラート、小さいビブラート、とても短いビブラート等様々な種類がある</p>
@@ -53,7 +58,7 @@
         <div class="category-title">
             <h2>ブレス(v)</h2>
         </div>
-        <p>息継ぎをするタイミング。(v)で表される。息継ぎ(ブレス)も場合によっては表現になる。胸式呼吸、腹式呼吸で音が変わる。</p>
+        <p>息継ぎをするタイミング。(v)で表されることが多い。息継ぎ(ブレス)も場合によっては表現になる。胸式呼吸、腹式呼吸で音が変わる。</p>
     </div>
 
     <div class="category-container">
@@ -69,6 +74,20 @@
         </div>
         <p>和訳するとささやき声。日本では声の成分の中に多く息が入った声のことを指すことが多い</p>
         <p>話し声がウィスパーボイスのような人もいる</p>
+    </div>
+    <div class="category-container">
+        <div class="category-title">
+            <h2>テクニック名</h2>
+        </div>
+        <p>説明</p>
+        <p>説明</p>
+    </div>
+    <div class="category-container">
+        <div class="category-title">
+            <h2>テクニック名</h2>
+        </div>
+        <p>説明</p>
+        <p>説明</p>
     </div>
 
     <div class="category-container">

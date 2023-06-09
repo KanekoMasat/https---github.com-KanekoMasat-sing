@@ -29,7 +29,6 @@
                 <input id="title" type="text" value="{{ old('title', $singing->title) }}" name="title"
                     class="title-content">
             </div>
-            background-colorを直す。急務
             <div class="show-link-wrapper">
                 <a href="{{ route('singing.show', ['singing' => $singing->id]) }}" class="show-link">&nbsp;全体表示（スクショ用）</a>
             </div>
@@ -43,9 +42,10 @@
         <button type="submit" class="update-button">更新</button>
         <div id="my-textarea" contenteditable="true">
         </div>
-        <div>※テキスト選択中はPCの仕様上色が変わります</div>
-        <div>※(" " + "v" + " ")が連続して入力されていると自動的に"(v)"に置き換わります</div>
+        <div>・テキスト選択中はPCの仕様上色が変わります</div>
+        <div>・(" " + "v" + " ")が連続して入力されていると自動的に"(v)"に置き換わります</div>
         <div>※" " = 半角スペース</div>
+        <div>・表現の色が重複する場合、直前に選択した色に塗り替えられます</div>
     </form>
 
     <div id="tool-bar" class="tool-bar">

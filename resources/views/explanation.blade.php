@@ -6,9 +6,7 @@
 
 @section('main')
     <a href="{{ route('index') }}" class="back-to-top-link">トップへ</a>
-    <h1 style="background-color: lightblue">準備中</h1>
-    <h1 style="background-color: lightblue">準備中</h1>
-    <h3>PCでしか使用できない</h3>
-    <h3>Google Chrome、Safariでしか動作確認してない</h3>
-    <h3>初心者が書いてるので間違っていることあるかも</h3>
+    <h3>・PC以外の使用は想定していません</h3>
+    <h3>・Google Chrome、Safariでしか動作確認してません。※特にSafariでは動作確認しかしてません</h3>
+    <h3>・まだまだ未熟な者が歌唱テクニックを説明をしているので間違っている可能性があります</h3>
 @endsection

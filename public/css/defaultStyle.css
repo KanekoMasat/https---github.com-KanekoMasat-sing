@@ -9,6 +9,13 @@ body {
     padding-left: 30px;
 }
 
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin-top: 10px;
+}
 
 .webSite-title {
     font-family: "Courier New";
@@ -60,4 +67,67 @@ body {
     font-size: 20px;
     text-decoration: none;
     border-bottom: 2px solid;
+}
+
+/* ログインフォーム用CSS */
+.error-message-container {
+    font-size: 20px;
+}
+
+.login-form-wrapper {
+    height: 200px;
+    display: flex;
+}
+
+.login-form-label {
+    font-size: 25px;
+}
+
+.login-form-content {
+    margin-top: 25px;
+    transform: scale(1.2);
+}
+
+.content {
+    margin-top: 16px;
+    transform: scale(1.2);
+}
+
+.login-button {
+    margin-left: 200px;
+    transform: scale(1.4);
+    border-radius: 10px;
+}
+
+.user-create-link-wrapper {
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+/* アカウント作成フォーム用CSS */
+.user-create-form-wrapper {
+    display: flex;
+}
+
+.user-create-label {
+    font-size: 25px;
+}
+
+.user-create-content-wrapper {
+    margin-top: 25px;
+}
+
+.user-create-content {
+    transform: scale(1.2);
+}
+
+.user-create-button {
+    margin-left: 200px;
+    transform: scale(1.5);
+    border-radius: 10px;
+}
+
+.login-form-link-wrapper {
+    margin-top: 20px;
+    margin-left: 50px;
 }
