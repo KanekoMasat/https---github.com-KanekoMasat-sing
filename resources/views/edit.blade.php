@@ -7,7 +7,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
-{{-- この辺のゴチャゴチャしてるのをリファクタリング --}}
 @section('main')
     @foreach ($errors->all() as $error)
         <p>{{ $error }}</p>
@@ -60,6 +59,5 @@
     </div>
 
 
-    {{-- <script src="{{ asset('js/script.js') }}"></script> --}}
     <script src="{{ mix('js/app.js') }}"></script>
 @endsection

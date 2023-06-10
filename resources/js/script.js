@@ -25,7 +25,7 @@ editable.addEventListener("input", function (event) {
     });
 });
 
-//カーソルの位置が変わっちゃう
+// "" + v + ""で(v)になる
 editable.addEventListener("input", function (event) {
     const divElement = [];
     editable.childNodes.forEach(element => {
@@ -48,6 +48,7 @@ function decodeHTMLEntities(text) {
 
 let previousRange;
 
+//ツールバーを出現させるイベントリスナー
 editable.addEventListener('click', function (event) {
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
@@ -66,6 +67,7 @@ editable.addEventListener('click', function (event) {
 
 });
 
+//フォームの送信にdiv要素内の情報を加えるためのイベントリスナー
 updateForm.addEventListener("submit", function (event) {
     event.preventDefault(); //フォームの規定の送信をしない処理
 
@@ -97,8 +99,6 @@ italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
 vibratoButton.addEventListener('click', setWavyUnderline);
 
-//これら3つは同じプロパティを使用してるからちょい問題
-//処理めんどそうなので朝にやることを推奨
 blueButton.addEventListener('click', setBlue);
 greenButton.addEventListener('click', setGreen);
 orangeButton.addEventListener('click', setOrange);
