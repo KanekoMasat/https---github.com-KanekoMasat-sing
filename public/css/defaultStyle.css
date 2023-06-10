@@ -131,3 +131,22 @@ li {
     margin-top: 20px;
     margin-left: 50px;
 }
+
+/* テクニック説明用CSS */
+.technique-title-wrapper {
+    margin-top: 55px;
+}
+
+.vocalization-title-wrapper {
+    margin-top: 65px;
+}
+
+.category-container {
+    margin-top: 30px;
+}
+
+.summary {
+    margin-top: 40px;
+    font-size: large;
+    font-weight: bold;
+}

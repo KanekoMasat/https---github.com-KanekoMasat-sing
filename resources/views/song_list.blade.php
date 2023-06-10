@@ -7,9 +7,12 @@
 
 
 @section('main')
-    @if (session()->has('success'))
-        {{ session('success') }}
-    @endif
+    <div class="success-message-wrapper">
+        @if (session()->has('success'))
+            {{ session('success') }}
+        @endif
+    </div>
+
     <p>画面左の作成したシートを選択してください</p>
     <p>画面右に編集画面が表示されます</p>
     <p>『+』ボタンを押すと新たにシートを作成できます</p>

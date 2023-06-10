@@ -6,9 +6,12 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @endsection
 @section('main')
-    @if (session()->has('success'))
-        {{ session('success') }}
-    @endif
+    <div class="success-message-wrapper">
+        @if (session()->has('success'))
+            {{ session('success') }}
+        @endif
+    </div>
+
     <div class="create-form">
         <form action="{{ route('singing.store') }}" method="POST" enctype="multipart/form-data">
             @csrf

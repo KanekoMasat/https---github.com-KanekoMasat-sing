@@ -8,11 +8,6 @@ body {
     padding: 6px;
 }
 
-
-.category-container {
-    padding-bottom: 20px;
-}
-
 p {
     font-family: serif;
 }
@@ -27,11 +22,6 @@ li {
 }
 
 .header-container {
-    /* もし余裕があればヘッダー固定する */
-    /* position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%; */
     margin-bottom: 7px;
     margin-top: 27px;
 }
@@ -84,6 +74,10 @@ li {
 
 .title-form {
     width: 30%;
+}
+
+.success-message-wrapper {
+    font-size: 25px;
 }
 
 .create-title-wrapper {
@@ -229,5 +223,5 @@ li {
     margin-top: 10px;
     margin-left: 10px;
     border-radius: 10px;
-    transform: scale(1.3);
+    transform: scale(1.4);
 }
