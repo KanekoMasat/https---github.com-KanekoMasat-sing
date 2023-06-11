@@ -161,11 +161,61 @@ li {
     position: absolute;
     display: none;
     z-index: 30px;
+    padding-left: 6px;
+    border: 3px solid;
+    border-top-color: gray;
+    border-bottom-color: gray;
+    border-left-color: gray;
+    border-right-color: gray;
+    border-radius: 3px;
+    opacity: 0;
+}
+
+.tool-bar-menu-wrapper {
+    height: auto;
+    width: auto;
 }
 
 .tool-bar-menu {
-    display: inline-flex;
+    display: flex;
+    justify-content: flex-start;
     z-index: 30px;
+}
+
+.tool-bar-button {
+    font-weight: bold;
+    border: solid;
+    border-radius: 0px;
+    border-color: gray;
+    transform: scale(1.2);
+}
+
+#vibratoButton {
+    margin-left: 0px;
+}
+
+#blueColor {
+    margin-left: 13px;
+}
+
+#greenColor {
+    margin-left: 13px;
+}
+
+#orangeColor {
+    margin-left: 12px;
+}
+
+#boldButton {
+    margin-left: 7px;
+}
+
+#italicButton {
+    margin-left: 2px;
+}
+
+#underlineButton {
+    margin-left: 2px;
 }
 
 .edit-songs-container {

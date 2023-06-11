@@ -26,17 +26,17 @@ editable.addEventListener("input", function (event) {
 });
 
 // "" + v + ""で(v)になる
-editable.addEventListener("input", function (event) {
-    const divElement = [];
-    editable.childNodes.forEach(element => {
-        if (element.nodeName == "DIV") {
-            divElement.push(element);
-        }
-    });
-    divElement.forEach(element => {
-        element.textContent = element.textContent.replace(/\sv\s/g, "(v)");
-    });
-});
+// editable.addEventListener("input", function (event) {
+//     const divElement = [];
+//     editable.childNodes.forEach(element => {
+//         if (element.nodeName == "DIV") {
+//             divElement.push(element);
+//         }
+//     });
+//     divElement.forEach(element => {
+//         element.textContent = element.textContent.replace(/\sv\s/g, "(v)");
+//     });
+// });
 
 // HTMLエンティティをデコードする関数
 function decodeHTMLEntities(text) {
@@ -54,18 +54,26 @@ editable.addEventListener('click', function (event) {
     const range = selection.getRangeAt(0);
     if (previousRange !== range && selection.toString().length > 0) {
         toolBar.style.display = "block";
+        previousRange = range;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft; // x軸のスクロール量を取得
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop; // y軸のスクロール量を取得
+        const x = event.pageX - scrollLeft;
+        const y = event.pageY - scrollTop - 135;
+        toolBar.style.left = x + 'px';
+        toolBar.style.top = y + 'px';
+
+        setTimeout(function () {
+            toolBar.style.opacity = "1";
+            toolBar.style.transition = "opacity 0.2s ease-in-out";
+        }, 50);
     } else {
         toolBar.style.display = "none";
+        toolBar.style.opacity = "0";
     }
-    previousRange = range;
-    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft; // x軸のスクロール量を取得
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop; // y軸のスクロール量を取得
-    const x = event.pageX - scrollLeft;
-    const y = event.pageY - scrollTop - 60;
-    toolBar.style.left = x + 'px';
-    toolBar.style.top = y + 'px';
 
 });
+
+
 
 //フォームの送信にdiv要素内の情報を加えるためのイベントリスナー
 updateForm.addEventListener("submit", function (event) {

@@ -87,18 +87,18 @@ editable.addEventListener("input", function (event) {
   });
 });
 
-//カーソルの位置が変わっちゃう
-editable.addEventListener("input", function (event) {
-  var divElement = [];
-  editable.childNodes.forEach(function (element) {
-    if (element.nodeName == "DIV") {
-      divElement.push(element);
-    }
-  });
-  divElement.forEach(function (element) {
-    element.textContent = element.textContent.replace(/\sv\s/g, "(v)");
-  });
-});
+// "" + v + ""で(v)になる
+// editable.addEventListener("input", function (event) {
+//     const divElement = [];
+//     editable.childNodes.forEach(element => {
+//         if (element.nodeName == "DIV") {
+//             divElement.push(element);
+//         }
+//     });
+//     divElement.forEach(element => {
+//         element.textContent = element.textContent.replace(/\sv\s/g, "(v)");
+//     });
+// });
 
 // HTMLエンティティをデコードする関数
 function decodeHTMLEntities(text) {
@@ -107,22 +107,31 @@ function decodeHTMLEntities(text) {
   return textArea.value;
 }
 var previousRange;
+
+//ツールバーを出現させるイベントリスナー
 editable.addEventListener('click', function (event) {
   var selection = window.getSelection();
   var range = selection.getRangeAt(0);
   if (previousRange !== range && selection.toString().length > 0) {
     toolBar.style.display = "block";
+    previousRange = range;
+    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft; // x軸のスクロール量を取得
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop; // y軸のスクロール量を取得
+    var x = event.pageX - scrollLeft;
+    var y = event.pageY - scrollTop - 135;
+    toolBar.style.left = x + 'px';
+    toolBar.style.top = y + 'px';
+    setTimeout(function () {
+      toolBar.style.opacity = "1";
+      toolBar.style.transition = "opacity 0.2s ease-in-out";
+    }, 50);
   } else {
     toolBar.style.display = "none";
+    toolBar.style.opacity = "0";
   }
-  previousRange = range;
-  var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft; // x軸のスクロール量を取得
-  var scrollTop = window.pageYOffset || document.documentElement.scrollTop; // y軸のスクロール量を取得
-  var x = event.pageX - scrollLeft;
-  var y = event.pageY - scrollTop - 60;
-  toolBar.style.left = x + 'px';
-  toolBar.style.top = y + 'px';
 });
+
+//フォームの送信にdiv要素内の情報を加えるためのイベントリスナー
 updateForm.addEventListener("submit", function (event) {
   event.preventDefault(); //フォームの規定の送信をしない処理
 
@@ -158,9 +167,6 @@ boldButton.addEventListener('click', setBold);
 italicButton.addEventListener('click', setItalic);
 underlineButton.addEventListener('click', setUnderline);
 vibratoButton.addEventListener('click', setWavyUnderline);
-
-//これら3つは同じプロパティを使用してるからちょい問題
-//処理めんどそうなので朝にやることを推奨
 blueButton.addEventListener('click', setBlue);
 greenButton.addEventListener('click', setGreen);
 orangeButton.addEventListener('click', setOrange);

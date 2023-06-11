@@ -42,20 +42,22 @@
         <div id="my-textarea" contenteditable="true">
         </div>
         <div>・テキスト選択中はPCの仕様上色が変わります</div>
-        <div>・"半角スペース + v + 半角スペース" が連続して入力されていると自動的に"(v)"に置き換わります</div>
         <div>・表現の色が重複する場合、直前に選択した色に塗り替えられます</div>
     </form>
 
     <div id="tool-bar" class="tool-bar">
-        <div class="tool-bar-menu">
-            <button id="vibratoButton">ビブラート</button>
-            <button id="blueColor">表現1(青)</button>
-            <button id="greenColor">表現２(緑)</button>
-            <button id="orangeColor">表現3(橙)</button>
-            <button id="boldButton">B</button>
-            <button id="italicButton" style="font-style: italic">I</button>
-            <button id="underlineButton"><u>U</u></button>
+        <div class="tool-bar-menu-wrapper">
+            <div class="tool-bar-menu">
+                <button class="tool-bar-button" id="vibratoButton">ビブラート</button>
+                <button class="tool-bar-button" id="blueColor">表現1(青)</button>
+                <button class="tool-bar-button" id="greenColor">表現２(緑)</button>
+                <button class="tool-bar-button" id="orangeColor">表現3(橙)</button>
+                <button class="tool-bar-button" id="boldButton">B</button>
+                <button class="tool-bar-button" id="italicButton"><span style="font-style: italic">I</span></button>
+                <button class="tool-bar-button" id="underlineButton"><u>U</u></button>
+            </div>
         </div>
+
     </div>
 
 
