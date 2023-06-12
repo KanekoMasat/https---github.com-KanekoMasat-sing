@@ -21,7 +21,7 @@
                 <div class="login-form-label">
                     <ul>
                         <li><label for="username">名前：</label></li>
-                        <li><label for="accountID">アカウントID：</label></li>
+                        <li><label for="accountID">メールアドレス：</label></li>
                         <li><label for="password">パスワード：</label></li>
                     </ul>
                 </div>

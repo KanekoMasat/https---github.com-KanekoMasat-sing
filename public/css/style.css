@@ -222,6 +222,7 @@ li {
     border: 4px ridge;
     border-radius: 10px;
     border-color: rgba(104, 104, 101, 0.98);
+    background-color: rgb(232, 232, 232);
     width: 28%;
     overflow: scroll;
 }

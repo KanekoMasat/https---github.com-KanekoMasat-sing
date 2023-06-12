@@ -23,7 +23,6 @@
         <div class="edit-link">
             <a href="{{ route('singing.edit', ['singing' => $singingSheet->id]) }}">前の画面へ戻る</a>
         </div>
-        この右にツールバー追加するかも
     </div>
     <script>
         const lyrics = document.getElementById("lyrics-content");
