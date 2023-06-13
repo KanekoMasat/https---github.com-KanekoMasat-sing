@@ -13,7 +13,8 @@
             <li class="topSite-list"><a href="{{ route('singing.create') }}" class="topSite-list-link">新規作成</a></li>
             <li class="topSite-list"><a href="{{ route('singing.index') }}" class="topSite-list-link">曲の編集</a></li>
             <li class="topSite-list"><a href="{{ route('definition') }}" class="topSite-list-link">歌唱での様々な表現の紹介</a></li>
-            <li class="topSite-list"><a href="{{ route('explanation') }}" class="topSite-list-link">このWebページについて</a></li>
+            <li class="topSite-list"><a href="{{ route('explanation') }}" class="topSite-list-link">使い方含め、このWebページについて</a>
+            </li>
         </ul>
     </div>
 

@@ -150,3 +150,12 @@ li {
     font-size: large;
     font-weight: bold;
 }
+
+/* 説明用CSS */
+.usage {
+    margin-bottom: 65px;
+}
+
+.usage-content {
+    font-weight: bold;
+}

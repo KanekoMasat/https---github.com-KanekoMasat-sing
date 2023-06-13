@@ -33,6 +33,7 @@
             <div class="create-submit-button-wrapper">
                 <input type="submit" value="登録" class="create-submit-button">
             </div>
+            ※0文字では登録できません
         </form>
     </div>
 
