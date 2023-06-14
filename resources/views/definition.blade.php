@@ -20,7 +20,7 @@
         <div class="category-title">
             <h2>・ビブラート</h2>
         </div>
-        <img src="{{ asset('storage/ビブラート.png') }}" alt="">
+        <img src="{{ asset('storage/ビブラート.png') }}" alt="">
         <p>簡単に言うと声を揺らす技術。
             語尾を伸ばした際に使用されることが多い
         </p>
@@ -31,7 +31,7 @@
         <div class="category-title">
             <h2>・こぶし</h2>
         </div>
-        <img src="{{ asset('storage/こぶし.png') }}" alt="">
+        <img src="{{ asset('storage/こぶし.png') }}" alt="">
         <p>音程を一瞬だけ上下したり揺らす技術。
             短いビブラートのようなイメージ(イメージというだけで実際には全くの別物)
         </p>
