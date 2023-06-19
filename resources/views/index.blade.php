@@ -2,6 +2,9 @@
 @section('title', 'トップ画面')
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/defaultStyle.css') }}">
+    <script>
+        console.log("Sing start");
+    </script>
 @endsection
 
 @section('main')

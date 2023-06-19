@@ -9,12 +9,18 @@
 
 <body>
     <div class="body-container" id="body-container">
-        <header class="header-container" id="header-container">
-            <h1 class="webSite-title">My Singing Sheet</h1>
-            <div class="lead-content">
-                <h2>~~ 歌い方を可視化する ~~</h2>
+        <div class="header-container" id="header-container">
+            <header>
+                <h1 class="webSite-title">My Singing Sheet</h1>
+                <div class="lead-content">
+                    <h2>~~ 歌い方を可視化する ~~</h2>
+                </div>
+            </header>
+            <div class="user-view-container">
+                ユーザー
             </div>
-        </header>
+        </div>
+
         <main>
             <div class="main-container">
                 @yield('main')
