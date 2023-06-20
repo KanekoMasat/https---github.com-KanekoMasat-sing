@@ -16,9 +16,6 @@
                     <h2>~~ 歌い方を可視化する ~~</h2>
                 </div>
             </header>
-            <div class="user-view-container">
-                ユーザー
-            </div>
         </div>
 
         <main>
