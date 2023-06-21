@@ -25,19 +25,6 @@ editable.addEventListener("input", function (event) {
     });
 });
 
-// "" + v + ""で(v)になる
-// editable.addEventListener("input", function (event) {
-//     const divElement = [];
-//     editable.childNodes.forEach(element => {
-//         if (element.nodeName == "DIV") {
-//             divElement.push(element);
-//         }
-//     });
-//     divElement.forEach(element => {
-//         element.textContent = element.textContent.replace(/\sv\s/g, "(v)");
-//     });
-// });
-
 // HTMLエンティティをデコードする関数
 function decodeHTMLEntities(text) {
     let textArea = document.createElement('textarea');
@@ -46,9 +33,10 @@ function decodeHTMLEntities(text) {
 }
 
 
-let previousRange;
+
 
 //ツールバーを出現させるイベントリスナー
+let previousRange;
 editable.addEventListener('click', function (event) {
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
@@ -271,9 +259,8 @@ function setOrange() {
 
 
 function edit(range, addAttribute) {
-    //ノードの範囲が複数のノードに跨っていない時
+    //ノードの範囲が複数のノードに跨っていない時(単一ノード時)
     if (range.startContainer === range.endContainer) {
-        console.log("単一ノードです");
         if (range.commonAncestorContainer.parentElement.tagName === "SPAN" && getAttributeStatus(addAttribute, range.commonAncestorContainer.parentElement) && getStyleCount(range.commonAncestorContainer.parentElement) === 1) {
             //付与しようとしている属性を消したい場合の処理
             removeSpanElement(addAttribute, range);
@@ -291,10 +278,9 @@ function edit(range, addAttribute) {
             setSpanAttribute(range, addAttribute);
         }
     }
-    //ノードが複数のノードに跨っている時
+    //ノードが複数のノードに跨っている時(複数のノード時)
     else {
         const rangeChildNodes = range.extractContents().childNodes;
-        console.log("複数ノードです");
 
         if (hasTextNodes(rangeChildNodes)) {
             applyAttributesToMultipleNodes(addAttribute, rangeChildNodes, range);
@@ -417,7 +403,6 @@ function removeAttribute(attribute, element) {
 
 //同じContainer内で選択範囲のspanタグを消したい場合のメソッド
 function removeSpanElement(addAttribute, range) {
-    console.log("spanタグ削除");
     let resultNode;
     let beforeText;
     let afterText;
@@ -464,7 +449,6 @@ function addAttributeToSpanTag(addAttribute, range) {
 
 //spanタグに付与されている属性を削除(spanタグ自体は消さない)
 function removeSpanAttribute(addAttribute, range) {
-    console.log("spanタグの属性削除");
     let resultNode;
     let beforeText;
     let afterText;
@@ -484,7 +468,6 @@ function removeSpanAttribute(addAttribute, range) {
             originalAttribute.push(attribute.getName());
         }
     });
-    console.log(originalAttribute);
     const fragment = removeAttributesFromPartialText(addAttribute, originalAttribute, beforeText, range, afterText);
 
     parentNode.parentNode.replaceChild(fragment, parentNode);
@@ -657,7 +640,6 @@ function stripAttributeFromTag(beforeText, middleTextNode, afterText, addAttribu
 
 //単一ノード用：複数の属性の中から一つの属性のみ消す
 function removeAttributesFromPartialText(addAttribute, originalAttribute, beforeText, range, afterText) {
-    console.log(originalAttribute);
     const middleSpanContainer = document.createElement("span");
     let fragment = document.createDocumentFragment();
 
