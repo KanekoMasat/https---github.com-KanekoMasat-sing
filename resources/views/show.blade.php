@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <title>「{{ $singingSheet->title }}」の全体表示</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ asset('css/showStyle.css') }}">
 </head>

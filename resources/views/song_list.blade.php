@@ -1,6 +1,6 @@
 @extends('layouts.edit_default')
 
-@section('title', 'サンプル')
+@section('title', 'シート一覧')
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @endsection
