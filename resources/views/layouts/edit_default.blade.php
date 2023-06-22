@@ -18,6 +18,14 @@
     </header>
     <div class="body-container" id="body-container">
         <div class="edit-songs-container">
+            <div class="list-none-message-area">
+                @if (count($singingSheets) === 0)
+                    <p style="font-weight: bold">シートが作成されていません。</p>
+                    <p style="font-weight: bold">画面上の＋ボタンでシートの作成を行なってください</p>
+                @endif
+            </div>
+
+
             @foreach ($singingSheets as $singingSheet)
                 <div class="edit-songs-wrapper">
                     <div class="edit-song">

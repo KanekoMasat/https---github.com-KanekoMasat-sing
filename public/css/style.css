@@ -227,6 +227,11 @@ li {
     overflow: scroll;
 }
 
+.list-none-message-area {
+    margin-left: 20px;
+    font-size: large;
+}
+
 .edit-songs-wrapper {
     height: 150px;
     border-bottom: 4px ridge;
