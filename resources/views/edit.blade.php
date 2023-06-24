@@ -41,7 +41,9 @@
         <button type="submit" class="update-button">更新</button>
         <div id="my-textarea" contenteditable="true">
         </div>
-        <h3>注意！未更新のまま、他のページに移行すると編集内容は消えます</h3>
+        <div class="notes-area">
+            <h3>注意！未更新のまま、他のページに移行すると編集内容は消えます</h3>
+        </div>
         <div>・テキスト選択中はPCの仕様上色が変わります</div>
         <div>・表現の色が重複する場合、直前に選択した色に塗り替えられます</div>
     </form>

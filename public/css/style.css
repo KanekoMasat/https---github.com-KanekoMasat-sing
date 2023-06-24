@@ -157,6 +157,10 @@ li {
     padding-bottom: 6px;
 }
 
+.notes-area {
+    color: rgb(204, 128, 84);
+}
+
 .tool-bar {
     position: absolute;
     display: none;
