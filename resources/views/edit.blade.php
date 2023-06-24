@@ -55,14 +55,12 @@
                 <button class="tool-bar-button" id="blueColor">表現1(青)</button>
                 <button class="tool-bar-button" id="greenColor">表現２(緑)</button>
                 <button class="tool-bar-button" id="orangeColor">表現3(橙)</button>
-                <button class="tool-bar-button" id="boldButton">B</button>
+                <button class="tool-bar-button" id="boldButton"><span style="font-weight: bold">B</span></button>
                 <button class="tool-bar-button" id="italicButton"><span style="font-style: italic">I</span></button>
-                <button class="tool-bar-button" id="underlineButton"><u>U</u></button>
+                <button class="tool-bar-button" id="underlineButton"><span style="font-style: italic">U</span></button>
             </div>
         </div>
-
     </div>
-
 
     <script src="{{ mix('js/app.js') }}"></script>
 @endsection

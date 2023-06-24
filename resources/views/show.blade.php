@@ -22,7 +22,7 @@
     </div>
     <div class="edit-link-wrapper">
         <div class="edit-link">
-            <a href="{{ route('singing.edit', ['singing' => $singingSheet->id]) }}">前の画面へ戻る</a>
+            <a href="{{ route('singing.edit', ['singing' => $singingSheet->id]) }}">編集画面へ戻る</a>
         </div>
     </div>
     <script>
