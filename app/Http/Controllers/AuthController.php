@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -29,7 +29,7 @@ class AuthController extends Controller
 
             // ミドルウェアに対応したリダイレクト(後述)
             // 下記はredirect('/index')に類似
-            return redirect()->intended('/index');
+            return redirect()->intended('/index')->with('success', 'ログインに成功しました');
         }
 
         // ログイン情報が正しくない場合のみ実行される処理(return すると以降の処理は実行されないため)
@@ -39,6 +39,15 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'メールアドレスまたはパスワードが正しくありません',
         ])->onlyInput('email');
+    }
+
+    public function guestLogin(Request $request)
+    {
+        $request->session()->regenerate();
+        $guestUserId = 1; //ゲストユーザーのIDを１とする
+        $user = User::find($guestUserId);
+        Auth::login($user);
+        return redirect()->intended('/index')->with('success', 'ゲストユーザーでログインしました');
     }
 
     public function logout(Request $request)
