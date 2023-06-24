@@ -1,16 +1,13 @@
 # Sing ~ 歌い方を可視化する ~
+https://www.objectivesinging.com/index
 
-説明
 
  
 # 概要
- 
-"hoge"の魅力が直感的に伝えわるデモ動画や図解を載せる
+
 
 <img width="1800" alt="スクリーンショット 2023-06-24 10 27 07" src="https://github.com/KanekoMasat/https---github.com-KanekoMasat-sing/assets/109212020/cd45a07b-74dc-4502-a3c2-e5cf25943739">
-# Features
- 
-セールスポイントや差別化の説明
+
 
 # 使用技術
 
@@ -29,11 +26,6 @@
 * HTML
 * CSS
 
-
-
-# Requirement
- 
-* Node.js 18.12.1
  
 # Installation
  
@@ -56,6 +48,7 @@ python demo.py
 # その他
  
 * 色を重ねて編集することはできません
+* PC以外での操作を想定していません
  
 # 作成者
  
