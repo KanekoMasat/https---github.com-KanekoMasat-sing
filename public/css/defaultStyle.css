@@ -78,13 +78,6 @@ li {
     border-bottom: 2px solid;
 }
 
-.user-related-link {
-    color: rgb(125, 128, 222);
-    font-size: 20px;
-    text-decoration: none;
-    border-bottom: 2px solid;
-}
-
 /* ログインフォーム用CSS */
 .error-message-container {
     font-size: 20px;
@@ -115,9 +108,28 @@ li {
     border-radius: 10px;
 }
 
+.guestLogin-link-wrapper {
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+.guestLogin-link {
+    color: rgb(125, 128, 222);
+    font-size: 20px;
+    text-decoration: none;
+    border-bottom: 2px solid;
+}
+
 .user-create-link-wrapper {
     margin-top: 20px;
     margin-left: 50px;
+}
+
+.user-related-link {
+    color: rgb(125, 128, 222);
+    font-size: 20px;
+    text-decoration: none;
+    border-bottom: 2px solid;
 }
 
 /* アカウント作成フォーム用CSS */

@@ -39,7 +39,9 @@
             <button type="submit" class="login-button">ログイン</button>
         </div>
     </form>
-    <a href="{{ route('guestLogin') }}">ゲストユーザーでログイン</a>
+    <div class="guestLogin-link-wrapper">
+        <a href="{{ route('guestLogin') }}" class="guestLogin-link">ゲストユーザーでログイン</a>
+    </div>
     <div class="user-create-link-wrapper">
         <a href="{{ route('users.create') }}" class="user-related-link">ユーザーの新規作成</a>
     </div>
