@@ -9,8 +9,19 @@
         <a href="{{ route('index') }}" class="back-to-top-link">トップへ</a>
         <h2>使い方</h2>
         <p class="usage-content">1. 新規作成または編集画面の＋ボタンよりシートを新規作成します。※この段階ではまだ編集できません</p>
+        <div class="newSheet-image-wrapper">
+            <img src="{{ asset('storage/新規作成.png') }}" alt="" class="newSheet-image">
+        </div>
+
         <p class="usage-content">2. 「曲の編集」より画面左に作成したシートが表示されます。クリックすると歌詞の編集が可能になります</p>
+        <div class="sheetList-image-wrapper">
+            <img src="{{ asset('storage/シートリスト.png') }}" alt="" class="sheetList-image">
+        </div>
+
         <p class="usage-content">3. 歌詞を選択するとツールバーが表示されるので、ボタンを押すと色等をつけることができます</p>
+        <div class="edit-image-wrapper">
+            <img src="{{ asset('storage/編集.png') }}" alt="" class="edit-image">
+        </div>
     </div>
 
 
