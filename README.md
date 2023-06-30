@@ -9,8 +9,7 @@ https://www.objectivesinging.com/index
 <img width="1800" alt="スクリーンショット 2023-06-24 10 27 07" src="https://github.com/KanekoMasat/https---github.com-KanekoMasat-sing/assets/109212020/cd45a07b-74dc-4502-a3c2-e5cf25943739">
 
 # こだわった点
-JavaScriptでのコーディング
-文字を選択した際に複数ノードを跨いでも機能するようにこだわりました
+JavaScriptでのコーディング: 文字を選択した際に複数ノードを跨いでも機能するようにこだわりました
 
 # 使用技術
 
