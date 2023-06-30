@@ -5,9 +5,12 @@ https://www.objectivesinging.com/index
  
 # 概要
 
-
+ゲストユーザーでログインが可能です
 <img width="1800" alt="スクリーンショット 2023-06-24 10 27 07" src="https://github.com/KanekoMasat/https---github.com-KanekoMasat-sing/assets/109212020/cd45a07b-74dc-4502-a3c2-e5cf25943739">
 
+# こだわった点
+JavaScriptでのコーディング
+    文字を選択した際に複数ノードを跨いでも機能するようにこだわりました
 
 # 使用技術
 
@@ -27,24 +30,11 @@ https://www.objectivesinging.com/index
 * CSS
 
  
-# Installation
- 
-Requirementで列挙したライブラリなどのインストール方法を説明する
- 
-```bash
-pip install huga_package
-```
- 
 # 使い方
- 
-DEMOの実行方法など、"hoge"の基本的な使い方を説明する
- 
-```bash
-git clone https://github.com/hoge/~
-cd examples
-python demo.py
-```
- 
+1. ユーザーの新規作成
+2. 新規シートの作成
+3. 作成したシートを編集する
+
 # その他
  
 * 色を重ねて編集することはできません
