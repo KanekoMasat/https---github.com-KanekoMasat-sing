@@ -40,6 +40,11 @@ li {
     background-color: white;
     border: ridge 3px;
     border-radius: 10px;
+    transition: .3s;
+}
+
+.back-to-top-link:hover {
+    background-color: rgb(213, 214, 215);
 }
 
 .song-create-button {
@@ -52,6 +57,11 @@ li {
     margin-left: auto;
     margin-right: 5px;
     transform: scale(1.5, 0.8);
+    transition: .3s;
+}
+
+.song-create-button:hover {
+    background-color: rgb(193, 193, 173);
 }
 
 .body-container {
@@ -250,7 +260,12 @@ li {
 .song-button {
     text-decoration: none;
     color: inherit;
+    background-color: rgb(232, 232, 232);
     height: 100%;
+}
+
+.song-button:hover {
+    background-color: rgb(185, 181, 181);
 }
 
 .song-label {
@@ -274,9 +289,14 @@ li {
 }
 
 .delete-button {
+    background-color: rgb(232, 232, 232);
     border-radius: 10px;
     transform: scale(1.1);
     z-index: 40px;
+}
+
+.delete-button:hover {
+    background-color: rgb(195, 195, 195);
 }
 
 .update-button {

@@ -59,6 +59,7 @@ li {
 }
 
 .default-button {
+    background-color: white;
     margin-top: 30px;
     margin-left: 45px;
     border-radius: 10px;
