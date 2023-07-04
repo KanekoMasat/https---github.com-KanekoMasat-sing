@@ -13,6 +13,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/guestLogin', [AuthController::class, 'guestLogin'])->name('guestLogin');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/', function () {
+    return view('index');
+})->middleware('auth');
 
 Route::get('/index', function () {
     return view('index');
