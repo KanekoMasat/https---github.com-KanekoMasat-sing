@@ -15,7 +15,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
     return view('index');
-})->middleware('auth');
+});
 
 Route::get('/index', function () {
     return view('index');
