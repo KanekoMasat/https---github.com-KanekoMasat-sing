@@ -10,13 +10,13 @@ const toolBar = document.getElementById("tool-bar");
 const updateForm = document.getElementById("updateForm");
 const songLyrics = document.getElementsByClassName("song-lyrics");
 
-
+//歌詞表示部分をデコードする
 Array.from(songLyrics).forEach(element => {
     element.innerHTML = decodeHTMLEntities(element.innerHTML).toString();
 });
 editable.innerHTML = decodeHTMLEntities(editable.innerHTML);
 
-
+//歌詞表示部分に何も記入されていなかったら"ここに歌詞を入力できます"という文字を挿入する
 editable.addEventListener("input", function (event) {
     editable.childNodes.forEach(element => {
         if (element.nodeName === "DIV" && element.textContent.length === 0 && editable.childNodes.length === 3) {
