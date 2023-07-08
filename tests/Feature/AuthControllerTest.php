@@ -13,7 +13,7 @@ class AuthControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function test_loginpage()
     {
         $response = $this->get('/login');
 

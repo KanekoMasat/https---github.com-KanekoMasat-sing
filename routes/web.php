@@ -21,7 +21,6 @@ Route::get('/index', function () {
     return view('index');
 })->name('index')->middleware('auth');
 
-//元のルート
 Route::resource('/singing', SingingSheetController::class)->middleware('auth');
 
 
