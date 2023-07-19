@@ -116,6 +116,11 @@ li {
     border: ridge 3px;
     border-radius: 6px;
     transform: scale(1.2);
+    transition: .3s;
+}
+
+.show-link:hover {
+    background-color: rgb(176, 172, 172);
 }
 
 .title-content {
