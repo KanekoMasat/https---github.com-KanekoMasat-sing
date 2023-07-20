@@ -309,4 +309,9 @@ li {
     margin-left: 10px;
     border-radius: 10px;
     transform: scale(1.4);
+    transition: .3s;
+}
+
+.update-button:hover {
+    background-color: rgb(201, 201, 201);
 }
