@@ -5,9 +5,12 @@
     <title>@yield('title', '歌い方')</title>
     <meta charset="UTF-8">
     @yield('head')
+    <script>
+        console.log("Sing start");
+    </script>
 </head>
 
-<body>
+<body class="preload">
     <header class="header-container">
         <div class="header-button-wrapper">
             <a href="{{ route('index') }}" class="back-to-top-link">
