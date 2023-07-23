@@ -260,17 +260,18 @@ li {
     padding-left: 5px;
     height: 100%;
     overflow: hidden;
+    background-color: rgb(232, 232, 232);
+    transition: .3s;
+}
+
+.edit-song:hover {
+    background-color: rgb(190, 188, 188);
 }
 
 .song-button {
     text-decoration: none;
     color: inherit;
-    background-color: rgb(232, 232, 232);
     height: 100%;
-}
-
-.song-button:hover {
-    background-color: rgb(185, 181, 181);
 }
 
 .song-label {
